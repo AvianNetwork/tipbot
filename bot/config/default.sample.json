@@ -1,0 +1,33 @@
+{
+  // Bot configuration
+  "bot": {
+      "token":"",
+      "prefix": "!",
+      "debug": true
+  },
+  "rvl": {
+    "paytxfee": 0.005,
+    "config": {
+      "port": 1234,
+      "user": "myrpcusername",
+      "pass": "mysecurepassword"
+    }
+  }, 
+  "moderation":{
+  "pm2Name": "TipBot",
+   // Roles that have access to all commands.
+  "perms": ["[MEMBER]"],
+  // Bot Devs!
+  "botDev": "[Core Lead Developer]",
+  // Channel to log the bots moderation..
+  "logchannel": "", // channel id
+  //channel that the tip message will reply in if Multi or Role tip is used.
+  "botspamchannels": ["ID", "ID"] // channel ids
+  },
+  "explorer":{
+    "explorertxurl": "",
+    "exploreraddressurl": ""
+  }
+
+}
+

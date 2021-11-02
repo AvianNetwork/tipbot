@@ -335,7 +335,7 @@ function dumpPrivKey(message, tipper) {
 
 		    message.channel.send({ embeds: [ {
 //    message.channel.send({ embeds: [ {
-    description: '**:closed_lock_with_key::money_with_wings::moneybag:Ravencoin Lite (RVL) PrivKey sent!:moneybag::money_with_wings:closed_lock_with_key:**',
+    description: '**:closed_lock_with_key::money_with_wings::moneybag:Ravencoin Lite (RVL) PrivKey sent!:moneybag::money_with_wings::closed_lock_with_key:**',
     color: 1363892,
     fields: [
       {

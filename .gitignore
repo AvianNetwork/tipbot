@@ -76,4 +76,4 @@ typings/
 .fusebox/
 
 # bot token
-config/default.json
+bot/config/default.json

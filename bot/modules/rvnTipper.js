@@ -412,9 +412,9 @@ function getValidatedAmount(amount) {
 }
 
 function txLink(txId) {
-  return 'https://explorer.ravencoinlite.info/tx/' + txId;
+   return config.explorer.explorertxurl + txId;
 }
 
 function addyLink(address) {
-  return 'https://explorer.ravencoinlite.info/address/' + address;
+  return config.explorer.exploreraddressurl + address;
 }

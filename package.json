@@ -16,7 +16,8 @@
     "package.json": "^2.0.1",
     "pm2": "^5.1.1",
     "regex": "^0.1.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "big.js": "^5.2.2"
   },
   "scripts": {
     "precommit": "prettier --single-quote true --write bot/**/*.js",

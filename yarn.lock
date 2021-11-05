@@ -653,6 +653,11 @@
   dependencies:
     "tweetnacl" "^0.14.3"
 
+"big.js@^5.2.2":
+  "integrity" "sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ=="
+  "resolved" "https://registry.npmjs.org/big.js/-/big.js-5.2.2.tgz"
+  "version" "5.2.2"
+
 "binary-extensions@^1.0.0":
   "integrity" "sha1-RqoXUftqL5PuXmibsQh9SxTGwgU="
   "resolved" "https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.11.0.tgz"

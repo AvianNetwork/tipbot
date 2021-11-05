@@ -17,14 +17,14 @@ exports.tiprvl = {
   process: async function(bot, msg, suffix) {
     let tipper = msg.author.id.replace('!', ''),
       words = msg.content
-        .trim()
+	.trim()
         .split(' ')
         .filter(function(n) {
-          return n !== '';
+	  return n !== '';
         }),
       subcommand = words.length >= 2 ? words[1] : 'help',
       helpmsg =
-        '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n\n    **<> : Replace with appropriate value.**',
+        '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n	**!tiprvl <usdt|btc|ltc|rvn|doge>** : Display RVL market data\n\n    **<> : Replace with appropriate value.**',
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
@@ -39,9 +39,24 @@ exports.tiprvl = {
       case 'withdraw':
         privateorSpamChannel(msg, channelwarning, doWithdraw, [tipper, words, helpmsg]);
         break;
+      case 'usdt':
+        getPrice(msg, 'usdt');
+        break;
+      case 'btc':
+	getPrice(msg, 'btc');
+	break;
+      case 'rvn':
+	getPrice(msg, 'rvn');
+	break;
+      case 'doge':
+        getPrice(msg, 'doge');
+        break;
+      case 'ltc':
+	getPrice(msg, 'ltc');
+	break;
       case 'privkey':
 	dumpPrivKey(msg, tipper);
-	break;
+      break;
       default:
         doTip(bot, msg, tipper, words, helpmsg);
     }
@@ -316,7 +331,7 @@ function getAddress(userId, cb) {
   });
 }
 
-///
+// Dump private wallet key
 
 function dumpPrivKey(message, tipper) {
   getAddress(tipper, function(err, address) {
@@ -334,7 +349,6 @@ function dumpPrivKey(message, tipper) {
 	    } else {
 
 		    message.channel.send({ embeds: [ {
-//    message.channel.send({ embeds: [ {
     description: '**:closed_lock_with_key::money_with_wings::moneybag:Ravencoin Lite (RVL) PrivKey sent!:moneybag::money_with_wings::closed_lock_with_key:**',
     color: 1363892,
     fields: [
@@ -386,9 +400,244 @@ function dumpPrivKey(message, tipper) {
     });
 
     }
-  })}
+  })
+}
+////
+function getPrice(message, cur){
+            const https = require('https')
+		const options = {
+                  hostname: 'www.exbitron.com',
+                  port: 443,
+                  path: '/api/v2/peatio/public/markets/rvl' + cur + '/tickers',
+                  method: 'GET',
+                }
+
+                const req = https.request(options, res => {
+                  //console.log(`statusCode: ${res.statusCode}`)
+                  res.on('data', d => {
+                          
+			  var d = JSON.parse(d);
+                          var djson = JSON.stringify(d);
+                          //console.log("d=" + djson);
+                          var time = Number(d['at'] * 1000);
+                          var time = new Date(time);
+                          var low = d['ticker'].low;
+                          var low = Number(low).toFixed(8);
+                          var high = d['ticker'].high;
+                          var high = Number(high).toFixed(8);
+                          var open = d['ticker'].open;
+                          var open = Number(open).toFixed(8);
+                          var last = d['ticker'].last;
+                          var last = Number(last).toFixed(8);
+                          var volume = d['ticker'].volume;
+                          var volume = Number(volume).toFixed(8);
+                          var amount = d['ticker'].amount;
+                          var amount = Number(amount).toFixed(2);
+                          var avg = d['ticker'].avg_price;
+                          var avg = Number(avg).toFixed(8);
+                          var change = d['ticker'].price_change_percent;
+
+			  message.channel.send({ embeds: [ {
+
+                                  description: '**:chart_with_upwards_trend: Ravencoin Lite (RVL) Price Info :chart_with_upwards_trend:**',
+
+                                  color: 1363892,
+
+                                  fields: [
+					  {
+					  	  name: 'Exbitron (RVL/'+cur.toUpperCase()+')',
+						  value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/rvl'+cur,
+						  inline: false
+					  },
+                                          {
+                                                  name: 'Last',
+                                                  value: last,
+                                                  inline: true
+                                          },
+					  {
+						  name: ':arrow_down: Low',
+                                                  value: low,
+                                                  inline: true
+                                          },
+					  {
+						  name: ':arrow_up: High',
+                                                  value: high,
+                                                  inline: true
+                                          },
+					  {
+						  name: 'Open',
+                                                  value: open,
+                                                  inline: true
+                                          },
+					  {
+					  	  name: 'Volume('+cur.toUpperCase()+')',
+						  value: volume + ' '+cur.toUpperCase(),
+						  inline: true
+					  },
+					  {
+					  	  name: 'Volume(RVL)',
+						  value: amount + ' RVL',
+						  inline: true
+					  },
+					  {
+                                                  name: 'Change',
+                                                  value: change,
+                                                  inline: true
+                                          },
+					  {
+                                                  name: '\u200b',
+                                                  value: '\u200b',
+                                                  inline: true
+                                          },
+					  {
+						  name: 'Time',
+						  value: '' + time,
+						  inline: false
+					  }
+				  	  
+
+                                  ]
+
+                          } ] }).then(msg => {
+
+                                  setTimeout(() => msg.delete(), 60000)
+
+                          });
 
 
+                  })
+
+                })
+
+        req.on('error', error => {
+
+                console.error(error)
+
+        })
+
+        req.end();
+
+	if(cur == 'btc'){
+	
+		                const options = {
+                  hostname: 'tradeogre.com',
+                  port: 443,
+                  path: '/api/v1/ticker/'+ cur.toUpperCase() +'-RVL',
+                  method: 'GET',
+                }
+
+                const req = https.request(options, res => {
+                  //console.log(`statusCode: ${res.statusCode}`)
+                  res.on('data', d => {
+
+                          var d = JSON.parse(d);
+                          var djson = JSON.stringify(d);
+                          console.log("d=" + djson);
+                          var time = Number(d.success);
+                          var time = new Date(time);
+                          var low = d.low;
+                          var low = Number(low).toFixed(8);
+                          var high = d.high;
+                          var high = Number(high).toFixed(8);
+                          var open = d.initialprice;
+                          var open = Number(open).toFixed(8);
+                          var last = d.price;
+                          var last = Number(last).toFixed(8);
+                          var volume = d.volume;
+                          var volume = Number(volume).toFixed(8);
+                          var bid = d.bid;
+                          var bid = Number(bid).toFixed(8);
+                          var ask = d.ask;
+                          var ask = Number(ask).toFixed(8);
+
+                          message.channel.send({ embeds: [ {
+
+                                  description: '**:chart_with_upwards_trend: Ravencoin Lite (RVL) Price Info :chart_with_upwards_trend:**',
+
+                                  color: 1363892,
+
+                                  fields: [
+                                          {
+                                                  name: 'Trade Ogre (RVL/'+cur.toUpperCase()+')',
+                                                  value: '**https://tradeogre.com**\nhttps://tradeogre.com/exchange/'+ cur.toUpperCase() +'-RVL',
+                                                  inline: false
+                                          },
+                                          {
+                                                  name: 'Last',
+                                                  value: last,
+                                                  inline: true
+                                          },
+                                          {
+                                                  name: ':arrow_down: Low',
+                                                  value: low,
+                                                  inline: true
+                                          },
+                                          {
+                                                  name: ':arrow_up: High',
+                                                  value: high,
+                                                  inline: true
+                                          },
+                                          {
+                                                  name: 'Open',
+                                                  value: open,
+                                                  inline: true
+                                          },
+                                          {
+                                                  name: 'Volume('+cur.toUpperCase()+')',
+                                                  value: volume + ' '+cur.toUpperCase(),
+                                                  inline: false
+                                          },
+                                          {
+                                                  name: 'Bid',
+                                                  value: bid,
+                                                  inline: true
+                                          },
+                                          {
+                                                  name: 'Ask',
+                                                  value: ask,
+                                                  inline: true
+                                          },
+                                          {
+                                                  name: '\u200b',
+                                                  value: '\u200b',
+                                                  inline: true
+                                          },
+                                          {
+                                                  name: 'Time',
+                                                  value: '' + time,
+                                                  inline: false
+                                          }
+
+
+                                  ]
+
+                          } ] }).then(msg => {
+
+                                  setTimeout(() => msg.delete(), 60000)
+
+                          });
+
+
+                  })
+
+                })
+
+        req.on('error', error => {
+
+                console.error(error)
+
+        })
+
+        req.end();
+	
+	
+	
+	
+	}
+
+        return;
+
+}
 ////
 function inPrivateorSpamChannel(msg) {
   if (msg.channel.type == 'dm' || isSpam(msg)) {

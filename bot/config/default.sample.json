@@ -28,6 +28,10 @@
     "explorertxurl": "",
     "exploreraddressurl": ""
   }
-
+ "wrvl":{
+    "contractaddress": "",
+    "polygonapikey": "",
+    "coinwrapurl": ""
+  }
 }
 

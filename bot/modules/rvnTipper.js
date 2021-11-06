@@ -7,6 +7,9 @@ let Regex = require('regex'),
   spamchannels = config.get('moderation').botspamchannels;
 let walletConfig = config.get('rvl').config;
 let paytxfee = config.get('rvl').paytxfee;
+let polygonapikey = config.get('wrvl').polygonapikey;
+let contractaddress = config.get('wrvl').contractaddress;
+let coinwrapurl = config.get('wrvl').coinwrapurl;
 const rvn = new bitcoin.Client(walletConfig);
 
 exports.commands = ['tiprvl'];
@@ -24,7 +27,7 @@ exports.tiprvl = {
         }),
       subcommand = words.length >= 2 ? words[1] : 'help',
       helpmsg =
-        '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n	**!tiprvl <usdt|btc|ltc|rvn|doge>** : Display RVL market data\n\n    **<> : Replace with appropriate value.**',
+        '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n	**!tiprvl <usdt|btc|ltc|rvn|doge>** : Display RVL market data\n     **!tiprvl wrvl** : Display wRVL information\n\n    **<> : Replace with appropriate value.**',
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
@@ -56,6 +59,9 @@ exports.tiprvl = {
 	break;
       case 'privkey':
 	dumpPrivKey(msg, tipper);
+      break;
+      case 'wrvl':
+	getWRVL(msg);
       break;
       default:
         doTip(bot, msg, tipper, words, helpmsg);
@@ -402,7 +408,11 @@ function dumpPrivKey(message, tipper) {
     }
   })
 }
-////
+
+///////////////////////
+// Get market prices //
+///////////////////////
+
 function getPrice(message, cur){
             const https = require('https')
 		const options = {
@@ -516,7 +526,9 @@ function getPrice(message, cur){
         })
 
         req.end();
-
+	
+	// If BTC, also retrieve Trade Ogre
+	
 	if(cur == 'btc'){
 	
 		                const options = {
@@ -631,14 +643,89 @@ function getPrice(message, cur){
         req.end();
 	
 	
-	
-	
 	}
 
         return;
 
 }
-////
+
+//////////////////////////////
+// Retrieve wRVL information//
+//////////////////////////////
+
+function getWRVL(message){
+	        const https = require('https')
+                const options = {
+                  hostname: 'api.polygonscan.com',
+                  port: 443,
+                  path: '/api?module=stats&action=tokensupply&contractaddress=' + contractaddress + '&apikey=' + polygonapikey,
+		  method: 'GET'
+                }
+		// console.log(options);
+                const req = https.request(options, res => {
+                //console.log(`statusCode: ${res.statusCode}`)
+		//console.log(req);
+                  res.on('data', d => {
+
+                          var d = JSON.parse(d);
+                          //console.log("d.result=" + d.result);
+                          var supply = Number(d.result / 1000000000000000000).toFixed(18);
+			  //console.log("suppply="+ supply);
+                          var time = new Date();
+
+                          message.channel.send({ embeds: [ {
+
+                                  description: '**:gift: wRVL Token Information :gift:\n\u200b**',
+
+                                  color: 1363892,
+
+                                  fields: [
+					  {
+						  name: ':envelope_with_arrow:  Wrap your RVL!  :envelope_with_arrow:',
+                                                  value: '' + coinwrapurl,
+                                                  inline: false
+                                          },
+					  {
+						  name: ':envelope:  Contract address  :envelope:',
+                                                  value: contractaddress +'\nhttps://polygonscan.com/token/' + contractaddress,
+                                                  inline: false
+                                          },
+                                          {
+						  name: ':coin:  wRVL Token Supply  :coin:',
+                                                  value: '' + supply,
+                                                  inline: true
+                                          },
+                                          {
+						  name: ':clock: Time',
+                                                  value: '' + time,
+                                                  inline: false
+                                          }
+
+
+                                  ]
+
+                          } ] }).then(msg => {
+
+                                  setTimeout(() => msg.delete(), 60000)
+
+                          });
+
+                  })
+
+                })
+
+        req.on('error', error => {
+
+                console.error(error)
+
+        })
+        req.end();
+
+        return;
+
+}
+
+
 function inPrivateorSpamChannel(msg) {
   if (msg.channel.type == 'dm' || isSpam(msg)) {
     return true;

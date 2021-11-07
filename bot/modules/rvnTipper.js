@@ -27,7 +27,7 @@ exports.tiprvl = {
         }),
       subcommand = words.length >= 2 ? words[1] : 'help',
       helpmsg =
-        '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n	**!tiprvl <usdt|btc|ltc|rvn|doge>** : Display RVL market data\n     **!tiprvl wrvl** : Display wRVL information\n\n    **<> : Replace with appropriate value.**',
+        '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n    **!tiprvl <usdt|btc|ltc|rvn|doge>** : Display RVL market data\n    **!tiprvl wrvl** : Display wRVL information\n    **!tiprvl diff** : Display current network difficulty\n    **!tiprvl hash** : Display current network hashrate\n    **!tiprvl mininginfo** : Display network mining info\n    **!tiprvl chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
@@ -62,6 +62,18 @@ exports.tiprvl = {
       break;
       case 'wrvl':
 	getWRVL(msg);
+      break;
+      case 'diff':
+	getDifficulty(msg);
+      break;
+      case 'hash':
+	getNetworkHashPs(msg);
+      break;
+      case 'mininginfo':
+	getMiningInfo(msg);
+      break;
+      case 'chaininfo':
+	getBlockchainInfo(msg);
       break;
       default:
         doTip(bot, msg, tipper, words, helpmsg);
@@ -407,6 +419,218 @@ function dumpPrivKey(message, tipper) {
 
     }
   })
+}
+/////////////////////////
+// get network difficulty
+/////////////////////////
+
+function getDifficulty(message) {
+	
+    rvn.getDifficulty(function(err, difficulty) {
+            if (err) {
+                    message.reply(err.message).then(msg => {
+                            setTimeout(() => msg.delete(), 10000)
+                    });
+            } else {
+                    message.channel.send({ embeds: [ {
+
+			    description: '**:pick: Ravencoin Lite (RVL) Network difficulty :pick:**',
+			    color: 1363892,
+			    fields: [
+				    {
+					    name: 'Network Difficulty',
+					    value: '**' + difficulty + '**',
+					    inline: false
+				    }
+			    ]
+
+		    } ] }).then(msg => {
+			    setTimeout(() => msg.delete(), 60000)
+		    });
+	    }  
+    })
+}
+
+////////////////////////
+// get network hashrate
+////////////////////////
+
+function getNetworkHashPs(message){
+
+	rvn.getNetworkHashPs(function(err, hashrate) {
+	
+		if (err) {
+			
+			message.reply(err.message).then(msg => {
+
+				setTimeout(() => msg.delete(), 10000)
+
+			});
+			
+		} else {
+		
+                    message.channel.send({ embeds: [ {
+
+                            description: '**:pick: Ravencoin Lite (RVL) Network hashrate :pick:**',
+                            color: 1363892,
+                            fields: [
+                                    {
+                                            name: 'Network hashrate',
+                                            value: '**' + Number(hashrate / 1000000000).toFixed(3)+ ' GH/s**',
+                                            inline: false
+                                    }
+                            ]
+
+                    } ] }).then(msg => {
+                            setTimeout(() => msg.delete(), 60000)
+                    });		
+		}
+	})
+	
+}
+
+///////////////////////
+// get mining info ////
+///////////////////////
+
+function getMiningInfo(message){
+
+
+        rvn.getMiningInfo(function(err, mininginfo) {
+
+		var time = new Date();
+
+		if (err) {
+
+                        message.reply(err.message).then(msg => {
+
+                                setTimeout(() => msg.delete(), 10000)
+
+                        });
+
+                } else {
+
+                    message.channel.send({ embeds: [ {
+
+                            description: '**:pick: Ravencoin Lite (RVL) network mining info :pick:**',
+                            color: 1363892,
+                            fields: [
+				    {
+				    	    name: 'Chain',
+					    value: '' + mininginfo.chain.toString() + '',
+					    inline: true
+				    },
+				    {
+				            name: '\u200b',
+				            value: '\u200b',
+				            inline: true
+                                    },
+				    {
+					    name: 'Blocks',
+					    value: '' + mininginfo.blocks.toString() + '',
+					    inline: true
+				    },
+				    {
+                                            name: 'Network hashrate',
+                                            value: '' + Number(mininginfo.networkhashps / 1000000000).toFixed(3)+ ' GH/s',
+                                            inline: true
+                                    },
+				    {
+				    	    name: 'Network difficulty',
+					    value: '' + Number(mininginfo.difficulty) + '',
+					    inline: true
+				    },
+				    {
+                                            name: ':clock: Time',
+		                            value: '' + time,
+                                            inline: false
+                                    }
+				    
+                            ]
+
+                    } ] }).then(msg => {
+                            setTimeout(() => msg.delete(), 60000)
+                    });
+                }
+        })
+
+}
+
+/////////////////////////
+// get blockchain info //
+/////////////////////////
+
+function getBlockchainInfo(message){
+
+
+        rvn.getBlockchainInfo(function(err, chaininfo) {
+
+                var time = new Date();
+
+                if (err) {
+
+                        message.reply(err.message).then(msg => {
+
+                                setTimeout(() => msg.delete(), 10000)
+
+                        });
+
+                } else {
+
+                    message.channel.send({ embeds: [ {
+
+                            description: '**:chains:  Ravencoin Lite (RVL) blockchain info  :chains:**',
+                            color: 1363892,
+                            fields: [
+                                    {
+                                            name: 'Chain',
+                                            value: '' + chaininfo.chain.toString() + '',
+                                            inline: true
+                                    },
+                                    {
+                                            name: 'Blocks',
+                                            value: '' + chaininfo.blocks.toString() + '',
+                                            inline: true
+                                    },
+                                    {
+                                            name: 'Headers',
+                                            value: '' + chaininfo.headers.toString() + '',
+                                            inline: true
+                                    },
+                                    {
+                                            name: 'Network difficulty',
+                                            value: '' + Number(chaininfo.difficulty) + '',
+                                            inline: true
+                                    },
+                                    {
+                                            name: 'Size on disk',
+                                            value: '' + Number(chaininfo.size_on_disk / 1000000).toFixed(2) + ' MB (' + Number(chaininfo.size_on_disk / 1000000000).toFixed(2) + ' GB)',
+                                            inline: true
+                                    },
+				    {
+                                            name: 'Difficulty Algo',
+                                            value: '' + String(chaininfo.difficulty_algorithm) + '',
+                                            inline: true
+                                    },
+				    {
+                                            name: 'Best Blockhash',
+                                            value: '' + String(chaininfo.bestblockhash) + '',
+                                            inline: true
+                                    },
+				    {
+                                            name: ':clock: Time',
+                                            value: '' + time,
+                                            inline: false
+                                    }
+
+                            ]
+
+			                        } ] }).then(msg => {
+							                            setTimeout(() => msg.delete(), 60000)
+							                    });
+			                }
+		        })
+
 }
 
 ///////////////////////

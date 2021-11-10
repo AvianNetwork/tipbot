@@ -6,6 +6,8 @@
       "debug": true
   },
   "rvl": {
+    "coinname": "",
+    "coinsymbol": "",
     "paytxfee": 0.005,
     "config": {
       "port": 1234,

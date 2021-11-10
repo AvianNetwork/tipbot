@@ -10,13 +10,17 @@ let paytxfee = config.get('rvl').paytxfee;
 let polygonapikey = config.get('wrvl').polygonapikey;
 let contractaddress = config.get('wrvl').contractaddress;
 let coinwrapurl = config.get('wrvl').coinwrapurl;
+let coinname = config.get('rvl').coinname;
+let coinsymbol = config.get('rvl').coinsymbol;
+
 const rvn = new bitcoin.Client(walletConfig);
 
 exports.commands = ['tiprvl'];
+//console.log(exports.commands);
 exports.tiprvl = {
   usage: '<subcommand>',
   description:
-    '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n\n    has a default txfee of ' + paytxfee,
+  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n    **!tiprvl <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **!tiprvl wrvl** : Display w' + coinsymbol + ' information\n    **!tiprvl sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **!tiprvl diff** : Display current network difficulty\n    **!tiprvl hash** : Display current network hashrate\n    **!tiprvl mininginfo** : Display network mining info\n    **!tiprvl chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
   process: async function(bot, msg, suffix) {
     let tipper = msg.author.id.replace('!', ''),
       words = msg.content
@@ -27,7 +31,7 @@ exports.tiprvl = {
         }),
       subcommand = words.length >= 2 ? words[1] : 'help',
       helpmsg =
-        '__**Ravencoin Lite (RVL) Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n    **!tiprvl <usdt|btc|ltc|rvn|doge>** : Display RVL market data\n    **!tiprvl wrvl** : Display wRVL information\n    **!tiprvl diff** : Display current network difficulty\n    **!tiprvl hash** : Display current network hashrate\n    **!tiprvl mininginfo** : Display network mining info\n    **!tiprvl chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
+        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n    **!tiprvl <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **!tiprvl wrvl** : Display w' + coinsymbol + ' information\n    **!tiprvl sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **!tiprvl diff** : Display current network difficulty\n    **!tiprvl hash** : Display current network hashrate\n    **!tiprvl mininginfo** : Display network mining info\n    **!tiprvl chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
@@ -63,6 +67,9 @@ exports.tiprvl = {
       case 'wrvl':
 	getWRVL(msg);
       break;
+      case 'sushi':
+	getSushi(msg);
+      break;
       case 'diff':
 	getDifficulty(msg);
       break;
@@ -97,13 +104,13 @@ function doBalance(message, tipper) {
   rvn.getBalance(tipper, 1, function(err, balance) {
     if (err) {
       console.log(err);
-      message.reply('Error getting Ravencoin Lite (RVL) balance.').then(msg => {
+      message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(msg => {
                                 setTimeout(() => msg.delete(), 10000)
                               });
     } else {
     message.channel.send({ embeds: [ {
 //    message.channel.send({ embeds: [ {
-    description: '**:bank::money_with_wings::moneybag:Ravencoin Lite (RVL) Balance sent!:moneybag::money_with_wings::bank:**',
+    description: '**:bank::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Balance sent!:moneybag::money_with_wings::bank:**',
     color: 1363892,
     fields: [
       {
@@ -125,7 +132,7 @@ function doBalance(message, tipper) {
 
     message.author.send({ embeds: [ {
 //    message.channel.send({ embeds: [ {
-    description: '**:bank::money_with_wings::moneybag:Ravencoin Lite (RVL) Balance!:moneybag::money_with_wings::bank:**',
+    description: '**:bank::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Balance!:moneybag::money_with_wings::bank:**',
     color: 1363892,
     fields: [
       {
@@ -150,10 +157,10 @@ function doDeposit(message, tipper) {
   getAddress(tipper, function(err, address) {
     if (err) {
       console.log(err);
-      message.reply('Error getting your Ravencoin Lite (RVL) deposit address.').then(message => message.delete(10000));
+      message.reply('Error getting your ' + coinname + ' (' + coinsymbol + ') deposit address.').then(message => message.delete(10000));
     } else {
     message.channel.send({ embeds: [ {
-    description: '**:bank::card_index::moneybag:Ravencoin Lite (RVL) Address!:moneybag::card_index::bank:**',
+    description: '**:bank::card_index::moneybag:' + coinname + ' (' + coinsymbol + ') Address!:moneybag::card_index::bank:**',
     color: 1363892,
     fields: [
       {
@@ -182,16 +189,16 @@ function doWithdraw(message, tipper, words, helpmsg) {
     amount = getValidatedAmount(words[3]);
 
   if (amount === null) {
-    message.reply("I don't know how to withdraw that much Ravencoin Lite (RVL)...").then(message => message.delete(10000));
+    message.reply("I don't know how to withdraw that much " + coinname + " (" + coinsymbol + ")...").then(message => message.delete(10000));
     return;
   }
 
   rvn.getBalance(tipper, 1, function(err, balance) {
     if (err) {
-      message.reply('Error getting Ravencoin Lite (RVL) balance.').then(message => message.delete(10000));
+      message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(message => message.delete(10000));
     } else {
       if (Number(amount) + Number(paytxfee) > Number(balance)) {
-        message.channel.send('Please leave atleast ' + paytxfee + ' Ravencoin Lite (RVL) for transaction fees!');
+        message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!');
         return;
       }
       rvn.sendFrom(tipper, address, Number(amount), function(err, txId) {
@@ -199,7 +206,7 @@ function doWithdraw(message, tipper, words, helpmsg) {
           message.reply(err.message).then(message => message.delete(10000));
         } else {
         message.channel.send({embeds: [ {
-        description: '**:outbox_tray::money_with_wings::moneybag:Ravencoin Lite (RVL) Transaction Completed!:moneybag::money_with_wings::outbox_tray:**',
+        description: '**:outbox_tray::money_with_wings::moneybag:' + coinsymbol + ' (' + coinsymbol + ') Transaction Completed!:moneybag::money_with_wings::outbox_tray:**',
         color: 1363892,
         fields: [
           {
@@ -250,16 +257,16 @@ function doTip(bot, message, tipper, words, helpmsg) {
   let amount = getValidatedAmount(words[amountOffset]);
 
   if (amount === null) {
-    message.reply("I don't know how to tip that much Ravencoin Lite (RVL)...").then(message => message.delete(10000));
+    message.reply("I don't know how to tip that much " + coinname + " (" + coinsymbol + ")...").then(message => message.delete(10000));
     return;
   }
 
   rvn.getBalance(tipper, 1, function(err, balance) {
     if (err) {
-      message.reply('Error getting Ravencoin Lite (RVL) balance.').then(message => message.delete(10000));
+      message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(message => message.delete(10000));
     } else {
       if (Number(amount) + Number(paytxfee) > Number(balance)) {
-        message.channel.send('Please leave atleast ' + paytxfee + ' Ravencoin Lite (RVL) for transaction fees!');
+        message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!');
         return;
       }
 
@@ -292,7 +299,7 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
                               });
 		} else {
                   message.channel.send({ embeds: [ {
-                  description: '**:money_with_wings::moneybag:Ravencoin Lite (RVL) Transaction Completed!:moneybag::money_with_wings:**',
+                  description: '**:money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Transaction Completed!:moneybag::money_with_wings:**',
                   color: 1363892,
                   fields: [
                     {
@@ -355,7 +362,7 @@ function dumpPrivKey(message, tipper) {
   getAddress(tipper, function(err, address) {
     if (err) {
       console.log(err);
-      message.reply('Error getting your Ravencoin Lite (RVL) deposit address.').then(message => message.delete(10000));
+      message.reply('Error getting your ' + coinname + ' (' + coinsymbol + ') deposit address.').then(message => message.delete(10000));
     } else {
 
     rvn.dumpPrivKey(address, function(err, privkey) {
@@ -367,7 +374,7 @@ function dumpPrivKey(message, tipper) {
 	    } else {
 
 		    message.channel.send({ embeds: [ {
-    description: '**:closed_lock_with_key::money_with_wings::moneybag:Ravencoin Lite (RVL) PrivKey sent!:moneybag::money_with_wings::closed_lock_with_key:**',
+    description: '**:closed_lock_with_key::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') PrivKey sent!:moneybag::money_with_wings::closed_lock_with_key:**',
     color: 1363892,
     fields: [
       {
@@ -389,7 +396,7 @@ function dumpPrivKey(message, tipper) {
 
     message.author.send({ embeds: [ {
 //    message.channel.send({ embeds: [ {
-	    description: '**:closed_lock_with_key:::money_with_wings::moneybag:Ravencoin Lite (RVL) Privkey:moneybag::money_with_wings::closed_lock_with_key:**',
+	    description: '**:closed_lock_with_key:::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Privkey:moneybag::money_with_wings::closed_lock_with_key:**',
     color: 1363892,
     fields: [
       {
@@ -434,7 +441,7 @@ function getDifficulty(message) {
             } else {
                     message.channel.send({ embeds: [ {
 
-			    description: '**:pick: Ravencoin Lite (RVL) Network difficulty :pick:**',
+			    description: '**:pick: ' + coinname + ' (' + coinsymbol + ') Network difficulty :pick:**',
 			    color: 1363892,
 			    fields: [
 				    {
@@ -471,7 +478,7 @@ function getNetworkHashPs(message){
 		
                     message.channel.send({ embeds: [ {
 
-                            description: '**:pick: Ravencoin Lite (RVL) Network hashrate :pick:**',
+                            description: '**:pick: ' + coinname + ' (' + coinsymbol + ') Network hashrate :pick:**',
                             color: 1363892,
                             fields: [
                                     {
@@ -512,7 +519,7 @@ function getMiningInfo(message){
 
                     message.channel.send({ embeds: [ {
 
-                            description: '**:pick: Ravencoin Lite (RVL) network mining info :pick:**',
+                            description: '**:pick: ' + coinname + ' (' + coinsymbol + ') network mining info :pick:**',
                             color: 1363892,
                             fields: [
 				    {
@@ -579,7 +586,7 @@ function getBlockchainInfo(message){
 
                     message.channel.send({ embeds: [ {
 
-                            description: '**:chains:  Ravencoin Lite (RVL) blockchain info  :chains:**',
+                            description: '**:chains:  ' + coinname + ' (' + coinsymbol + ') blockchain info  :chains:**',
                             color: 1363892,
                             fields: [
                                     {
@@ -673,13 +680,13 @@ function getPrice(message, cur){
 
 			  message.channel.send({ embeds: [ {
 
-                                  description: '**:chart_with_upwards_trend: Ravencoin Lite (RVL) Price Info :chart_with_upwards_trend:**',
+                                  description: '**:chart_with_upwards_trend: ' + coinname + ' (' + coinsymbol + ') Price Info :chart_with_upwards_trend:**',
 
                                   color: 1363892,
 
                                   fields: [
 					  {
-					  	  name: 'Exbitron (RVL/'+cur.toUpperCase()+')',
+					  	  name: 'Exbitron (' + coinsymbol + '/'+cur.toUpperCase()+')',
 						  value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/rvl'+cur,
 						  inline: false
 					  },
@@ -709,8 +716,8 @@ function getPrice(message, cur){
 						  inline: true
 					  },
 					  {
-					  	  name: 'Volume(RVL)',
-						  value: amount + ' RVL',
+					  	  name: 'Volume(' + coinsymbol + ')',
+						  value: amount + ' ' + coinsymbol,
 						  inline: true
 					  },
 					  {
@@ -788,13 +795,13 @@ function getPrice(message, cur){
 
                           message.channel.send({ embeds: [ {
 
-                                  description: '**:chart_with_upwards_trend: Ravencoin Lite (RVL) Price Info :chart_with_upwards_trend:**',
+                                  description: '**:chart_with_upwards_trend: ' + coinname + ' (' + coinsymbol + ') Price Info :chart_with_upwards_trend:**',
 
                                   color: 1363892,
 
                                   fields: [
                                           {
-                                                  name: 'Trade Ogre (RVL/'+cur.toUpperCase()+')',
+                                                  name: 'Trade Ogre (' + coinsymbol.toUpperCase() + '/'+cur.toUpperCase()+')',
                                                   value: '**https://tradeogre.com**\nhttps://tradeogre.com/exchange/'+ cur.toUpperCase() +'-RVL',
                                                   inline: false
                                           },
@@ -873,9 +880,9 @@ function getPrice(message, cur){
 
 }
 
-//////////////////////////////
-// Retrieve wRVL information//
-//////////////////////////////
+//////////////////////////////////////
+// Retrieve wrapped coin information//
+/////////////////////////////////////
 
 function getWRVL(message){
 	        const https = require('https')
@@ -899,13 +906,13 @@ function getWRVL(message){
 
                           message.channel.send({ embeds: [ {
 
-                                  description: '**:gift: wRVL Token Information :gift:\n\u200b**',
+                                  description: '**:gift: w' + coinsymbol + ' Token Information :gift:\n\u200b**',
 
                                   color: 1363892,
 
                                   fields: [
 					  {
-						  name: ':envelope_with_arrow:  Wrap your RVL!  :envelope_with_arrow:',
+						  name: ':envelope_with_arrow:  Wrap your ' + coinsymbol + '!  :envelope_with_arrow:',
                                                   value: '' + coinwrapurl,
                                                   inline: false
                                           },
@@ -915,7 +922,7 @@ function getWRVL(message){
                                                   inline: false
                                           },
                                           {
-						  name: ':coin:  wRVL Token Supply  :coin:',
+						  name: ':coin:  w' + coinsymbol + ' Token Supply  :coin:',
                                                   value: '' + supply,
                                                   inline: true
                                           },
@@ -930,7 +937,7 @@ function getWRVL(message){
 
                           } ] }).then(msg => {
 
-                                  setTimeout(() => msg.delete(), 60000)
+                                  setTimeout(() => msg.delete(), 120000)
 
                           });
 
@@ -948,6 +955,126 @@ function getWRVL(message){
         return;
 
 }
+
+////////////////////////
+// Get Sushi Swap data//
+////////////////////////
+
+function getSushi(message){
+                const https = require('https')
+                const options = {
+                  hostname: 'api2.sushipro.io',
+                  port: 443,
+                  path: '/?chainID=137&action=get_pairs_by_token&token=' + contractaddress,
+                  method: 'GET'
+                }
+                // console.log(options);
+                const req = https.request(options, res => {
+                // console.log(`statusCode: ${res.statusCode}`)
+                // console.log(req);
+                  res.on('data', d => {
+
+                          var d = JSON.parse(d);
+			  
+			  var chain = String(d[0].chain);
+			  var token = String(d[0].token);
+			  var pairID = String(d[1][0].Pair_ID);
+			  var Token_1_symbol = String(d[1][0].Token_1_symbol); 
+			  var Token_1_price = Number(d[1][0].Token_1_price).toFixed(8);
+			  var Token_2_symbol = String(d[1][0].Token_2_symbol);
+			  var Token_2_price = Number(d[1][0].Token_2_price).toFixed(8);
+			  var Token_1_reserve = Number(d[1][0].Token_1_reserve).toFixed(8); 
+			  var Token_2_reserve = Number(d[1][0].Token_2_reserve).toFixed(8);
+			  var Token_1_name = String(d[1][0].Token_1_name);
+			  var Token_2_name = String(d[1][0].Token_2_name);
+
+                          var time = new Date();
+
+                          message.channel.send({ embeds: [ {
+
+				  description: '**:sushi: ' + Token_2_symbol + '/' + Token_1_symbol + ' Sushi Swap Information :sushi:**\n\n**Sushi Swap Analytics**\n*https://analytics-polygon.sushi.com/pairs/' + pairID + '*\n\n**PooCoin Charts**\n*https://polygon.poocoin.app/tokens/' + token + '\n\u200b*',
+
+                                  color: 1363892,
+
+                                  fields: [
+                                          {
+                                                  name: ':chains:  Chain  :chains:',
+                                                  value: '' + chain,
+                                                  inline: true
+                                          },
+                                          {
+						  name: ':coin:  ' + Token_2_symbol + ' Token ID  :coin:',
+                                                  value: '' + token,
+                                                  inline: true
+                                          },
+                                          {
+						  name: ':scales:  Pair ID  :scales:',
+                                                  value: '' + pairID,
+                                                  inline: true
+                                          },
+					  {
+						  name: ':chart_with_upwards_trend:  ' + Token_2_symbol + ' Price  :chart_with_upwards_trend:',
+						  value: Token_1_price + ' '+ Token_1_symbol,
+					  	  inline: true
+					  },
+					  {
+                                                  name: '\u200b',
+                                                  value: '\u200b',
+                                                  inline: true
+                                          },
+					  {
+						  name: ':bank:  ' + Token_2_symbol + ' Reserve  :bank:',
+                                                  value: ''+ Token_2_reserve + ' ' + Token_2_symbol,
+                                                  inline: true
+                                          },
+					  {
+						  name: ':chart_with_upwards_trend:  ' + Token_1_symbol + ' Price  :chart_with_upwards_trend:',
+                                                  value: Token_2_price + ' '+ Token_2_symbol,
+                                                  inline: true
+                                          },
+					  {
+                                                  name: '\u200b',
+                                                  value: '\u200b',
+                                                  inline: true
+                                          },
+					  {
+						  name: ' :bank:  ' + Token_1_symbol + ' Reserve  :bank:',
+                                                  value: ''+ Token_1_reserve + ' ' + Token_1_symbol,
+                                                  inline: true
+                                          },
+					  {
+                                                  name: ':clock: Time',
+                                                  value: '' + time,
+                                                  inline: false
+                                          }
+					 
+
+
+                                  ]
+
+                          } ] }).then(msg => {
+
+                                  setTimeout(() => msg.delete(), 120000)
+
+                          });
+
+                  })
+
+                })
+
+        req.on('error', error => {
+
+                console.error(error)
+
+        })
+        req.end();
+
+        return;
+
+}
+
+
+///////////////////
 
 
 function inPrivateorSpamChannel(msg) {

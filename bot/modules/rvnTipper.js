@@ -3,25 +3,35 @@
 const bitcoin = require('bitcoin');
 
 let Regex = require('regex'),
-  config = require('config'),
-  spamchannels = config.get('moderation').botspamchannels;
-let walletConfig = config.get('rvl').config;
-let paytxfee = config.get('rvl').paytxfee;
-let polygonapikey = config.get('wrvl').polygonapikey;
-let contractaddress = config.get('wrvl').contractaddress;
-let coinwrapurl = config.get('wrvl').coinwrapurl;
-let coinname = config.get('rvl').coinname;
-let coinsymbol = config.get('rvl').coinsymbol;
+ config = require('config'),
+ spamchannels = config.get('moderation').botspamchannels;
+let walletConfig = config.get('avn').config;
+let paytxfee = config.get('avn').paytxfee;
+let polygonapikey = config.get('wavn').polygonapikey;
+let contractaddress = config.get('wavn').contractaddress;
+let coinwrapurl = config.get('wavn').coinwrapurl;
+let coinname = config.get('avn').coinname;
+let coinsymbol = config.get('avn').coinsymbol;
+let prefix = config.get('bot').prefix;
+
+let oldcoinsymbol = "RVL";
+let oldcontractaddress = "0x56F483CF2f1F6cf224656647CA0a0D11BFB0404E";
+
 
 const rvn = new bitcoin.Client(walletConfig);
 
-exports.commands = ['tiprvl'];
+exports.commands = ['tipavn'];
 //console.log(exports.commands);
-exports.tiprvl = {
+let text = exports.commands.toString();
+let botcmd = text.replace("['", "");
+botcmd = text.replace("']", "");
+//console.log('botcmd='+botcmd);
+
+exports.tipavn = {
   usage: '<subcommand>',
   description:
-  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n    **!tiprvl <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **!tiprvl wrvl** : Display w' + coinsymbol + ' information\n    **!tiprvl sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **!tiprvl diff** : Display current network difficulty\n    **!tiprvl hash** : Display current network hashrate\n    **!tiprvl mininginfo** : Display network mining info\n    **!tiprvl chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
-  process: async function(bot, msg, suffix) {
+  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
+    process: async function(bot, msg, suffix) {
     let tipper = msg.author.id.replace('!', ''),
       words = msg.content
 	.trim()
@@ -31,7 +41,7 @@ exports.tiprvl = {
         }),
       subcommand = words.length >= 2 ? words[1] : 'help',
       helpmsg =
-        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **!tiprvl** : Displays This Message\n    **!tiprvl balance** : get your balance\n    **!tiprvl deposit** : get address for your deposits\n    **!tiprvl withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **!tiprvl <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **!tiprvl private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **!tiprvl privkey** : dump privkey for your wallet(result sent via DM)\n    **!tiprvl <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **!tiprvl wrvl** : Display w' + coinsymbol + ' information\n    **!tiprvl sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **!tiprvl diff** : Display current network difficulty\n    **!tiprvl hash** : Display current network hashrate\n    **!tiprvl mininginfo** : Display network mining info\n    **!tiprvl chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
+        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
@@ -64,8 +74,8 @@ exports.tiprvl = {
       case 'privkey':
 	dumpPrivKey(msg, tipper);
       break;
-      case 'wrvl':
-	getWRVL(msg);
+      case 'wavn':
+	getWAVN(msg);
       break;
       case 'sushi':
 	getSushi(msg);
@@ -649,7 +659,7 @@ function getPrice(message, cur){
 		const options = {
                   hostname: 'www.exbitron.com',
                   port: 443,
-                  path: '/api/v2/peatio/public/markets/rvl' + cur + '/tickers',
+                  path: '/api/v2/peatio/public/markets/' + oldcoinsymbol.toLowerCase() + cur + '/tickers',
                   method: 'GET',
                 }
 
@@ -687,7 +697,7 @@ function getPrice(message, cur){
                                   fields: [
 					  {
 					  	  name: 'Exbitron (' + coinsymbol + '/'+cur.toUpperCase()+')',
-						  value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/rvl'+cur,
+						  value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/'+oldcoinsymbol.toLowerCase()+cur,
 						  inline: false
 					  },
                                           {
@@ -765,7 +775,7 @@ function getPrice(message, cur){
 		                const options = {
                   hostname: 'tradeogre.com',
                   port: 443,
-                  path: '/api/v1/ticker/'+ cur.toUpperCase() +'-RVL',
+                  path: '/api/v1/ticker/'+ cur.toUpperCase() +'-'+oldcoinsymbol.toUpperCase(),
                   method: 'GET',
                 }
 
@@ -802,7 +812,7 @@ function getPrice(message, cur){
                                   fields: [
                                           {
                                                   name: 'Trade Ogre (' + coinsymbol.toUpperCase() + '/'+cur.toUpperCase()+')',
-                                                  value: '**https://tradeogre.com**\nhttps://tradeogre.com/exchange/'+ cur.toUpperCase() +'-RVL',
+                                                  value: '**https://tradeogre.com**\nhttps://tradeogre.com/exchange/'+ cur.toUpperCase() +'-'+oldcoinsymbol.toUpperCase(),
                                                   inline: false
                                           },
                                           {
@@ -880,28 +890,29 @@ function getPrice(message, cur){
 
 }
 
+
 //////////////////////////////////////
 // Retrieve wrapped coin information//
 /////////////////////////////////////
 
-function getWRVL(message){
-	        const https = require('https')
+function getWAVN(message){
+                const https = require('https')
                 const options = {
                   hostname: 'api.polygonscan.com',
                   port: 443,
                   path: '/api?module=stats&action=tokensupply&contractaddress=' + contractaddress + '&apikey=' + polygonapikey,
-		  method: 'GET'
+                  method: 'GET'
                 }
-		// console.log(options);
+                // console.log(options);
                 const req = https.request(options, res => {
                 //console.log(`statusCode: ${res.statusCode}`)
-		//console.log(req);
+                //console.log(req);
                   res.on('data', d => {
 
                           var d = JSON.parse(d);
                           //console.log("d.result=" + d.result);
                           var supply = Number(d.result / 1000000000000000000).toFixed(18);
-			  //console.log("suppply="+ supply);
+                          //console.log("suppply="+ supply);
                           var time = new Date();
 
                           message.channel.send({ embeds: [ {
@@ -911,48 +922,48 @@ function getWRVL(message){
                                   color: 1363892,
 
                                   fields: [
-					  {
-						  name: ':envelope_with_arrow:  Wrap your ' + coinsymbol + '!  :envelope_with_arrow:',
+                                          {
+                                                  name: ':envelope_with_arrow:  Wrap your ' + coinsymbol + '!  :envelope_with_arrow:',
                                                   value: '' + coinwrapurl,
                                                   inline: false
                                           },
-					  {
-						  name: ':envelope:  Contract address  :envelope:',
+                                          {
+                                                  name: ':envelope:  Contract address  :envelope:',
                                                   value: contractaddress +'\nhttps://polygonscan.com/token/' + contractaddress,
                                                   inline: false
                                           },
                                           {
-						  name: ':coin:  w' + coinsymbol + ' Token Supply  :coin:',
+                                                  name: ':coin:  w' + coinsymbol + ' Token Supply  :coin:',
                                                   value: '' + supply,
                                                   inline: true
                                           },
                                           {
-						  name: ':clock: Time',
+                                                  name: ':clock: Time',
                                                   value: '' + time,
                                                   inline: false
                                           }
 
 
                                   ]
+ 
+			  } ] }).then(msg => {
 
-                          } ] }).then(msg => {
-
-                                  setTimeout(() => msg.delete(), 120000)
-
-                          });
-
-                  })
-
-                })
-
-        req.on('error', error => {
-
-                console.error(error)
-
-        })
-        req.end();
-
-        return;
+				  setTimeout(() => msg.delete(), 120000)
+				  
+			  });
+			  
+		  })
+		
+		})
+	        
+	req.on('error', error => {
+	
+		console.error(error)
+		
+	})
+	req.end();
+	
+	return;
 
 }
 
@@ -975,10 +986,59 @@ function getSushi(message){
                   res.on('data', d => {
 
                           var d = JSON.parse(d);
-			  
+			 
+			  var number_of_results =  Number(d[0].number_of_results);
+
+			  if(number_of_results == 0){
+			  	
+				  
+				  var time = new Date();
+
+				  message.channel.send({ embeds: [ {
+
+
+					  description: '**:sushi: W' + coinsymbol + ' Sushi Swap Information :sushi:**',
+
+					
+					  color: 1363892,
+
+					
+					  fields: [
+						  {
+						  
+							  name: 'No pairs found for W' + coinsymbol,
+							  value: '\u200b',
+							  inline: false
+						  },
+						  {
+						  
+							  name: 'Add liquidity on Sushi Swap!',
+							  value: '*https://app.sushi.com/add/ETH/' + contractaddress + '*',
+							  inline: false
+
+						  },
+						  {
+                                                  
+							  name: ':clock: Time',
+							  value: '' + time,
+							  inline: false
+						  }
+                                  
+						  ]
+
+				  } ] }).then(msg => {
+                                  
+					  setTimeout(() => msg.delete(), 120000)
+
+				  });
+
+			  }else{
+
+
 			  var chain = String(d[0].chain);
 			  var token = String(d[0].token);
 			  var pairID = String(d[1][0].Pair_ID);
+
 			  var Token_1_symbol = String(d[1][0].Token_1_symbol); 
 			  var Token_1_price = Number(d[1][0].Token_1_price).toFixed(8);
 			  var Token_2_symbol = String(d[1][0].Token_2_symbol);
@@ -1057,6 +1117,9 @@ function getSushi(message){
                                   setTimeout(() => msg.delete(), 120000)
 
                           });
+			  
+			  
+			  }
 
                   })
 
@@ -1075,6 +1138,7 @@ function getSushi(message){
 
 
 ///////////////////
+
 
 
 function inPrivateorSpamChannel(msg) {

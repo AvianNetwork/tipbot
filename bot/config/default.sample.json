@@ -5,7 +5,7 @@
       "prefix": "!",
       "debug": true
   },
-  "rvl": {
+  "avn": {
     "coinname": "",
     "coinsymbol": "",
     "paytxfee": 0.005,
@@ -30,7 +30,7 @@
     "explorertxurl": "",
     "exploreraddressurl": ""
   }
- "wrvl":{
+ "wavn":{
     "contractaddress": "",
     "polygonapikey": "",
     "coinwrapurl": ""

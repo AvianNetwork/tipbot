@@ -30,7 +30,7 @@ botcmd = text.replace("']", "");
 exports.tipavn = {
   usage: '<subcommand>',
   description:
-  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
+  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n   **<> : Replace with appropriate value.**',
     process: async function(bot, msg, suffix) {
     let tipper = msg.author.id.replace('!', ''),
       words = msg.content
@@ -41,7 +41,7 @@ exports.tipavn = {
         }),
       subcommand = words.length >= 2 ? words[1] : 'help',
       helpmsg =
-        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
+        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
@@ -88,6 +88,9 @@ exports.tipavn = {
       break;
       case 'mininginfo':
 	getMiningInfo(msg);
+      break;
+      case 'miningcalc':
+	miningCalc(msg, words[2]);
       break;
       case 'chaininfo':
 	getBlockchainInfo(msg);
@@ -1136,11 +1139,116 @@ function getSushi(message){
 
 }
 
+////////////////////////////////////////////
+/// miningCalc - Calculate mininig returns
+////////////////////////////////////////////
+
+function miningCalc(message, hashrate) {
+
+
+		rvn.getDifficulty(function(err, difficulty) {
+
+			if (err) {
+			
+				message.reply(err.message).then(msg => {
+				
+					setTimeout(() => msg.delete(), 10000)
+                    
+				});
+                
+			} else {
+
+				var netdiff = difficulty
+				difficulty = difficulty.toString().replace(".", "").padEnd(13, "0");
+				difficulty = Number(difficulty);
+				// check for negative number
+				if(hashrate <= 0){
+					hashrate = "Please supply a positive number in ";
+					hashpersec = "0";
+					secondsSolo = "0";
+					minutesSolo = ":infinity:";
+					hoursSolo = ":infinity:";
+					profitability = "0";
+
+				}else if(isNaN(hashrate)){
+					hashrate = "Please supply a number in ";
+					hashpersec = "0";
+					secondsSolo = "0";
+					minutesSolo = ":infinity:";
+					hoursSolo = ":infinity:";
+					profitability = "0";
+				}else{
+
+
+				//console.log("difficulty="+difficulty);
+				var hashpersec = Number(hashrate * 1000000);
+				//console.log("hashpersec="+hashpersec)
+				var secondsSolo = Number(difficulty * 4294967296 / hashpersec / 10000000000000);
+				//console.log("secondsSolo="+secondsSolo);
+				var minutesSolo = Number(secondsSolo / 60).toFixed(2);
+				var hoursSolo = Number(secondsSolo / 360).toFixed(2);
+				var profitability = Number(hashpersec * 86400 * 2500 * 1000000000000 / difficulty / 4294967296).toFixed(8);
+				//console.log("profitability="+profitability);
+				}
+				var time = new Date();
+
+
+				message.channel.send({ embeds: [ {
+
+                                  
+					description: '**:abacus: ' + coinsymbol + ' Mining Calculator :abacus:\n\u200b**',
+
+					color: 1363892,
+
+
+					fields: [
+                                        
+						{
+							name: 'Hashrate',
+							value: '' + hashrate + 'MH/s',
+							inline: true
+                                          
+						},
+                                          
+						{
+                                                  	name: 'Difficulty',
+	                                                  value: '' + netdiff + '',
+        	                                          inline: true
+                	                          },
+                        	                  {
+                                	                  name: 'Time to find',
+                                        	          value: hoursSolo + ' hrs (' + minutesSolo + ' mins)',
+                                                	  inline: true
+	                                          },
+						  {
+							  name: '' + coinsymbol + ' per day',
+							  value: '' + profitability,
+							  inline: true
+						  },
+
+	                                          {
+        	                                          name: ':clock: Time',
+                	                                  value: '' + time,
+                        	                          inline: false
+                                	          }
+
+	                                  ]
+
+        
+				} ] }).then(msg => {
+                                
+					setTimeout(() => msg.delete(), 120000)
+
+				});
+                
+			}
+
+			return;
+		
+		})
+}
 
 ///////////////////
-
-
-
 function inPrivateorSpamChannel(msg) {
   if (msg.channel.type == 'dm' || isSpam(msg)) {
     return true;
@@ -1157,6 +1265,9 @@ function isSpam(msg) {
 function getValidatedAmount(amount) {
   amount = amount.trim();
   if (amount.toLowerCase().endsWith('rvl')) {
+    amount = amount.substring(0, amount.length - 3);
+  }
+  if (amount.toLowerCase().endsWith('avn')) {
     amount = amount.substring(0, amount.length - 3);
   }
   return amount.match(/^[0-9]+(\.[0-9]+)?$/) ? amount : null;

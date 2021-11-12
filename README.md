@@ -1,1 +1,3 @@
-<h2>CorvusCoin TipBot</h2>
+<h2>Avian Network TipBot</h2>
+
+

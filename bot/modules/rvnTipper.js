@@ -24,13 +24,13 @@ exports.commands = ['tipavn'];
 //console.log(exports.commands);
 let text = exports.commands.toString();
 let botcmd = text.replace("['", "");
-botcmd = text.replace("']", "");
+botcmd = botcmd.replace("']", "");
 //console.log('botcmd='+botcmd);
 
 exports.tipavn = {
   usage: '<subcommand>',
   description:
-  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n   **<> : Replace with appropriate value.**',
+  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n   **<> : Replace with appropriate value.**',
     process: async function(bot, msg, suffix) {
     let tipper = msg.author.id.replace('!', ''),
       words = msg.content
@@ -41,7 +41,7 @@ exports.tipavn = {
         }),
       subcommand = words.length >= 2 ? words[1] : 'help',
       helpmsg =
-        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
+        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
@@ -57,19 +57,19 @@ exports.tipavn = {
         privateorSpamChannel(msg, channelwarning, doWithdraw, [tipper, words, helpmsg]);
         break;
       case 'usdt':
-        getPrice(msg, 'usdt');
+        getPrice(msg, 'usdt', words[2]);
         break;
       case 'btc':
-	getPrice(msg, 'btc');
+	getPrice(msg, 'btc', words[2]);
 	break;
       case 'rvn':
-	getPrice(msg, 'rvn');
+	getPrice(msg, 'rvn', words[2]);
 	break;
       case 'doge':
-        getPrice(msg, 'doge');
+        getPrice(msg, 'doge', words[2]);
         break;
       case 'ltc':
-	getPrice(msg, 'ltc');
+	getPrice(msg, 'ltc', words[2]);
 	break;
       case 'privkey':
 	dumpPrivKey(msg, tipper);
@@ -657,7 +657,9 @@ function getBlockchainInfo(message){
 // Get market prices //
 ///////////////////////
 
-function getPrice(message, cur){
+function getPrice(message, cur, amt){
+	
+
             const https = require('https')
 		const options = {
                   hostname: 'www.exbitron.com',
@@ -690,82 +692,125 @@ function getPrice(message, cur){
                           var avg = d['ticker'].avg_price;
                           var avg = Number(avg).toFixed(8);
                           var change = d['ticker'].price_change_percent;
+			 
+			  if(!isNaN(amt)){
+			  
+				  var worth = Number(last * amt).toFixed(8);	  
+				  sendWorth(worth);
 
-			  message.channel.send({ embeds: [ {
+			  }else{
+			  
 
-                                  description: '**:chart_with_upwards_trend: ' + coinname + ' (' + coinsymbol + ') Price Info :chart_with_upwards_trend:**',
+				  message.channel.send({ embeds: [ {
 
-                                  color: 1363892,
+                                  
+					  description: '**:chart_with_upwards_trend: ' + coinname + ' (' + coinsymbol + ') Price Info :chart_with_upwards_trend:**',
 
-                                  fields: [
-					  {
-					  	  name: 'Exbitron (' + coinsymbol + '/'+cur.toUpperCase()+')',
-						  value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/'+oldcoinsymbol.toLowerCase()+cur,
-						  inline: false
-					  },
-                                          {
-                                                  name: 'Last',
-                                                  value: last,
-                                                  inline: true
-                                          },
-					  {
-						  name: ':arrow_down: Low',
-                                                  value: low,
-                                                  inline: true
-                                          },
-					  {
-						  name: ':arrow_up: High',
-                                                  value: high,
-                                                  inline: true
-                                          },
-					  {
-						  name: 'Open',
-                                                  value: open,
-                                                  inline: true
-                                          },
-					  {
-					  	  name: 'Volume('+cur.toUpperCase()+')',
-						  value: volume + ' '+cur.toUpperCase(),
-						  inline: true
-					  },
-					  {
-					  	  name: 'Volume(' + coinsymbol + ')',
-						  value: amount + ' ' + coinsymbol,
-						  inline: true
-					  },
-					  {
-                                                  name: 'Change',
-                                                  value: change,
-                                                  inline: true
-                                          },
-					  {
-                                                  name: '\u200b',
-                                                  value: '\u200b',
-                                                  inline: true
-                                          },
-					  {
-						  name: 'Time',
-						  value: '' + time,
-						  inline: false
-					  }
+					  color: 1363892,
+
+					  fields: [
+					  
+						  {
+							  name: 'Exbitron (' + coinsymbol + '/'+cur.toUpperCase()+')',
+							  value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/'+oldcoinsymbol.toLowerCase()+cur,
+							  inline: false
+						  },
+                                          
+						  {
+							  name: 'Last',
+							  value: last,
+							  inline: true
+						  },
+					  	  {
+						  	  name: ':arrow_down: Low',
+	                                                  value: low,
+        	                                          inline: true
+                	                          },
+						  {
+							  name: ':arrow_up: High',
+                                        	          value: high,
+                                                	  inline: true
+	                                          },
+						  {
+							  name: 'Open',
+                        	                          value: open,
+                                	                  inline: true
+                                        	  },
+						  {
+						  	  name: 'Volume('+cur.toUpperCase()+')',
+							  value: volume + ' '+cur.toUpperCase(),
+							  inline: true
+						  },
+						  {
+						  	  name: 'Volume(' + coinsymbol + ')',
+							  value: amount + ' ' + coinsymbol,
+							  inline: true
+						  },
+						  {
+                                        	          name: 'Change',
+                                                	  value: change,
+	                                                  inline: true
+        	                                  },
+						  {
+                        	                          name: '\u200b',
+                                	                  value: '\u200b',
+                                        	          inline: true
+	                                          },
+						  {
+							  name: 'Time',
+							  value: '' + time,
+							  inline: false
+						  }
 				  	  
 
-                                  ]
+	                                  ]
 
-                          } ] }).then(msg => {
+	                          } ] }).then(msg => {
 
-                                  setTimeout(() => msg.delete(), 60000)
+	                                  setTimeout(() => msg.delete(), 60000)
 
-                          });
+        	                  });
+
+			  
+				  }
+	                  })
 
 
-                  })
+			})
 
-                })
 
-        req.on('error', error => {
 
-                console.error(error)
+	function sendWorth(worth){
+	
+		message.channel.send({ embeds: [ {
+			
+			description: '**:chart_with_upwards_trend: ' + coinname + ' (' + coinsymbol + ') Price Info :chart_with_upwards_trend:**',
+			
+			color: 1363892,
+					
+				
+			fields: [
+			
+				{
+					name: 'Market value of ' + amt + ' ' + coinsymbol,
+					value: '' + worth + ' ' + cur.toUpperCase(),
+					inline: true
+				}
+			]
+					
+				
+		} ] }).then(msg => {
+
+			setTimeout(() => msg.delete(), 60000)
+
+		});
+
+	
+	}
+		
+	req.on('error', error => {
+		
+		console.error(error)
 
         })
 
@@ -773,7 +818,7 @@ function getPrice(message, cur){
 	
 	// If BTC, also retrieve Trade Ogre
 	
-	if(cur == 'btc'){
+	if(cur == 'btc' && isNaN(amt)){
 	
 		                const options = {
                   hostname: 'tradeogre.com',
@@ -1179,17 +1224,20 @@ function miningCalc(message, hashrate) {
 					profitability = "0";
 				}else{
 
+					//console.log("difficulty="+difficulty);
+					var hashpersec = Number(hashrate * 1000000);
+					//console.log("hashpersec="+hashpersec)
+					var secondsSolo = Number(difficulty * 4294967296 / hashpersec / 10000000000000);
+					//console.log("secondsSolo="+secondsSolo);
+					var minutesSolo = Number(secondsSolo / 60).toFixed(2);
+					var hoursSolo = Number(secondsSolo / 360).toFixed(2);
+					var profitability = Number(hashpersec * 86400 * 2500 * 1000000000000 / difficulty / 4294967296).toFixed(8);
+					var hrlyprofit = Number(profitability / 24).toFixed(8);
+					var minuteprofit = Number(hrlyprofit / 60).toFixed(8);
 
-				//console.log("difficulty="+difficulty);
-				var hashpersec = Number(hashrate * 1000000);
-				//console.log("hashpersec="+hashpersec)
-				var secondsSolo = Number(difficulty * 4294967296 / hashpersec / 10000000000000);
-				//console.log("secondsSolo="+secondsSolo);
-				var minutesSolo = Number(secondsSolo / 60).toFixed(2);
-				var hoursSolo = Number(secondsSolo / 360).toFixed(2);
-				var profitability = Number(hashpersec * 86400 * 2500 * 1000000000000 / difficulty / 4294967296).toFixed(8);
-				//console.log("profitability="+profitability);
+					//console.log("profitability="+profitability);
 				}
+
 				var time = new Date();
 
 
@@ -1209,28 +1257,36 @@ function miningCalc(message, hashrate) {
 							inline: true
                                           
 						},
-                                          
 						{
                                                   	name: 'Difficulty',
-	                                                  value: '' + netdiff + '',
-        	                                          inline: true
-                	                          },
-                        	                  {
-                                	                  name: 'Time to find',
-                                        	          value: hoursSolo + ' hrs (' + minutesSolo + ' mins)',
-                                                	  inline: true
-	                                          },
-						  {
-							  name: '' + coinsymbol + ' per day',
-							  value: '' + profitability,
-							  inline: true
-						  },
-
-	                                          {
-        	                                          name: ':clock: Time',
-                	                                  value: '' + time,
-                        	                          inline: false
-                                	          }
+	                                                value: '' + netdiff + '',
+        	                                        inline: true
+                	                        },
+                        	                {
+                                	                name: 'Time to find (solo)',
+                                        	        value: hoursSolo + ' hrs (' + minutesSolo + ' mins)',
+                                                	inline: true
+						},
+						{
+							name: '' + coinsymbol + ' per minute',
+							value: '' + minuteprofit,
+							inline: true
+						},
+						{
+							name: '' + coinsymbol + ' per hour',
+							value: '' + hrlyprofit,
+							inline: true
+						},
+						{
+							name: '' + coinsymbol + ' per day',
+							value: '' + profitability,
+							inline: true
+						},
+	                                        {
+        	                                        name: ':clock: Time',
+                	                                value: '' + time,
+                        	                        inline: false
+                                	        }
 
 	                                  ]
 

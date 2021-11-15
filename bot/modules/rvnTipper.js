@@ -113,7 +113,44 @@ function privateorSpamChannel(message, wrongchannelmsg, fn, args) {
 }
 
 function doHelp(message, helpmsg) {
-  message.reply(helpmsg);
+//  message.reply(helpmsg);
+
+
+    message.channel.send({ embeds: [ {
+	
+	    description: '__**' + coinname + ' (' + coinsymbol + ') Tipper**__',
+	        color: 1363892,
+	        fields: [
+			    {
+				      name: ':left_right_arrow:  Transaction Fees  :left_right_arrow:',
+			              value: '' + paytxfee + ' ' + coinsymbol,
+			              inline: false
+		            },
+			    {
+				    name: ':moneybag:  Wallet commands  :moneybag:',
+				      value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
+				      inline: false
+			    },
+			    {
+			    
+				    name: ':chart_with_upwards_trend:  Market Data  :chart_with_upwards_trend:',
+				    value: '**' + prefix + botcmd + ' exchanges** : Display ' + coinsymbol + ' exchange listings\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n**' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n**' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n\u200b',
+				    inline: false
+			    },
+			    {
+				   name: ':chains:  Blockchain and Mining  :pick:',
+				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n**<> : Replace with appropriate value.**',
+				   inline: false
+			    }
+
+			    ]
+	      } ] }).then(msg => {
+
+		                setTimeout(() => msg.delete(), 120000)
+
+	
+	      });
+
 }
 
 function doBalance(message, tipper) {
@@ -1307,8 +1344,9 @@ function miningCalc(message, hashrate) {
 		})
 }
 
-///////////////////
-
+///////////////////////////////////
+// List current exchange listings
+///////////////////////////////////
 
 function listExchanges(message){
 
@@ -1347,11 +1385,12 @@ function listExchanges(message){
 
 		]
 
-		} ] }).then(msg => {
-                
-			setTimeout(() => msg.delete(), 120000)
 
-		});
+	} ] }).then(msg => {
+	
+		setTimeout(() => msg.delete(), 120000)
+		
+	});
 
 
 }

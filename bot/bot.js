@@ -88,7 +88,7 @@ bot.on('ready', function() {
      status:'online'
   });
 
-  var text = ['ravencoinlite.org'];
+  var text = ['avn.network'];
   var counter = 0;
   setInterval(change, 10000);
 

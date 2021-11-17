@@ -19,7 +19,7 @@ let oldcontractaddress = "0x56F483CF2f1F6cf224656647CA0a0D11BFB0404E";
 
 
 const rvn = new bitcoin.Client(walletConfig);
-
+let balancecase = "bal" || "balance"
 exports.commands = ['tipavn'];
 //console.log(exports.commands);
 let text = exports.commands.toString();
@@ -47,7 +47,7 @@ exports.tipavn = {
       case 'help':
         privateorSpamChannel(msg, channelwarning, doHelp, [helpmsg]);
         break;
-      case 'balance':
+      case balancecase:
         doBalance(msg, tipper);
         break;
       case 'deposit':

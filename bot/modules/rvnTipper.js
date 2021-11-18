@@ -20,14 +20,14 @@ let oldcontractaddress = "0x56F483CF2f1F6cf224656647CA0a0D11BFB0404E";
 
 const rvn = new bitcoin.Client(walletConfig);
 
-exports.commands = ['tipavn'];
+exports.commands = ['avn'];
 //console.log(exports.commands);
 let text = exports.commands.toString();
 let botcmd = text.replace("['", "");
 botcmd = botcmd.replace("']", "");
 //console.log('botcmd='+botcmd);
 
-exports.tipavn = {
+exports.avn = {
   usage: '<subcommand>',
   description:
   '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n    **' + prefix + botcmd + ' exchanges** : Display ' + coinsymbol + ' exchange listings\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n   **<> : Replace with appropriate value.**',
@@ -98,6 +98,10 @@ exports.tipavn = {
       case 'exchanges':
 	listExchanges(msg);
       break;
+      case 'validate':
+      case 'validateaddr':
+	validateAddress(msg, words[2]);
+      break;
       default:
         doTip(bot, msg, tipper, words, helpmsg);
     }
@@ -139,7 +143,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				   name: ':chains:  Blockchain and Mining  :pick:',
-				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n**<> : Replace with appropriate value.**',
+				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\n**<> : Replace with appropriate value.**',
 				   inline: false
 			    }
 
@@ -179,7 +183,7 @@ function doBalance(message, tipper) {
     ]
   } ] }).then(msg => {
    
-	  setTimeout(() => msg.delete(), 50000)
+	  setTimeout(() => msg.delete(), 120000)
          
   });
 
@@ -1394,10 +1398,76 @@ function listExchanges(message){
 
 
 }
+////////////////////
+
+function validateAddress(message, address){
+
+	var address = address;
+	//console.log("address="+address);
+
+        rvn.validateAddress(address, function(err, addr) {
+                var time = new Date();
+
+                if (err) {
+
+                        message.reply(err.message).then(msg => {
+
+                                setTimeout(() => msg.delete(), 10000)
+
+                        });
+
+                } else {
+
+			var addr =  JSON.stringify(addr);
+			var addr =  JSON.parse(addr);
+		
+			if(addr.isvalid === true){
+
+				var validity = ':white_check_mark: Valid ' + coinsymbol + ' address';
+
+			}else if(addr.isvalid === false){
+
+				var validity = ':x: Invalid ' + coinsymbol + ' address';
+
+			}
+			
+			message.channel.send({ embeds: [ {
+
+			    description: '**:house:  ' + coinname + ' (' + coinsymbol + ') address validator  :house:**',
+                            color: 1363892,
+                            fields: [
+                                    {
+                                            name: 'Address',
+                                            value: '' + address + '',
+                                            inline: true
+                                    },
+                                    {
+                                            name: '\u200b',
+                                            value: '\u200b',
+                                            inline: true
+                                    },
+                                    {
+                                            name: 'Validity',
+                                            value: '' + validity + '',
+                                            inline: true
+                                    }
+
+                            ]
+
+                    } ] }).then(msg => {
+                            setTimeout(() => msg.delete(), 30000)
+                    });
+                }
+        })
+
+}
+
+//////////////////////////////
 
 
 
-///////////////////
+
+
 function inPrivateorSpamChannel(msg) {
   if (msg.channel.type == 'dm' || isSpam(msg)) {
     return true;

@@ -65,7 +65,7 @@ bot.on('ready', function() {
       pm2Name +
       '] type ' +
       config.prefix +
-      'tipavn in Discord for a commands list.'
+      'avn in Discord for a commands list.'
   );
   bot.channels.cache
     client.channels.cache.get(logChannel)
@@ -78,7 +78,7 @@ bot.on('ready', function() {
         pm2Name +
         '] type ' +
         config.prefix +
-        'tipavn in Discord for a commands list.'
+        'avn in Discord for a commands list.'
     )});
 
   bot.user.setPresence({

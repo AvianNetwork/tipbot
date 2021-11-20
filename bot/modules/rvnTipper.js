@@ -13,9 +13,10 @@ let coinwrapurl = config.get('wavn').coinwrapurl;
 let coinname = config.get('avn').coinname;
 let coinsymbol = config.get('avn').coinsymbol;
 let prefix = config.get('bot').prefix;
+let msgtimeout = config.get('bot').msgtimeout;
+let errmsgtimeout = config.get('bot').errmsgtimeout;
 
 let oldcoinsymbol = "RVL";
-let oldcontractaddress = "0x56F483CF2f1F6cf224656647CA0a0D11BFB0404E";
 
 
 const rvn = new bitcoin.Client(walletConfig);
@@ -45,7 +46,7 @@ exports.avn = {
       channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
     switch (subcommand) {
       case 'help':
-        privateorSpamChannel(msg, channelwarning, doHelp, [helpmsg]);
+	privateorSpamChannel(msg, channelwarning, doHelp, [helpmsg]);
         break;
       case 'balance':
         doBalance(msg, tipper);
@@ -98,6 +99,9 @@ exports.avn = {
       case 'exchanges':
 	listExchanges(msg);
       break;
+      case 'links':
+	listURLs(msg);
+      break;
       case 'validate':
       case 'validateaddr':
 	validateAddress(msg, words[2]);
@@ -126,10 +130,15 @@ function doHelp(message, helpmsg) {
 	        color: 1363892,
 	        fields: [
 			    {
-				      name: ':left_right_arrow:  Transaction Fees  :left_right_arrow:',
-			              value: '' + paytxfee + ' ' + coinsymbol,
-			              inline: false
+				    name: ':left_right_arrow:  Transaction Fees  :left_right_arrow:',
+			            value: '' + paytxfee + ' ' + coinsymbol + '\n\u200b',
+			            inline: false
 		            },
+			    {
+				    name: ':globe_with_meridians:  Project Info  :globe_with_meridians:',
+				    value: '**' + prefix + botcmd + ' links** : List official project links\n\u200b',
+				    inline: false
+			    },
 			    {
 				    name: ':moneybag:  Wallet commands  :moneybag:',
 				      value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
@@ -150,7 +159,7 @@ function doHelp(message, helpmsg) {
 			    ]
 	      } ] }).then(msg => {
 
-		                setTimeout(() => msg.delete(), 120000)
+		                setTimeout(() => msg.delete(), msgtimeout)
 
 	
 	      });
@@ -183,7 +192,7 @@ function doBalance(message, tipper) {
     ]
   } ] }).then(msg => {
    
-	  setTimeout(() => msg.delete(), 120000)
+	  setTimeout(() => msg.delete(), msgtimeout)
          
   });
 
@@ -203,10 +212,10 @@ function doBalance(message, tipper) {
         inline: false
       }
     ]
-  } ] }).then(msg => {
-              setTimeout(() => msg.delete(), 10000)
-         });
+  } ] }); 
+    
     }
+  
   });
 }
 
@@ -217,6 +226,23 @@ function doDeposit(message, tipper) {
       message.reply('Error getting your ' + coinname + ' (' + coinsymbol + ') deposit address.').then(message => message.delete(10000));
     } else {
     message.channel.send({ embeds: [ {
+    description: '**:bank::card_index::moneybag: ' + coinname + ' (' + coinsymbol + ') Address :moneybag::card_index::bank:**',
+    color: 1363892,
+    fields: [
+      {
+        name: 'Success!',
+        value: ':lock: Deposit address sent via DM',
+        inline: false
+      }
+    ]
+  } ] }).then(msg => {
+
+	  setTimeout(() => msg.delete(), msgtimeout)
+          
+  });
+   
+    message.author.send({ embeds: [ {
+//    message.channel.send({ embeds: [ {
     description: '**:bank::card_index::moneybag:' + coinname + ' (' + coinsymbol + ') Address!:moneybag::card_index::bank:**',
     color: 1363892,
     fields: [
@@ -231,7 +257,8 @@ function doDeposit(message, tipper) {
         inline: false
       }
     ]
-  } ] });
+  } ] });    
+    
     }
   });
 }
@@ -246,21 +273,37 @@ function doWithdraw(message, tipper, words, helpmsg) {
     amount = getValidatedAmount(words[3]);
 
   if (amount === null) {
-    message.reply("I don't know how to withdraw that much " + coinname + " (" + coinsymbol + ")...").then(message => message.delete(10000));
+    message.reply("I don't know how to withdraw that much " + coinname + " (" + coinsymbol + ")...").then(msg => {
+	    
+	    setTimeout(() => msg.delete(), errmsgtimeout)
+    
+    });
     return;
   }
 
   rvn.getBalance(tipper, 1, function(err, balance) {
     if (err) {
-      message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(message => message.delete(10000));
+      message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(msg => {
+	        
+	      setTimeout(() => msg.delete(), errmsgtimeout)
+	      
+      });
     } else {
       if (Number(amount) + Number(paytxfee) > Number(balance)) {
-        message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!');
+        message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!').then(msg => {
+		       
+		setTimeout(() => msg.delete(), errmsgtimeout)
+		
+	});
         return;
       }
       rvn.sendFrom(tipper, address, Number(amount), function(err, txId) {
         if (err) {
-          message.reply(err.message).then(message => message.delete(10000));
+          message.reply(err.message).then(msg => {
+
+		  setTimeout(() => msg.delete(), errmsgtimeout)
+		      
+	  });
         } else {
         message.channel.send({embeds: [ {
         description: '**:outbox_tray::money_with_wings::moneybag:' + coinsymbol + ' (' + coinsymbol + ') Transaction Completed!:moneybag::money_with_wings::outbox_tray:**',
@@ -293,6 +336,7 @@ function doWithdraw(message, tipper, words, helpmsg) {
           }
         ]
       } ] });
+
       }
     });
     }
@@ -314,29 +358,49 @@ function doTip(bot, message, tipper, words, helpmsg) {
   let amount = getValidatedAmount(words[amountOffset]);
 
   if (amount === null) {
-    message.reply("I don't know how to tip that much " + coinname + " (" + coinsymbol + ")...").then(message => message.delete(10000));
+    message.reply("I don't know how to tip that much " + coinname + " (" + coinsymbol + ")...").then(msg => {
+
+	    setTimeout(() => msg.delete(), errmsgtimeout)
+	        
+    });
     return;
   }
 
   rvn.getBalance(tipper, 1, function(err, balance) {
     if (err) {
-      message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(message => message.delete(10000));
+      message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(msg => {
+
+	      setTimeout(() => msg.delete(), errmsgtimeout)
+	      
+      });
     } else {
       if (Number(amount) + Number(paytxfee) > Number(balance)) {
-        message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!');
+        message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!').then(msg => {
+		            
+		setTimeout(() => msg.delete(), errmsgtimeout)
+		    
+	});
         return;
       }
 
       if (!message.mentions.users.first()){
            message
             .reply('Sorry, I could not find a user in your tip...')
-            .then(message => message.delete(10000));
-            return;
+            .then(msg => {
+		                
+		    setTimeout(() => msg.delete(), errmsgtimeout)
+		        
+	    });
+	    return;
           }
       if (message.mentions.users.first().id) {
         sendRVN(bot, message, tipper, message.mentions.users.first().id.replace('!', ''), amount, prv);
       } else {
-        message.reply('Sorry, I could not find a user in your tip...').then(message => message.delete(10000));
+        message.reply('Sorry, I could not find a user in your tip...').then(msg => {
+		            
+		setTimeout(() => msg.delete(), errmsgtimeout)
+		    
+	});
       }
     }
   });
@@ -346,53 +410,97 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
   getAddress(recipient.toString(), function(err, address) {
     if (err) {
       message.reply(err.message).then(msg => {
-                                setTimeout(() => msg.delete(), 10000)
-                              });
+                                
+	      setTimeout(() => msg.delete(), errmsgtimeout)
+              
+      });
     } else {
           rvn.sendFrom(tipper, address, Number(amount), 1, null, null, function(err, txId) {
               if (err) {
                 message.reply(err.message).then(msg => {
-                                setTimeout(() => msg.delete(), 10000)
-                              });
-		} else {
-                  message.channel.send({ embeds: [ {
-                  description: '**:money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Transaction Completed!:moneybag::money_with_wings:**',
-                  color: 1363892,
-                  fields: [
-                    {
-                      name: '__Sender__',
-                      value: '<@' + message.author.id + '>',
-                      inline: true
-                    },
-                    {
-                      name: '__Receiver__',
-                      value: '<@' + recipient + '>',
-                      inline: true
-                    },
-                    {
-                      name: '__txid__',
-                      value: '**' + txId + '**\n' + txLink(txId),
-                      inline: false
-                    },
-                    {
-                      name: '__Amount__',
-                      value: '**' + amount.toString() + '**',
-                      inline: true
-                    },
-                    {
-                      name: '__Fee__',
-                      value: '**' + paytxfee.toString() + '**',
-                      inline: true
-                    }
-                  ]
-                } ] }).then(msg => {
-                                setTimeout(() => msg.delete(), 10000)
-                              });
-                }
-              }
-	  );
+
+			setTimeout(() => msg.delete(), errmsgtimeout)
+                        
+		});
+
+	      } else {
+
+		      message.channel.send({ embeds: [ {
+
+			      description: '**:money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Transaction Completed!:moneybag::money_with_wings:**',
+			      color: 1363892,
+			      fields: [
+			
+				      {
+					      name: '__Sender__',
+					      value: '<@' + message.author.id + '>',
+					      inline: true
+				      },
+				      {
+					      name: '__Receiver__',
+					      value: '<@' + recipient + '>',
+					      inline: true
+				      },
+				      {
+					      name: '__txid__',
+					      value: '**' + txId + '**\n' + txLink(txId),
+					      inline: false
+				      },
+				      {
+					      name: '__Amount__',
+					      value: '**' + amount.toString() + ' ' + coinsymbol + '**',
+					      inline: true
+				      },
+				      {
+					      name: '__Fee__',
+					      value: '**' + paytxfee.toString() + '**',
+					      inline: true
+				      }
+                  
+			      ]
+
+		      } ] }).then(msg => {
+                      
+			      setTimeout(() => msg.delete(), msgtimeout)
+		      
+		      });
+
+		      let user = message.mentions.users.first();
+
+		      user.send({ embeds: [ {
+			      
+			      description: '**:money_with_wings::moneybag: You have received an ' + coinname + ' (' + coinsymbol + ') Tip! :moneybag::money_with_wings:**',
+			      color: 1363892,
+			      fields: [
+			      
+				      {
+					      name: '__Sender__',
+					      value: '<@' + message.author.id + '>',
+					      inline: true
+				      },
+				      {
+					      name: '__txid__',
+					      value: '**' + txId + '**\n' + txLink(txId),
+					      inline: false
+				      },
+				      {
+					      name: '__Amount__',
+					      value: '**' + amount.toString() + ' ' + coinsymbol+ '**',
+					      inline: true
+				      }
+		
+			      ]
+		
+		      } ] })
+                
+	      }
+              
+	  });
+    
     }
+  
   });
+
 }
 
 function getAddress(userId, cb) {
@@ -426,64 +534,73 @@ function dumpPrivKey(message, tipper) {
 
 	    if (err) {
 		    message.reply(err.message).then(msg => {
-			    setTimeout(() => msg.delete(), 10000)
+
+			    setTimeout(() => msg.delete(), errmsgtimeout)
+		    
 		    });
 	    } else {
 
 		    message.channel.send({ embeds: [ {
-    description: '**:closed_lock_with_key::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') PrivKey sent!:moneybag::money_with_wings::closed_lock_with_key:**',
-    color: 1363892,
-    fields: [
-      {
-        name: '__User__',
-        value: '<@' + message.author.id + '>',
-        inline: false
-      },
-      {
-        name: 'Success!',
-        value: '**:lock: Wallet privkey sent via DM**',
-        inline: false
-      }
-    ]
-  } ] }).then(msg => {
+		    
+			    description: '**:closed_lock_with_key::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') PrivKey sent!:moneybag::money_with_wings::closed_lock_with_key:**',
+			    color: 1363892,
+			    fields: [
 
-          setTimeout(() => msg.delete(), 60000)
+				    {
+					    name: '__User__',
+					    value: '<@' + message.author.id + '>',
+					    inline: false
+				    },
+				    {
+					    name: 'Success!',
+					    value: '**:lock: Wallet privkey sent via DM**',
+					    inline: false
+				    }
 
-  });
+			    ]
 
-    message.author.send({ embeds: [ {
-//    message.channel.send({ embeds: [ {
-	    description: '**:closed_lock_with_key:::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Privkey:moneybag::money_with_wings::closed_lock_with_key:**',
-    color: 1363892,
-    fields: [
-      {
-        name: '__User__',
-        value: '<@' + message.author.id + '>',
-        inline: false
-      },
-      {
-        name: 'Wallet PrivKey',
-        value: '**' + privkey.toString() + '**',
-        inline: false
-      },
-      {
-        name: 'Keep it secret.',
-        value: '**Keep it safe.**',
-        inline: false
-      }
-    ]
-  } ] }).then(msg => {
-              setTimeout(() => msg.delete(), 60000)
-         });
+		    } ] }).then(msg => {
+
+			    setTimeout(() => msg.delete(), msgtimeout)
+
+		    });
+
+
+		    message.author.send({ embeds: [ {
+
+			    description: '**:closed_lock_with_key::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Privkey:moneybag::money_with_wings::closed_lock_with_key:**',
+			    color: 1363892,
+			    fields: [
+
+				    {
+					    name: '__User__',
+					    value: '<@' + message.author.id + '>',
+					    inline: false
+				    },
+				    {
+					    name: 'Wallet PrivKey',
+					    value: '**' + privkey.toString() + '**',
+					    inline: false
+				    },
+				    {
+					    name: 'Keep it secret.',
+					    value: '**Keep it safe.**',
+					    inline: false
+				    }
+
+			    ]
+
+		    } ] });
   
-	    
 	    }
 	    
-    });
+
+	    });
 
     }
   })
 }
+
 /////////////////////////
 // get network difficulty
 /////////////////////////
@@ -493,8 +610,10 @@ function getDifficulty(message) {
     rvn.getDifficulty(function(err, difficulty) {
             if (err) {
                     message.reply(err.message).then(msg => {
-                            setTimeout(() => msg.delete(), 10000)
-                    });
+        
+			    setTimeout(() => msg.delete(), errmsgtimeout)
+                    
+		    });
             } else {
                     message.channel.send({ embeds: [ {
 
@@ -509,7 +628,9 @@ function getDifficulty(message) {
 			    ]
 
 		    } ] }).then(msg => {
-			    setTimeout(() => msg.delete(), 60000)
+
+			    setTimeout(() => msg.delete(), msgtimeout)
+
 		    });
 	    }  
     })
@@ -527,7 +648,7 @@ function getNetworkHashPs(message){
 			
 			message.reply(err.message).then(msg => {
 
-				setTimeout(() => msg.delete(), 10000)
+				setTimeout(() => msg.delete(), errmsgtimeout)
 
 			});
 			
@@ -546,8 +667,10 @@ function getNetworkHashPs(message){
                             ]
 
                     } ] }).then(msg => {
-                            setTimeout(() => msg.delete(), 60000)
-                    });		
+
+			    setTimeout(() => msg.delete(), msgtimeout)
+
+		    });		
 		}
 	})
 	
@@ -568,7 +691,7 @@ function getMiningInfo(message){
 
                         message.reply(err.message).then(msg => {
 
-                                setTimeout(() => msg.delete(), 10000)
+                                setTimeout(() => msg.delete(), errmsgtimeout)
 
                         });
 
@@ -613,8 +736,10 @@ function getMiningInfo(message){
                             ]
 
                     } ] }).then(msg => {
-                            setTimeout(() => msg.delete(), 60000)
-                    });
+
+			    setTimeout(() => msg.delete(), msgtimeout)
+
+		    });
                 }
         })
 
@@ -635,7 +760,7 @@ function getBlockchainInfo(message){
 
                         message.reply(err.message).then(msg => {
 
-                                setTimeout(() => msg.delete(), 10000)
+                                setTimeout(() => msg.delete(), errmsgtimeout)
 
                         });
 
@@ -689,11 +814,15 @@ function getBlockchainInfo(message){
 
                             ]
 
-			                        } ] }).then(msg => {
-							                            setTimeout(() => msg.delete(), 60000)
-							                    });
-			                }
-		        })
+		    } ] }).then(msg => {
+		
+			    setTimeout(() => msg.delete(), msgtimeout)
+			
+		    });
+		
+		}
+		
+	})
 
 }
 
@@ -811,7 +940,7 @@ function getPrice(message, cur, amt){
 
 	                          } ] }).then(msg => {
 
-	                                  setTimeout(() => msg.delete(), 60000)
+	                                  setTimeout(() => msg.delete(), msgtimeout)
 
         	                  });
 
@@ -845,7 +974,7 @@ function getPrice(message, cur, amt){
 				
 		} ] }).then(msg => {
 
-			setTimeout(() => msg.delete(), 60000)
+			setTimeout(() => msg.delete(), msgtimeout)
 
 		});
 
@@ -958,7 +1087,7 @@ function getPrice(message, cur, amt){
 
                           } ] }).then(msg => {
 
-                                  setTimeout(() => msg.delete(), 60000)
+                                  setTimeout(() => msg.delete(), msgtimeout)
 
                           });
 
@@ -1040,7 +1169,7 @@ function getWAVN(message){
  
 			  } ] }).then(msg => {
 
-				  setTimeout(() => msg.delete(), 120000)
+				  setTimeout(() => msg.delete(), msgtimeout)
 				  
 			  });
 			  
@@ -1120,7 +1249,7 @@ function getSushi(message){
 
 				  } ] }).then(msg => {
                                   
-					  setTimeout(() => msg.delete(), 120000)
+					  setTimeout(() => msg.delete(), msgtimeout)
 
 				  });
 
@@ -1206,7 +1335,7 @@ function getSushi(message){
 
                           } ] }).then(msg => {
 
-                                  setTimeout(() => msg.delete(), 120000)
+                                  setTimeout(() => msg.delete(), msgtimeout)
 
                           });
 			  
@@ -1337,7 +1466,7 @@ function miningCalc(message, hashrate) {
         
 				} ] }).then(msg => {
                                 
-					setTimeout(() => msg.delete(), 120000)
+					setTimeout(() => msg.delete(), msgtimeout)
 
 				});
                 
@@ -1392,13 +1521,85 @@ function listExchanges(message){
 
 	} ] }).then(msg => {
 	
-		setTimeout(() => msg.delete(), 120000)
+		setTimeout(() => msg.delete(), msgtimeout)
 		
 	});
 
 
 }
-////////////////////
+
+function listURLs(message){
+
+        var time = new Date();
+
+        message.channel.send({ embeds: [ {
+
+		description: '**:globe_with_meridians:  ' + coinname + ' (' + coinsymbol + ') Official Links  :globe_with_meridians:\n\u200b**',
+                color: 1363892,
+                fields: [
+
+                        {
+                        	name: '__Project Website__',
+        	                value: '*https://avn.network/*',
+                	        inline: false
+                        },
+                        {
+                        	name: '__Project GitHub__',
+	                        value: '*https://github.com/AvianNetwork/Avian/*',
+        	                inline: false
+                        },
+			{
+				name: '__Project Twitter__',
+				value: '*https://twitter.com/avianfoundation*',
+				inline: false
+			},
+			{
+				name: '__Reddit__',
+				value: '*https://www.reddit.com/r/aviannetwork*',
+				inline: false
+			},
+			{
+			
+				name: '__Discord__',
+				value: '*https://discord.gg/xDDMYA2SqV*',
+				inline: false
+			},
+			{
+				name: '__Telegram__',
+				value: '*https://t.me/AvianNetwork*',
+				inline: false
+			},
+			{
+				name: '__Telegram Announcements__',
+				value: '*https://t.me/AvianNetworkAnnouncements*',
+				inline: false
+			},
+                        {
+                	        name: '__Coin Wrapping__',
+	                        value: '*https://wavn.avn.network/*\n\u200b',
+	                        inline: true
+                        },
+                        {
+	                        name: ':clock: Time',
+	                        value: '' + time,
+	                        inline: false
+                        }
+
+                ]
+
+
+        } ] }).then(msg => {
+
+                setTimeout(() => msg.delete(), msgtimeout)
+
+        });
+
+
+}
+
+///////////////////////////////
+// validate a wallet address //
+///////////////////////////////
 
 function validateAddress(message, address){
 
@@ -1412,7 +1613,7 @@ function validateAddress(message, address){
 
                         message.reply(err.message).then(msg => {
 
-                                setTimeout(() => msg.delete(), 10000)
+                                setTimeout(() => msg.delete(), errmsgtimeout)
 
                         });
 
@@ -1455,7 +1656,7 @@ function validateAddress(message, address){
                             ]
 
                     } ] }).then(msg => {
-                            setTimeout(() => msg.delete(), 30000)
+                            setTimeout(() => msg.delete(), msgtimeout)
                     });
                 }
         })

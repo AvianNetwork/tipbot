@@ -3,7 +3,9 @@
   "bot": {
       "token":"",
       "prefix": "!",
-      "debug": true
+      "debug": true,
+      "msgtimeout": "120000",
+      "errmsgtimeout": "10000"
   },
   "avn": {
     "coinname": "",

@@ -11,8 +11,7 @@ config = config.get('bot');
 
 const { Client, Intents } = require('discord.js');
 
-const client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES']});
-
+const client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'DIRECT_MESSAGES', 'GUILD_PRESENCES'], partials: ['CHANNEL']});
 var aliases;
 // check if any aliases are defined
 try {
@@ -29,8 +28,7 @@ try {
 }
 var commands = {};
 
-const bot = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-
+const bot = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'DIRECT_MESSAGES', 'GUILD_PRESENCES'], partials: ['CHANNEL']});
 bot.on('ready', function() {
   var time = moment()
     .tz('America/Los_Angeles')
@@ -45,7 +43,7 @@ bot.on('ready', function() {
       ' Logged in! '
   );
   bot.channels.cache.cache
-    client.channels.cache.get(logChannel)
+    bot.channels.cache.get(logChannel)
 	client.on('messageCreate', message => {
 
         client.channels.cache.get(logChannel).send(
@@ -68,7 +66,7 @@ bot.on('ready', function() {
       'avn in Discord for a commands list.'
   );
   bot.channels.cache
-    client.channels.cache.get(logChannel)
+    bot.channels.cache.get(logChannel)
         client.on('messageCreate', message => {
 
         client.channels.cache.get(logChannel).send(

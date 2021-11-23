@@ -55,6 +55,9 @@ exports.avn = {
       case 'help':
 	privateorSpamChannel(msg, channelwarning, doHelp, [helpmsg]);
         break;
+      case 'dm':
+	dmMe(msg);
+	break;
       case 'balance':
         doBalance(msg, tipper);
         break;
@@ -162,7 +165,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				   name: ':chains:  Blockchain and Mining  :pick:',
-				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\n**<> : Replace with appropriate value.**',
+				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\n**' + prefix + botcmd + ' dm** : Start a DM session with the bot. \n\n**<> : Replace with appropriate value.**',
 				   inline: false
 			    }
 
@@ -2126,6 +2129,76 @@ function validateAddress(message, address){
                 }
         })
 
+}
+
+/////////////////////////////////
+// Start a DM session with user//
+////////////////////////////////
+function dmMe(message){
+
+	message.channel.send({ embeds: [ {
+
+		description: '**:robot: ' + coinname + ' (' + coinsymbol + ') Bot :robot:**',
+		color: 1363892,
+		fields: [
+
+			{
+				name: '__DM session__',
+				value: 'Initiating',
+				inline: false
+			}
+
+		]
+
+	} ] }).then(msg => {
+		                        
+		setTimeout(() => msg.delete(), msgtimeout)
+
+	});
+
+	message.author.send({ embeds: [ {
+                                                
+		description: '**:robot:  ' + coinname + ' (' + coinsymbol + ') Bot  :robot:**',
+		color: 1363892,
+		fields: [
+                                                        
+			{
+				name: '__At your service!__',
+				value: 'Type `!avn` to get started!',
+				inline: false
+			}
+                                                
+		]
+
+	} ] }).catch(error => {
+
+		// If error(DMs disabled) be sane and send a notification to public chan
+		message.channel.send({ embeds: [ {
+
+			description: '**:robot: ' + coinname + ' (' + coinsymbol + ') Bot :robot:**',
+			color: 1363892,
+			fields: [
+
+				{
+					name: '__User__',
+					value: '<@' + message.author.id + '>',
+					inline: false
+				},
+				{
+					name: '__Uh oh!__',
+					value: '**:x:  I couldn\'t send you a DM, do you have DM\'s disabled?**',
+					inline: false
+				}
+                                                        
+			]
+                                                
+		} ] }).then(msg => {
+                                                        
+			setTimeout(() => msg.delete(), msgtimeout)
+                                                
+		})
+                                        
+	});
 }
 
 //////////////////////////////

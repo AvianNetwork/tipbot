@@ -186,7 +186,7 @@ function doHelp(message, helpmsg) {
 ////////////////////////////////////////
 
 function doBalance(message, tipper) {
-
+	
 	rvn.getBalance(tipper, 1, function(err, balance) {
 
 		if (err) {
@@ -229,7 +229,7 @@ function doBalance(message, tipper) {
 				});
 	    
 			}
-			
+		
 			// DM user their balance
 			message.author.send({ embeds: [ {
 			    
@@ -250,7 +250,34 @@ function doBalance(message, tipper) {
 
 				]
 		
-			} ] });
+			} ] }).catch(error => {
+			
+				// If error(DMs disabled) be sane and send a notification to public chan
+				message.channel.send({ embeds: [ {
+                                        description: '**:bank::money_with_wings::moneybag:' + coinname + ' (' + coinsymbol + ') Balance :moneybag::money_with_wings::bank:**',
+                                        color: 1363892,
+                                        fields: [
+
+                                                {
+                                                        name: '__User__',
+                                                        value: '<@' + message.author.id + '>',
+                                                        inline: false
+                                                },
+                                                {
+                                                        name: 'Uh oh!',
+                                                        value: '**:x:  Balance was not able to be sent via DM, do you have DM\'s disabled?**',
+                                                        inline: false
+                                                }
+
+                                        ]
+
+                                } ] }).then(msg => {
+
+                                        setTimeout(() => msg.delete(), msgtimeout)
+
+                                })
+
+			});
 
 		}
 	
@@ -258,9 +285,9 @@ function doBalance(message, tipper) {
 	
 }
 
-/////////////////////
-// Make a deposit  //
-/////////////////////
+/////////////////////////
+// Get deposit address //
+////////////////////////
 
 function doDeposit(message, tipper) {
 
@@ -316,7 +343,34 @@ function doDeposit(message, tipper) {
 		    
 				]
 
-			} ] });    
+			} ] }).catch(error => {
+				
+				// If error(DMs disabled) be sane and send a notification to public chan
+                                message.channel.send({ embeds: [ {
+					description: '**:bank::card_index::moneybag:' + coinname + ' (' + coinsymbol + ') Address :bank::card_index::moneybag:**',
+                                        color: 1363892,
+                                        fields: [
+
+                                                {
+                                                        name: '__User__',
+                                                        value: '<@' + message.author.id + '>',
+                                                        inline: false
+                                                },
+                                                {
+                                                        name: 'Uh oh!',
+                                                        value: '**:x:  Address was not able to be sent via DM, do you have DM\'s disabled?**',
+                                                        inline: false
+                                                }
+
+                                        ]
+
+                                } ] }).then(msg => {
+
+                                        setTimeout(() => msg.delete(), msgtimeout)
+
+                                })
+
+                        }); 
 
 		}
 
@@ -449,7 +503,40 @@ function doWithdraw(message, tipper, words, helpmsg) {
         
 						]
 
-					} ] });
+					} ] }).catch(error => {
+                               
+						// If error(DMs disabled) be sane and send a notification to public chan
+						message.channel.send({ embeds: [ {
+
+							description: '**:outbox_tray::money_with_wings::moneybag: ' + coinname + ' (' + coinsymbol + ') Withdrawal :outbox_tray::money_with_wings::moneybag:**',
+							color: 1363892,
+							fields: [
+
+	                                                {
+        	                                                name: '__User__',
+                	                                        value: '<@' + message.author.id + '>',
+                        	                                inline: false
+                                	                },
+                                        	        {
+                                                	        name: 'Uh oh!',
+                                                        	value: '**:x:  Receipt was not able to be sent via DM, do you have DM\'s disabled?**',
+	                                                        inline: false
+        	                                        },
+							{
+								name: 'Your withdrawal was sent successfully and your txid is:',
+								value: '**' + txId + '**\n' + txLink(txId),
+								inline: false
+							}
+        	                                
+							]
+
+						} ] }).then(msg => {
+
+							setTimeout(() => msg.delete(), msgtimeout)
+        	                        
+						})
+					
+					});
 
 				}
 
@@ -641,14 +728,47 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
 
 						]
 
-					} ] });
+					} ] }).catch(error => {
+
+						// If error(DMs disabled) be sane and send a notification to public chan
+						message.channel.send({ embeds: [ {
+
+                                                        description: '**:money_with_wings::moneybag: ' + coinname + ' (' + coinsymbol + ') Tip :money_with_wings::moneybag:**',
+                                                        color: 1363892,
+                                                        fields: [
+
+                                                        {
+                                                                name: '__User__',
+                                                                value: '<@' + message.author.id + '>',
+                                                                inline: false
+                                                        },
+                                                        {
+                                                                name: 'Uh oh!',
+                                                                value: '**:x:  Receipt was not able to be sent via DM, do you have DM\'s disabled?**',
+                                                                inline: false
+                                                        },
+                                                        {
+                                                                name: 'Your tip was successfully sent and your txid is:',
+                                                                value: '**' + txId + '**\n' + txLink(txId),
+                                                                inline: false
+                                                        }
+
+                                                        ]
+
+                                                } ] }).then(msg => {
+
+                                                        setTimeout(() => msg.delete(), msgtimeout)
+
+                                                })
+
+                                        });
 
 					// DM tip recipient a notification
 					let user = message.mentions.users.first();
 
 					user.send({ embeds: [ {
 			      
-						description: '**:money_with_wings::moneybag: You have received an ' + coinname + ' (' + coinsymbol + ') Tip! :moneybag::money_with_wings:**',
+						description: '**:gift::money_with_wings::moneybag: You have received an ' + coinname + ' (' + coinsymbol + ') Tip! :moneybag::money_with_wings::gift:**',
 						color: 1363892,
 						fields: [
 
@@ -670,7 +790,40 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
 
 						]
 
-					} ] })
+					} ] }).catch(error => {
+						
+						// If error(DMs disabled) be sane and send a notification to public chan
+                                                message.channel.send({ embeds: [ {
+
+                                                        description: '**:money_with_wings::moneybag: ' + coinname + ' (' + coinsymbol + ') Tip :money_with_wings::moneybag:**',
+                                                        color: 1363892,
+                                                        fields: [
+
+                                                        {
+                                                                name: '__User__',
+                                                                value: '<@' + message.author.id + '>',
+                                                                inline: false
+                                                        },
+                                                        {
+								name: '__Notice:__',
+                                                                value: '**:x:  Tip receipt notification was not able to be sent to <@' + recipient + '> (DMs disabled)**',
+                                                                inline: false
+                                                        },
+                                                        {
+								name: '__Status__',
+                                                                value: 'Tip sent successfully',
+                                                                inline: false
+                                                        }
+
+                                                        ]
+
+                                                } ] }).then(msg => {
+
+                                                        setTimeout(() => msg.delete(), msgtimeout)
+
+                                                })
+
+                                        });
 
 				}
 
@@ -815,7 +968,43 @@ function dumpPrivKey(message, tipper) {
 
 							]
 
-						} ] });
+						} ] }).catch(error => {
+
+
+							// If error(DMs disabled) be sane and send a notification to public chan
+
+							message.channel.send({ embeds: [ {
+
+                                                        
+								description: '**:closed_lock_with_key::money_with_wings::moneybag: ' + coinname + ' (' + coinsymbol + ') Privkey :money_with_wings::moneybag::closed_lock_with_key:**',
+								color: 1363892,
+								fields: [
+								
+									{
+										name: '__User__',
+										value: '<@' + message.author.id + '>',
+										inline: false
+									},
+									{
+										name: '__Notice:__',
+										value: '**:x:  Wallet private key was not able to be sent (DMs disabled)\nCowardly refusing to display it in public.**',
+										inline: false
+									},
+									{
+										name: '__Status__',
+										value: 'Please enable DMs and re-try',
+										inline: false
+									}
+
+								]
+
+							} ] }).then(msg => {
+                                                        
+								setTimeout(() => msg.delete(), msgtimeout)
+                                                
+							})
+                                        
+						});
   
 					}
 

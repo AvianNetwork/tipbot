@@ -23,7 +23,7 @@ let projectdiscord = config.get('project').discordurl;
 let projecttelegram = config.get('project').telegramurl;
 let projecttelegramann = config.get('project').telegramannurl;
 let nomicsapikey = config.get('nomics').apikey;
-
+let donationaddress = config.get('project').donationaddress;
 let oldcoinsymbol = "RVL";
 
 
@@ -120,6 +120,9 @@ exports.avn = {
       case 'nomics':
         getNomics(msg);
       break;
+      case 'donate':
+	doDonation(msg, tipper, words, helpmsg);
+      break;
       default:
         doTip(bot, msg, tipper, words, helpmsg);
     }
@@ -158,7 +161,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				    name: ':moneybag:  Wallet commands  :moneybag:',
-				      value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
+				      value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
 				      inline: false
 			    },
 			    {
@@ -614,7 +617,7 @@ function doTip(bot, message, tipper, words, helpmsg) {
 			}
 
 			if (!message.mentions.users.first()){
-	
+				
 				message.reply('Sorry, I could not find a user in your tip...').then(msg => {
 				
 					setTimeout(() => msg.delete(), errmsgtimeout)
@@ -1649,7 +1652,7 @@ function getNomics(message){
 
                 hostname: 'api.nomics.com',
                 port: 443,
-                path: '/v1/currencies/ticker?key=' + nomicsapikey + '&ids=WAVN&interval=1d&convert=USD&per-page=100&page=1',
+                path: '/v1/currencies/ticker?key=' + nomicsapikey + '&ids=W' + coinsymbol.toUpperCase() + '&interval=1d&convert=USD&per-page=100&page=1',
                 method: 'GET'
 
         }
@@ -1667,7 +1670,7 @@ function getNomics(message){
 			var symbol = d[0].symbol;
 			var name = d[0].name;
 			var logo_url = d[0].logo_url;
-			var nomicsstatus = JSON.stringify(d[0].status);
+			var nomicsstatus = d[0].status;
 			var platform_currency = d[0].platform_currency;
 			var price = d[0].price;
 			var price_date = d[0].price_date;
@@ -2384,8 +2387,182 @@ function dmMe(message){
 	});
 }
 
-//////////////////////////////
+/////////////////////
+// Make a Donation //
+/////////////////////
 
+function doDonation(message, tipper, words, helpmsg) {
+
+        if (words.length < 3) {
+
+                doHelp(message, helpmsg);
+                return;
+
+        }
+
+        var address = donationaddress,
+        amount = getValidatedAmount(words[2]);
+
+        if (amount === null) {
+
+                message.reply("I don't know how to donate that much " + coinname + " (" + coinsymbol + ")...").then(msg => {
+
+                        setTimeout(() => msg.delete(), errmsgtimeout)
+
+                });
+
+                return;
+        }
+
+        rvn.getBalance(tipper, 1, function(err, balance) {
+
+                if (err) {
+
+                        message.reply('Error getting ' + coinname + ' (' + coinsymbol + ') balance.').then(msg => {
+
+                                setTimeout(() => msg.delete(), errmsgtimeout)
+
+                        });
+
+                } else {
+
+                        if (Number(amount) + Number(paytxfee) > Number(balance)) {
+
+                                message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!').then(msg => {
+
+                                        setTimeout(() => msg.delete(), errmsgtimeout)
+
+                                });
+                                return;
+
+                        }
+
+                        rvn.sendFrom(tipper, address, Number(amount), function(err, txId) {
+
+                                if (err) {
+
+                                        message.reply(err.message).then(msg => {
+
+                                                setTimeout(() => msg.delete(), errmsgtimeout)
+
+                                        });
+
+                                } else {
+
+                                        // If public chan send reply
+                                        if(message.channel.type !== 'DM'){
+
+                                                message.channel.send({embeds: [ {
+
+                                                        description: '**:outbox_tray::money_with_wings::moneybag:  ' + coinname + ' (' + coinsymbol + ') Donation Sent!  :moneybag::money_with_wings::outbox_tray:**',
+                                                        color: 1363892,
+                                                        fields: [
+
+                                                                {
+
+                                                                        name: 'Success!',
+                                                                        value: ':lock:  Donation receipt sent via DM',
+                                                                        inline: true
+                                                                }
+
+                                                        ]
+
+                                                } ] }).then(msg => {
+
+                                                        setTimeout(() => msg.delete(), msgtimeout)
+
+                                                });
+
+                                        }
+
+                                        // DM user their withdrawal receipt
+                                        message.author.send({embeds: [ {
+
+
+                                                description: '**:outbox_tray::money_with_wings::moneybag:  ' + coinname + ' (' + coinsymbol + ') Donation Sent!  :moneybag::money_with_wings::outbox_tray:**',
+                                                color: 1363892,
+						footer: {
+							text: 'Thank you for donating to the Avian Foundation!',
+							icon_url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+						},
+                                                fields: [
+
+                                                        {
+                                                                name: '__Sender__',
+                                                                value: '<@' + message.author.id + '>',
+                                                                inline: true
+                                                        },
+                                                        {
+                                                                name: '__Receiver__',
+                                                                value: '**' + address + '**\n' + addyLink(address),
+                                                                inline: true
+                                                        },
+                                                        {
+                                                                name: '__txid__',
+                                                                value: '**' + txId + '**\n' + txLink(txId),
+                                                                inline: false
+                                                        },
+                                                        {
+                                                                name: '__Amount__',
+                                                                value: '**' + amount.toString() + '**',
+                                                                inline: true
+                                                        },
+                                                        {
+                                                                name: '__Fee__',
+                                                                value: '**' + paytxfee.toString() + '**\n\u200b',
+                                                                inline: true
+                                                        }
+
+
+
+                                                ]
+
+                                        } ] }).catch(error => {
+
+                                                // If error(DMs disabled) be sane and send a notification to public chan
+                                                message.channel.send({ embeds: [ {
+
+                                                        description: '**:outbox_tray::money_with_wings::moneybag: ' + coinname + ' (' + coinsymbol + ') Donation :outbox_tray::money_with_wings::moneybag:**',
+                                                        color: 1363892,
+                                                        fields: [
+
+                                                        {
+                                                                name: '__User__',
+                                                                value: '<@' + message.author.id + '>',
+                                                                inline: false
+                                                        },
+                                                        {
+                                                                name: 'Uh oh!',
+                                                                value: '**:x:  Donation receipt was not able to be sent via DM, do you have DM\'s disabled?**',
+                                                                inline: false
+                                                        },
+                                                        {
+                                                                name: 'Your donation was sent successfully and your txid is:',
+                                                                value: '**' + txId + '**\n' + txLink(txId),
+                                                                inline: false
+                                                        }
+
+                                                        ]
+
+                                                } ] }).then(msg => {
+
+                                                        setTimeout(() => msg.delete(), msgtimeout)
+
+                                                })
+
+                                        });
+
+                                }
+
+                        });
+
+                }
+
+        });
+
+}
+
+////////
 function inPrivateorSpamChannel(msg) {
 	
 	if (msg.channel.type == 'DM' || isSpam(msg)) {

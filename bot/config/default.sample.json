@@ -7,6 +7,16 @@
       "msgtimeout": "120000",
       "errmsgtimeout": "10000"
   },
+  "project": {
+      "siteurl": "",
+      "githuburl": "",
+      "twitterurl": "",
+      "redditurl": "",
+      "discordurl": "",
+      "telegramurl": "",
+      "telegramannurl": "",
+      "donationaddress": ""
+  },
   "avn": {
     "coinname": "",
     "coinsymbol": "",
@@ -40,5 +50,5 @@
     "nomics":{
       "apikey": ""
   }
-}
 
+}

@@ -22,6 +22,7 @@ let projectreddit = config.get('project').redditurl;
 let projectdiscord = config.get('project').discordurl;
 let projecttelegram = config.get('project').telegramurl;
 let projecttelegramann = config.get('project').telegramannurl;
+let nomicsapikey = config.get('nomics').apikey;
 
 let oldcoinsymbol = "RVL";
 
@@ -115,6 +116,9 @@ exports.avn = {
       case 'validate':
       case 'validateaddr':
 	validateAddress(msg, words[2]);
+      break;
+      case 'nomics':
+        getNomics(msg);
       break;
       default:
         doTip(bot, msg, tipper, words, helpmsg);
@@ -914,25 +918,15 @@ function dumpPrivKey(message, tipper) {
 								fields: [
 								
 									{
-									
 										name: '__User__',
-
 										value: '<@' + message.author.id + '>',
-
 										inline: false
-
 									},
-
 									{
-
 										name: 'Success!',
-
 										value: '**:lock: Wallet privkey sent via DM**',
-
 										inline: false
-
 									}
-
 
 								]
 
@@ -1277,7 +1271,7 @@ function getBlockchainInfo(message){
 ////////////////////////////////////////
 
 function getPrice(message, cur, amt){
-            
+        
 	const https = require('https')
 
 	const options = {
@@ -1641,6 +1635,195 @@ function getWAVN(message){
 	req.end();
 	
 	return;
+
+}
+
+////////////////////////////////////////
+// Get wrapped coin Nomics market data//
+///////////////////////////////////////
+
+function getNomics(message){
+
+        const https = require('https')
+        const options = {
+
+                hostname: 'api.nomics.com',
+                port: 443,
+                path: '/v1/currencies/ticker?key=' + nomicsapikey + '&ids=WAVN&interval=1d&convert=USD&per-page=100&page=1',
+                method: 'GET'
+
+        }
+        // console.log(options);
+        const req = https.request(options, res => {
+                //console.log(`statusCode: ${res.statusCode}`)
+                //console.log(req);
+                res.on('data', d => {
+
+			// parse it
+                        var d = JSON.parse(d);
+			// map it
+			var id = d[0].id;
+			var currency = d[0].currency;
+			var symbol = d[0].symbol;
+			var name = d[0].name;
+			var logo_url = d[0].logo_url;
+			var nomicsstatus = JSON.stringify(d[0].status);
+			var platform_currency = d[0].platform_currency;
+			var price = d[0].price;
+			var price_date = d[0].price_date;
+			var price_timestamp = d[0].price_timestamp;
+			var market_cap_dominance = d[0].market_cap_dominance;
+			var num_exchanges = d[0].num_exchanges;
+			var num_pairs = d[0].num_pairs;
+			var num_pairs_unmapped = d[0].num_pairs_unmapped;
+			var first_candle = d[0].first_candle;
+			var first_trade = d[0].first_trade;
+			var first_order_book = d[0].first_order_book;
+			var first_priced_at = d[0].first_priced_at;
+			var rank = d[0].rank;
+			var rank_delta = d[0].rank_delta;
+			var high = d[0].high;
+			var high_timestamp = d[0].high_timestamp;
+			var volume = d[0]["1d"]["volume"];
+			var price_change = d[0]["1d"]["price_change"];
+			var price_change_pct = d[0]["1d"]["price_change_pct"];
+			var volume_change = d[0]["1d"]["volume_change"];
+			var volume_change_pct = d[0]["1d"]["volume_change_pct"];
+			
+			var time = new Date();
+			
+			/*
+			// debug it
+			console.log("id="+id);
+			console.log("currency="+currency);
+			console.log("symbol="+symbol);
+			console.log("name="+name);
+			console.log("logo_url="+logo_url);
+			console.log("status="+nomicsstatus);
+			console.log("platform_currency="+platform_currency);
+			console.log("price="+price);
+			console.log("price_date="+price_date);
+			console.log("price_timestamp="+price_timestamp);
+			console.log("market_cap_dominance="+market_cap_dominance);
+			console.log("num_exchanges="+num_exchanges);
+			console.log("num_pairs="+num_pairs);
+			console.log("num_pairs_unmapped="+num_pairs_unmapped);
+			console.log("first_candle="+first_candle);
+			console.log("first_trade="+first_trade);
+			console.log("first_order_book="+first_order_book);
+			console.log("first_priced_at="+first_priced_at);
+			console.log("rank="+rank);
+			console.log("rank_delta="+rank_delta);
+			console.log("high="+high);
+			console.log("high_timestamp="+high_timestamp);
+			console.log("volume="+volume);
+			console.log("price_change="+price_change);
+			console.log("price_change_pct="+price_change_pct);
+			console.log("volume_change="+volume_change);
+			console.log("volume_change_pct="+volume_change_pct);
+			*/
+
+			// send it
+			message.channel.send({ embeds: [ {
+				
+				description: '**:chart_with_upwards_trend: ' + name + ' (' + symbol + ') Market Information :chart_with_upwards_trend:\n\u200b**',
+				color: 1363892,
+                                fields: [
+
+                                        {
+                                                name: '__Platform__',
+                                                value: '' + platform_currency,
+                                                inline: true
+                                        },
+					{
+						name: '__Pairs__',
+						value: '' + num_pairs,
+						inline: true
+					},
+					{
+						name: '__Exchanges__',
+						value: '' + num_exchanges,
+						inline: true
+					},
+                                        {
+                                                name: '__Current price__',
+                                                value: '$' + price + '',
+                                                inline: true
+                                        },
+					{
+                                                name: '\u200b',
+                                                value: '\u200b',
+                                                inline: true
+                                        },
+					{
+						name: '__Change (1d)__',
+						value: '' + price_change + ' (' + price_change_pct + '%)',
+						inline: true
+					},
+					{
+						name: '__Volume (1d)__',
+						value: '$' + volume + '',
+						inline: true
+					},
+					{
+                                                name: '\u200b',
+                                                value: '\u200b',
+                                                inline: true
+                                        },
+					{
+                                                name: '__Volume Change (1d)__',
+                                                value: '$' + volume_change + ' (' + volume_change_pct + '%)',
+                                                inline: true
+                                        },
+					{
+                                                name: '__Rank (change)__',
+                                                value: '' + rank + ' (' + rank_delta + ')',
+                                                inline: true
+                                        },
+					{
+						name: '__All time high__',
+						value: '$' + high + ' (' + high_timestamp + ')',
+						inline: true
+					},
+					{
+						name: 'Data provided by Nomics',
+						value: '*https://nomics.com/assets/wavn-wrapped-avian*',
+						inline: false
+					},
+                                        {
+                                                name: ':clock: Time',
+                                                value: '' + time + '',
+                                                inline: false
+                                        }
+
+                                ]
+
+                        } ] }).then(msg => {
+				// delete it
+                                let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+
+                                if(message.channel.type == 'DM'){
+
+                                        clearTimeout(publichantimeout);
+
+                                }
+
+                        });
+
+
+		
+		});
+
+		  
+	})
+
+
+        req.on('error', error => {
+
+		                console.error(error)
+
+		        })
+        req.end();
 
 }
 

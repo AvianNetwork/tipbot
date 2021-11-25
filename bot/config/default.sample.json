@@ -36,6 +36,9 @@
     "contractaddress": "",
     "polygonapikey": "",
     "coinwrapurl": ""
+  },
+    "nomics":{
+      "apikey": ""
   }
 }
 

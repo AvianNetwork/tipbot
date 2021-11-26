@@ -123,8 +123,11 @@ exports.avn = {
       case 'donate':
 	doDonation(msg, tipper, words, helpmsg);
       break;
-      default:
+      case 'tip':
         doTip(bot, msg, tipper, words, helpmsg);
+      break;
+      default:
+        doHelp(msg, helpmsg);
     }
   }
 };
@@ -161,7 +164,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				    name: ':moneybag:  Wallet commands  :moneybag:',
-				      value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
+				      value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' tip <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' tip private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
 				      inline: false
 			    },
 			    {
@@ -564,7 +567,7 @@ function doWithdraw(message, tipper, words, helpmsg) {
 
 function doTip(bot, message, tipper, words, helpmsg) {
 
-	if (words.length < 3 || !words) {
+	if (words.length < 4 || !words) {
 
 		doHelp(message, helpmsg);
 		return;
@@ -572,12 +575,12 @@ function doTip(bot, message, tipper, words, helpmsg) {
 	}
 
 	var prv = false;
-	var amountOffset = 2;
+	var amountOffset = 3;
 
-	if (words.length >= 4 && words[1] === 'private') {
+	if (words.length >= 5 && words[2] === 'private') {
 		
 		prv = true;
-		amountOffset = 3;
+		amountOffset = 4;
 	
 	}
 

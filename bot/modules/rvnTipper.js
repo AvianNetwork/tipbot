@@ -4,7 +4,8 @@ const bitcoin = require('bitcoin');
 
 let Regex = require('regex'),
  config = require('config'),
- spamchannels = config.get('moderation').botspamchannels;
+ spamchannels = config.get('moderation').botspamchannels,
+ logchannel = config.get('moderation').logchannel;
 let walletConfig = config.get('avn').config;
 let paytxfee = config.get('avn').paytxfee;
 let polygonapikey = config.get('wavn').polygonapikey;
@@ -25,7 +26,6 @@ let projecttelegramann = config.get('project').telegramannurl;
 let nomicsapikey = config.get('nomics').apikey;
 let donationaddress = config.get('project').donationaddress;
 let oldcoinsymbol = "RVL";
-
 
 const rvn = new bitcoin.Client(walletConfig);
 
@@ -1693,13 +1693,11 @@ function getNomics(message){
 			var volume = d[0]["1d"]["volume"];
 			var price_change = d[0]["1d"]["price_change"];
 			var price_change_pct = d[0]["1d"]["price_change_pct"];
-			var volume_change = d[0]["1d"]["volume_change"];
-			var volume_change_pct = d[0]["1d"]["volume_change_pct"];
 			
 			var time = new Date();
 			
-			/*
 			// debug it
+			console.log("d="+JSON.stringify(d));
 			console.log("id="+id);
 			console.log("currency="+currency);
 			console.log("symbol="+symbol);
@@ -1725,9 +1723,6 @@ function getNomics(message){
 			console.log("volume="+volume);
 			console.log("price_change="+price_change);
 			console.log("price_change_pct="+price_change_pct);
-			console.log("volume_change="+volume_change);
-			console.log("volume_change_pct="+volume_change_pct);
-			*/
 
 			// send it
 			message.channel.send({ embeds: [ {
@@ -1774,11 +1769,6 @@ function getNomics(message){
 					{
                                                 name: '\u200b',
                                                 value: '\u200b',
-                                                inline: true
-                                        },
-					{
-                                                name: '__Volume Change (1d)__',
-                                                value: '$' + volume_change + ' (' + volume_change_pct + '%)',
                                                 inline: true
                                         },
 					{

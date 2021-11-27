@@ -39,6 +39,7 @@
   "botspamchannels": ["ID", "ID"] // channel ids
   },
   "explorer":{
+    "explorerurl": "",
     "explorertxurl": "",
     "exploreraddressurl": ""
   },

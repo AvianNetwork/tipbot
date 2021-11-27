@@ -23,6 +23,7 @@ let projectreddit = config.get('project').redditurl;
 let projectdiscord = config.get('project').discordurl;
 let projecttelegram = config.get('project').telegramurl;
 let projecttelegramann = config.get('project').telegramannurl;
+let projectexplorerurl = config.get('explorer').explorerurl;
 let nomicsapikey = config.get('nomics').apikey;
 let donationaddress = config.get('project').donationaddress;
 let oldcoinsymbol = "RVL";
@@ -1052,6 +1053,10 @@ function getDifficulty(message) {
 
 			    description: '**:pick: ' + coinname + ' (' + coinsymbol + ') Network difficulty :pick:**',
 			    color: 1363892,
+			    footer: {
+				    text: 'Avian Network',
+				    icon_url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+                            },
 			    fields: [
 	
 				    {
@@ -1099,7 +1104,11 @@ function getNetworkHashPs(message){
 
                             description: '**:pick: ' + coinname + ' (' + coinsymbol + ') Network hashrate :pick:**',
                             color: 1363892,
-                            fields: [
+                            footer: {
+				    text: 'Avian Network',
+				    icon_url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+                            },
+			    fields: [
                                     {
                                             name: 'Network hashrate',
                                             value: '**' + Number(hashrate / 1000000000).toFixed(3)+ ' GH/s**',
@@ -2203,6 +2212,11 @@ function listURLs(message){
 	        	                inline: false
         	                },
 				{
+                                        name: '__Project Explorer__',
+                                        value: '*' + projectexplorerurl + '*',
+                                        inline: false
+                                },
+				{
 					name: '__Project Twitter__',
 					value: '*' + projecttwitter + '*',
 					inline: false
@@ -2566,6 +2580,9 @@ function doDonation(message, tipper, words, helpmsg) {
 
 }
 
+//////////////////////////////////
+// Explorer - Get money supply  //
+//////////////////////////////////
 
 function getMoneySupply(message){
 
@@ -2639,6 +2656,10 @@ function getMoneySupply(message){
                 return;
 
 }
+
+////////////////////////////////////////
+// Explorer - get wealth distribution //
+////////////////////////////////////////
 
 function getWealthDistrib(message){
 

@@ -126,6 +126,9 @@ exports.avn = {
       case 'tip':
         doTip(bot, msg, tipper, words, helpmsg);
       break;
+      case 'wealth':
+	getWealthDistrib(msg);
+      break;
       default:
         doHelp(msg, helpmsg);
     }
@@ -164,13 +167,18 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				    name: ':moneybag:  Wallet commands  :moneybag:',
-				      value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' tip <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' tip private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
-				      inline: false
+				    value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' tip <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' tip private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
+				    inline: false
 			    },
 			    {
 			    
 				    name: ':chart_with_upwards_trend:  Market Data  :chart_with_upwards_trend:',
 				    value: '**' + prefix + botcmd + ' exchanges** : Display ' + coinsymbol + ' exchange listings\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n**' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n**' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n**' + prefix + botcmd + ' nomics** : Display W' + coinsymbol + ' market information\n\u200b',
+				    inline: false
+			    },
+			    {
+				    name: ':mag:  Explorer Functions  :mag:',
+				    value: '**' + prefix + botcmd + ' wealth** : Display ' + coinsymbol + ' wealth distribution\n\u200b',
 				    inline: false
 			    },
 			    {
@@ -1695,7 +1703,7 @@ function getNomics(message){
 			var price_change_pct = d[0]["1d"]["price_change_pct"];
 			
 			var time = new Date();
-			
+		/*	
 			// debug it
 			console.log("d="+JSON.stringify(d));
 			console.log("id="+id);
@@ -1723,7 +1731,7 @@ function getNomics(message){
 			console.log("volume="+volume);
 			console.log("price_change="+price_change);
 			console.log("price_change_pct="+price_change_pct);
-
+		*/
 			// send it
 			message.channel.send({ embeds: [ {
 				
@@ -2552,6 +2560,167 @@ function doDonation(message, tipper, words, helpmsg) {
                 }
 
         });
+
+}
+
+function getWealthDistrib(message){
+
+        const https = require('https')
+        const options = {
+
+                hostname: 'explorer-us.avn.network',
+                port: 443,
+                path: '/ext/getdistribution',
+                method: 'GET'
+
+        }
+        // console.log(options);
+        const req = https.request(options, res => {
+                // console.log(`statusCode: ${res.statusCode}`)
+                // console.log(req);
+                res.on('data', d => {
+
+                        var d = JSON.parse(d);
+                        
+			var supply = Number(d.supply).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top125 = Number(d.t_1_25.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			var top125ttl = Number(d.t_1_25.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top2650 = Number(d.t_26_50.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			var top2650ttl = Number(d.t_26_50.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top5175 = Number(d.t_51_75.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        var top5175ttl = Number(d.t_51_75.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top76100 = Number(d.t_76_100.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        var top76100ttl = Number(d.t_76_100.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top101plus = Number(d.t_101plus.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        var top101plusttl = Number(d.t_101plus.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+
+                        //console.log("suppply="+ supply);
+                        var time = new Date();
+
+                        message.channel.send({ embeds: [ {
+
+				description: '**:bar_chart:  ' + coinname + ' (' + coinsymbol + ') Wealth Distribution Information  :bar_chart:**',
+                                color: 1363892,
+                                fields: [
+
+					{
+						name: '__:mag:  ' + coinname + ' (' + coinsymbol + ') Explorer  :mag:__',
+						value: '*https://explorer.avn.network/richlist*',
+						inline: false
+					},
+					{
+                                                name: '__Total coin supply__',
+                                                value: '' + supply,
+                                                inline: false
+                                        },
+                                        {
+                                                name: '__Top 1-25__',
+                                                value: '' + top125 + '%',
+                                                inline: true
+                                        },
+					{
+					        name: '\u200b',
+					        value: '\u200b',
+					        inline: true
+					},
+					{
+						name: '__Total coins held__',
+						value: '' + top125ttl + '',
+						inline: true
+					},
+                                        {
+                                                name: '__Top 26-50__',
+                                                value: '' + top2650 + '%',
+                                                inline: true
+                                        },
+					{
+					        name: '\u200b',
+					        value: '\u200b',
+					        inline: true
+					},
+					{
+                                                name: '__Total coins held__',
+                                                value: '' + top2650ttl + '',
+                                                inline: true
+                                        },
+					{
+                                                name: '__Top 51-75__',
+                                                value: '' + top5175 + '%',
+                                                inline: true
+                                        },
+                                        {
+                                                name: '\u200b',
+                                                value: '\u200b',
+                                                inline: true
+                                        },
+                                        {
+                                                name: '__Total coins held__',
+                                                value: '' + top5175ttl + '',
+                                                inline: true
+                                        },
+					{
+	                                        name: '__Top 76-100__',
+	                                        value: '' + top76100 + '%',
+	                                        inline: true
+                                        },
+                                        {
+                                                name: '\u200b',
+                                                value: '\u200b',
+                                                inline: true
+                                        },
+                                        {
+                                                name: '__Total coins held__',
+                                                value: '' + top76100ttl + '',
+                                                inline: true
+                                        },
+					{
+                                                name: '__Top 100+__',
+                                                value: '' + top101plus + '%',
+                                                inline: true
+                                        },
+                                        {
+                                                name: '\u200b',
+                                                value: '\u200b',
+                                                inline: true
+                                        },
+                                        {
+                                                name: '__Total coins held__',
+                                                value: '' + top101plusttl + '',
+                                                inline: true
+                                        },
+                                        {
+                                                name: ':clock: Time',
+                                                value: '' + time,
+                                                inline: false
+                                        }
+
+                                ]
+
+                        } ] }).then(msg => {
+
+                                let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+
+                                if(message.channel.type == 'DM'){
+
+                                        clearTimeout(publichantimeout);
+
+                                }
+
+				                        });
+
+			                })
+
+
+		        })
+
+	        req.on('error', error => {
+
+			                console.error(error)
+
+			        })
+	        req.end();
+
+	        return;
 
 }
 

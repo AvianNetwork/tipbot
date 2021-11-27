@@ -129,6 +129,9 @@ exports.avn = {
       case 'wealth':
 	getWealthDistrib(msg);
       break;
+      case 'supply':
+	getMoneySupply(msg);
+      break;
       default:
         doHelp(msg, helpmsg);
     }
@@ -178,7 +181,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				    name: ':mag:  Explorer Functions  :mag:',
-				    value: '**' + prefix + botcmd + ' wealth** : Display ' + coinsymbol + ' wealth distribution\n\u200b',
+				    value: '**' + prefix + botcmd + ' wealth** : Display ' + coinsymbol + ' wealth distribution\n**' + prefix + botcmd + ' supply** : Display current ' + coinsymbol + ' coin supply\n\u200b',
 				    inline: false
 			    },
 			    {
@@ -2560,6 +2563,80 @@ function doDonation(message, tipper, words, helpmsg) {
                 }
 
         });
+
+}
+
+
+function getMoneySupply(message){
+
+        const https = require('https')
+        const options = {
+
+                hostname: 'explorer-us.avn.network',
+                port: 443,
+                path: '/ext/getmoneysupply',
+                method: 'GET'
+
+        }
+        // console.log(options);
+        const req = https.request(options, res => {
+                // console.log(`statusCode: ${res.statusCode}`)
+                // console.log(req);
+                res.on('data', d => {
+
+                        var d = JSON.parse(d);
+
+                        var supply = Number(d).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+                        // console.log("suppply="+ supply);
+                        var time = new Date();
+
+                        message.channel.send({ embeds: [ {
+
+                                description: '**:bar_chart:  ' + coinname + ' (' + coinsymbol + ') coin supply  :bar_chart:**',
+                                color: 1363892,
+				thumbnail: {
+					
+					url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+				},
+                                
+				fields: [
+
+                                        {
+                                                name: '__Total coin supply__',
+                                                value: '' + supply + '',
+                                                inline: false
+                                        }
+
+
+
+
+                                ]
+
+                        } ] }).then(msg => {
+
+                                let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+
+                                if(message.channel.type == 'DM'){
+
+                                        clearTimeout(publichantimeout);
+
+                                }
+
+                                                        });
+
+                                        })
+
+
+                        })
+
+                req.on('error', error => {
+
+                                        console.error(error)
+
+                                })
+                req.end();
+
+                return;
 
 }
 

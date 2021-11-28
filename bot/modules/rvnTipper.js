@@ -327,7 +327,6 @@ function doDeposit(message, tipper) {
 			
 			// reply for public chan
 			if(message.channel.type !== 'DM'){
-	
 				message.channel.send({ embeds: [ {
 			    
 					description: '**:bank::card_index::moneybag: ' + coinname + ' (' + coinsymbol + ') Address :moneybag::card_index::bank:**',
@@ -349,10 +348,14 @@ function doDeposit(message, tipper) {
 			}
 
 			// DM the user the deposit address
+			message.author.send(address);
 			message.author.send({ embeds: [ {
 
 				description: '**:bank::card_index::moneybag:' + coinname + ' (' + coinsymbol + ') Address!:moneybag::card_index::bank:**',
 				color: 1363892,
+				thumbnail:{
+					url: 'https://explorer-us.avn.network/qr/' + address
+				},
 				fields: [
 
 					{
@@ -1711,7 +1714,7 @@ function getNomics(message){
 			var high = d[0].high;
 			var high_timestamp = d[0].high_timestamp;
 			var volume = d[0]["1d"]["volume"];
-			var price_change = d[0]["1d"]["price_change"];
+			var price_change = d[0]["1d"]["price_change"];	
 			var price_change_pct = d[0]["1d"]["price_change_pct"];
 			
 			var time = new Date();

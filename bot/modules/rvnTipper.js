@@ -1709,14 +1709,66 @@ function getNomics(message){
 			var first_trade = d[0].first_trade;
 			var first_order_book = d[0].first_order_book;
 			var first_priced_at = d[0].first_priced_at;
-			var rank = d[0].rank;
-			var rank_delta = d[0].rank_delta;
 			var high = d[0].high;
 			var high_timestamp = d[0].high_timestamp;
-			var volume = d[0]["1d"]["volume"];
-			var price_change = d[0]["1d"]["price_change"];	
-			var price_change_pct = d[0]["1d"]["price_change_pct"];
+			if(!d[0].rank){
 			
+				var rank = 'Unknown';
+			
+			}else{
+			
+				var rank = d[0].rank;
+
+			}
+
+			if(!d[0].rank_delta){
+
+				var rank_delta = 'Unknown';
+			
+			}else{
+			
+				var rank_delta = d[0].rank_delta;
+			
+			}
+			
+			if(!d[0["1d"]]){
+				
+				var volume = '0.00';
+				var price_change = '0.00';
+				var price_change_pct = '0.00';
+
+			}else{
+
+				if(!d[0]["1d"]["volume"]){
+				
+					var volume = '0.00';
+				
+				} else {
+				
+					var volume = d[0]["1d"]["volume"];
+				
+				}
+
+				if(!d[0]["1d"]["price_change"]){
+
+					var price_change = '0.00';
+				
+				} else {
+				
+					var price_change = d[0]["1d"]["price_change"];
+
+				}
+
+				if(!d[0]["1d"]["price_change_pct"]){
+
+					var price_change_pct = '0.00';
+				
+				 }else{
+
+					 var price_change_pct = d[0]["1d"]["price_change_pct"];
+			
+				 }
+			}
 			var time = new Date();
 		/*	
 			// debug it

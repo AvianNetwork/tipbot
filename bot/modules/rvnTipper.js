@@ -2215,11 +2215,6 @@ function listExchanges(message){
                         inline: false
                         },
                         {
-			name: ':chart_with_upwards_trend:  Solidus Exchange  :chart_with_upwards_trend:',
-                        value: 'https://exchange.solidus.finance/markets/RVL_BTC\nhttps://exchange.solidus.finance/markets/RVL_USDT\nhttps://exchange.solidus.finance/markets/RVL_RVN\n\u200b',
-                        inline: true
-                        },
-                        {
                         name: ':clock: Time',
                         value: '' + time,
                         inline: false

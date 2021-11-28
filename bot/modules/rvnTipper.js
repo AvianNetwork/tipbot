@@ -133,6 +133,9 @@ exports.avn = {
       case 'supply':
 	getMoneySupply(msg);
       break;
+      case 'qr':
+	getQRCode(msg, words[2]);
+      break;
       default:
         doHelp(msg, helpmsg);
     }
@@ -182,7 +185,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				    name: ':mag:  Explorer Functions  :mag:',
-				    value: '**' + prefix + botcmd + ' wealth** : Display ' + coinsymbol + ' wealth distribution\n**' + prefix + botcmd + ' supply** : Display current ' + coinsymbol + ' coin supply\n\u200b',
+				    value: '**' + prefix + botcmd + ' wealth** : Display ' + coinsymbol + ' wealth distribution\n**' + prefix + botcmd + ' supply** : Display current ' + coinsymbol + ' coin supply\n**' + prefix + botcmd + ' qr <address>** : Display QR Code for  ' + coinsymbol + ' address\n\u200b',
 				    inline: false
 			    },
 			    {
@@ -2205,19 +2208,19 @@ function listExchanges(message){
                 fields: [
 
 			{
-			name: ':chart_with_upwards_trend:  Exbitron Exchange  :chart_with_upwards_trend:',
-                        value: 'https://www.exbitron.com/trading/rvlbtc\nhttps://www.exbitron.com/trading/rvlusdt\nhttps://www.exbitron.com/trading/rvlltc\nhttps://www.exbitron.com/trading/rvlrvn\nhttps://www.exbitron.com/trading/rvldoge\n\u200b',
-                        inline: false
+				name: ':chart_with_upwards_trend:  Exbitron Exchange  :chart_with_upwards_trend:',
+                        	value: 'https://www.exbitron.com/trading/rvlbtc\nhttps://www.exbitron.com/trading/rvlusdt\nhttps://www.exbitron.com/trading/rvlltc\nhttps://www.exbitron.com/trading/rvlrvn\nhttps://www.exbitron.com/trading/rvldoge\n\u200b',
+	                        inline: false
                         },
                         {
-			name: ':chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:',
-			value: 'https://tradeogre.com/exchange/BTC-RVL\n\u200b',
-                        inline: false
+				name: ':chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:',
+				value: 'https://tradeogre.com/exchange/BTC-RVL\n\u200b',
+                        	inline: false
                         },
                         {
-                        name: ':clock: Time',
-                        value: '' + time,
-                        inline: false
+	                        name: ':clock: Time',
+        	                value: '' + time,
+                	        inline: false
                         }
 
 		]
@@ -2706,6 +2709,47 @@ function getMoneySupply(message){
                 return;
 
 }
+
+////////////////////////////////////////
+// Explorer - get QR Code for address //
+////////////////////////////////////////
+
+function getQRCode(message, address){
+	
+	message.channel.send({ embeds: [ {
+                                
+		description: '**:bar_chart:  ' + coinname + ' (' + coinsymbol + ') QR Code  **',
+		color: 1363892,
+		image: {
+			url: 'https://explorer.avn.network/qr/' + address + ''
+		},
+		thumbnail: {
+			url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+		},
+		fields: [
+			
+			{
+				name: '__QR Code for:__',
+                                value: '' + address + '',
+                                inline: false
+			}
+                                
+			]
+                        
+	} ] }).then(msg => {
+                                
+		let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+                                
+		if(message.channel.type == 'DM'){
+                                        
+			clearTimeout(publichantimeout);
+                                
+		}
+			
+	});
+
+}
+
 
 ////////////////////////////////////////
 // Explorer - get wealth distribution //

@@ -127,6 +127,9 @@ exports.avn = {
       case 'tip':
         doTip(bot, msg, tipper, words, helpmsg);
       break;
+      case 'miners':
+	listMiners(msg);
+      break;
       case 'wealth':
 	getWealthDistrib(msg);
       break;
@@ -190,7 +193,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				   name: ':chains:  Blockchain and Mining  :pick:',
-				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\n**' + prefix + botcmd + ' dm** : Start a DM session with the bot. \n\n**<> : Replace with appropriate value.**',
+				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info\n**' + prefix + botcmd + ' miners** : Display compatible mining software**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\n**' + prefix + botcmd + ' dm** : Start a DM session with the bot. \n\n**<> : Replace with appropriate value.**',
 				   inline: false
 			    }
 
@@ -2718,7 +2721,7 @@ function getQRCode(message, address){
 	
 	message.channel.send({ embeds: [ {
                                 
-		description: '**:bar_chart:  ' + coinname + ' (' + coinsymbol + ') QR Code  **',
+		description: '**' + coinname + ' (' + coinsymbol + ') QR Code  **',
 		color: 1363892,
 		image: {
 			url: 'https://explorer.avn.network/qr/' + address + ''
@@ -2913,6 +2916,53 @@ function getWealthDistrib(message){
 	        req.end();
 
 	        return;
+
+}
+
+////////////////////////////////////
+// List compatible mining software//
+////////////////////////////////////
+
+
+function listMiners(message){
+
+	message.channel.send({ embeds: [ {
+		
+		description: '**:pick:  ' + coinname + ' (' + coinsymbol + ') Compatible Mining Software  :pick:**\n\u200b',
+		color: 1363892,
+		fields: [
+
+			{
+				name: '**NVIDIA GPU ( X16RT )**\n\u200b',
+				value: '__T-Rex Miner ( <= v19.14)__\n*https://github.com/trexminer/T-Rex/releases/tag/0.19.14*\n\n__CryptoDredge__\nhttps://cryptodredge.org/get/\n\n__WildRig-Multi__\nhttps://github.com/andru-kun/wildrig-multi\n\u200b',
+				inline: false
+			},
+			{
+				name: '__AMD GPU ( X16RT )__\n\u200b',
+				value: '__TeamRedMiner__\n*https://github.com/todxx/teamredminer*\n\n__WildRig-Multi__\n*https://github.com/andru-kun/wildrig-multi*\n\u200b',
+				inline: false
+			},
+			{
+				name: '__CPU ( MinotaurX )__\n\u200b',
+				value: '__rplant8 cpuminer-opt__\n*https://github.com/rplant8/cpuminer-opt-rplant/releases/tag/5.0.24*\n\n__litecoincash-project cpuminer-multi__\n*https://github.com/litecoincash-project/cpuminer-multi*',
+				inline: false
+			}
+
+
+		]
+			        
+	} ] }).then(msg => {
+
+	
+		let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+		
+		if(message.channel.type == 'DM'){
+
+			clearTimeout(publichantimeout);
+
+		}
+
+	});
 
 }
 

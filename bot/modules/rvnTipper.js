@@ -1470,7 +1470,7 @@ function getPrice(message, cur, amt){
 			
 			hostname: 'tradeogre.com',
 			port: 443,
-			path: '/api/v1/ticker/'+ cur.toUpperCase() +'-'+oldcoinsymbol.toUpperCase(),
+			path: '/api/v1/ticker/'+ cur.toUpperCase() +'-'+coinsymbol.toUpperCase(),
 			method: 'GET',
 		}
 
@@ -1506,7 +1506,7 @@ function getPrice(message, cur, amt){
 					
 						{
 							name: 'Trade Ogre (' + coinsymbol.toUpperCase() + '/'+cur.toUpperCase()+')',
-							value: '**https://tradeogre.com**\nhttps://tradeogre.com/exchange/'+ cur.toUpperCase() +'-'+oldcoinsymbol.toUpperCase(),
+							value: '**https://tradeogre.com**\nhttps://tradeogre.com/exchange/'+ cur.toUpperCase() +'-'+coinsymbol.toUpperCase(),
 							inline: false
 						},
 						{
@@ -2217,7 +2217,7 @@ function listExchanges(message){
                         },
                         {
 				name: ':chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:',
-				value: 'https://tradeogre.com/exchange/BTC-RVL\n\u200b',
+				value: 'https://tradeogre.com/exchange/BTC-' + coinsymbol.toUpperCase() + '\n\u200b',
                         	inline: false
                         },
                         {

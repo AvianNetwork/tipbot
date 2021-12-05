@@ -23,6 +23,7 @@ let projectreddit = config.get('project').redditurl;
 let projectdiscord = config.get('project').discordurl;
 let projecttelegram = config.get('project').telegramurl;
 let projecttelegramann = config.get('project').telegramannurl;
+let webwallet = config.get('project').webwalleturl;
 let projectexplorerurl = config.get('explorer').explorerurl;
 let nomicsapikey = config.get('nomics').apikey;
 let donationaddress = config.get('project').donationaddress;
@@ -2300,9 +2301,14 @@ function listURLs(message){
 				},
         	                {
                 		        name: '__Coin Wrapping__',
-	                	        value: '*' + coinwrapurl + '*\n\u200b',
-	                        	inline: true
+	                	        value: '*' + coinwrapurl + '*',
+	                        	inline: false
 	                        },
+				{
+					name: '__Web Wallet__',
+					value: '*' + webwallet + '*\n\u200b',
+					inline: false
+				},
         	                {
 	        	                name: ':clock: Time',
 	                	        value: '' + time,

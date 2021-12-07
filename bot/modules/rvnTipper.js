@@ -1047,7 +1047,8 @@ function dumpPrivKey(message, tipper) {
 
 function getDifficulty(message) {
 	
-    rvn.getDifficulty(function(err, difficulty) {
+//    rvn.getDifficulty(function(err, difficulty) {
+	    rvn.getMiningInfo(function(err, mininginfo) {
 
 	    if (err) {
             
@@ -1059,20 +1060,28 @@ function getDifficulty(message) {
 
 	    } else {
             
+	console.log(mininginfo['difficulty']);
+		    console.log(mininginfo['crowdifficulty']);
 		    message.channel.send({ embeds: [ {
 
 			    description: '**:pick: ' + coinname + ' (' + coinsymbol + ') Network difficulty :pick:**',
 			    color: 1363892,
 			    footer: {
 				    text: 'Avian Network',
-				    icon_url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+				    icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
                             },
 			    fields: [
 	
 				    {
-					    name: 'Network Difficulty',
-					    value: '**' + difficulty + '**',
-					    inline: false
+					    name: 'X16RT',
+					    value: '**' + mininginfo['difficulty'] + '**',
+					    inline: true
+				    },
+				    {
+
+					    name: 'MinotaurX',
+					    value: '**' + mininginfo['crowdifficulty'] + '**',
+					    inline: true
 				    }
 			    
 			    ]
@@ -1116,7 +1125,7 @@ function getNetworkHashPs(message){
                             color: 1363892,
                             footer: {
 				    text: 'Avian Network',
-				    icon_url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+				    icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
                             },
 			    fields: [
                                     {
@@ -1188,8 +1197,13 @@ function getMiningInfo(message){
                                             inline: true
                                     },
 				    {
-				    	    name: 'Network difficulty',
+				    	    name: 'Network difficulty (X16RT)',
 					    value: '' + Number(mininginfo.difficulty) + '',
+					    inline: true
+				    },
+				    {
+					    name: "Network difficulty (MinotaurX)",
+					    value: '' + Number(mininginfo.crowdifficulty) + '',
 					    inline: true
 				    },
 				    {
@@ -2563,7 +2577,7 @@ function doDonation(message, tipper, words, helpmsg) {
                                                 color: 1363892,
 						footer: {
 							text: 'Thank you for donating to the Avian Foundation!',
-							icon_url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+							icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
 						},
                                                 fields: [
 
@@ -2675,7 +2689,7 @@ function getMoneySupply(message){
                                 color: 1363892,
 				thumbnail: {
 					
-					url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+					url: 'https://explorer.avn.network/images/avian_256x256x32.png',
 				},
                                 
 				fields: [
@@ -2733,7 +2747,7 @@ function getQRCode(message, address){
 			url: 'https://explorer.avn.network/qr/' + address + ''
 		},
 		thumbnail: {
-			url: 'https://explorer.avn.network/images/raven_256x256x32.png',
+			url: 'https://explorer.avn.network/images/avian_256x256x32.png',
 		},
 		fields: [
 			

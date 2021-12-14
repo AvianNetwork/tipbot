@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/raven_256x256x32.png" height="32"></a>Avian Network TipBot<a href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/raven_256x256x32.png" height="32"></a></h1>
+<h1 align="center"><a href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/avian_256x256x32.png" height="32"></a>Avian Network TipBot<a href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/avian_256x256x32.png" height="32"></a></h1>
 <p align ="center">
     <a href="https://discord.gg/xZd8xwVhVS">
         <img alt="Discord" src="https://img.shields.io/discord/904209882947932160.svg?label=&logo=discord&style=for-the-badge&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"/>
@@ -22,7 +22,7 @@ If you liked this repository, feel free to leave a star ⭐ to help promote Avia
 
 Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/contributors) that helped to develop the Avian Network project.
 
-<div align="center" style="text-align:center;margin: 0 auto"><a target="_blank" rel="noopener" href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/raven_256x256x32.png"></a></div>
+<div align="center" style="text-align:center;margin: 0 auto"><a target="_blank" rel="noopener" href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/avian_256x256x32.png"></a></div>
 <div align="center" style="text-align:center;margin: 0 auto">
     <p align="center" style="text-align:center;margin: 0 auto;"><h4>Official Project Links</h4></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Project home:&nbsp;<a target="_blank" rel="noopener" href="https://avn.network">https://avn.network</strong></a></p>
@@ -32,7 +32,7 @@ Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/c
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Discord:&nbsp;<a target="_blank" rel="noopener" href="https://discord.gg/xDDMYA2SqV">https://discord.gg/xDDMYA2SqV<a></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Telegram:&nbsp;<a target="_blank" rel="noopener" href="https://t.me/AvianNetwork">https://t.me/AvianNetwork<a></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Telegram Announcements:&nbsp;<a target="_blank" rel="noopener" href="https://t.me/AvianNetworkAnnouncements">https://t.me/AvianNetworkAnnouncements<a></p>
-    <p align="center"><a href="https://avn.network/"><a href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/raven_256x256x32.png" height="32"></a></p>
+    <p align="center"><a href="https://avn.network/"><a href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/avian_256x256x32.png" height="32"></a></p>
         <p align="center"><h4>Official Avian Foundation Donation address</h4></p>
     <p align="center">RDs4A4sDHp4otDHQQuFSaPDYEg2xx3hbdN</p>
         <p align="center">~ send AVN only ~</p>

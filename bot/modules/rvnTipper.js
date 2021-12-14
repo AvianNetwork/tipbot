@@ -2438,10 +2438,19 @@ function validateAddress(message, address){
 
                             ]
 
-                    } ] }).then(msg => {
-                            setTimeout(() => msg.delete(), msgtimeout)
-                    });
-                }
+			} ] }).then(msg => {
+			                         
+				let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+			                         
+				if(message.channel.type == 'DM'){
+							                                 
+					clearTimeout(publichantimeout);
+							                         
+				}
+			        
+			});
+			
+		}
         })
 
 }

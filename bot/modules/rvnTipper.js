@@ -1135,7 +1135,7 @@ function getNetworkHashPs(message){
 				    },
 				    {
                                             name: 'MinotaurX',
-                                            value: '**' + Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(3)+ ' KH/s**',
+                                            value: '**' + Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(3)+ ' MH/s**',
                                             inline: true
                                     }
                             ]
@@ -1213,7 +1213,7 @@ function getMiningInfo(message){
 				    },
 				    {
 					    name: 'Network hashrate (MinotaurX)',
-					    value: '' + Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(3)+ ' KH/s',
+					    value: '' + Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(3)+ ' MH/s',
 					    inline: true
 				    },
 				    {

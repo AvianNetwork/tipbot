@@ -1047,8 +1047,7 @@ function dumpPrivKey(message, tipper) {
 
 function getDifficulty(message) {
 	
-//    rvn.getDifficulty(function(err, difficulty) {
-	    rvn.getMiningInfo(function(err, mininginfo) {
+	rvn.getMiningInfo(function(err, mininginfo) {
 
 	    if (err) {
             
@@ -1060,8 +1059,6 @@ function getDifficulty(message) {
 
 	    } else {
             
-	console.log(mininginfo['difficulty']);
-		    console.log(mininginfo['crowdifficulty']);
 		    message.channel.send({ embeds: [ {
 
 			    description: '**:pick: ' + coinname + ' (' + coinsymbol + ') Network difficulty :pick:**',
@@ -1074,13 +1071,13 @@ function getDifficulty(message) {
 	
 				    {
 					    name: 'X16RT',
-					    value: '**' + mininginfo['difficulty'] + '**',
+					    value: '**' + mininginfo['difficulty_x16rt'] + '**',
 					    inline: true
 				    },
 				    {
 
 					    name: 'MinotaurX',
-					    value: '**' + mininginfo['crowdifficulty'] + '**',
+					    value: '**' + mininginfo['difficulty_minotaurx'] + '**',
 					    inline: true
 				    }
 			    
@@ -1107,18 +1104,20 @@ function getDifficulty(message) {
 
 function getNetworkHashPs(message){
 
-	rvn.getNetworkHashPs(function(err, hashrate) {
-	
+	rvn.getMiningInfo(function(err, mininginfo) {
+
+		var time = new Date();
+		                
 		if (err) {
-			
+					                        
 			message.reply(err.message).then(msg => {
-
+									                                
 				setTimeout(() => msg.delete(), errmsgtimeout)
-
+								
 			});
-			
+                
 		} else {
-		
+
                     message.channel.send({ embeds: [ {
 
                             description: '**:pick: ' + coinname + ' (' + coinsymbol + ') Network hashrate :pick:**',
@@ -1128,10 +1127,16 @@ function getNetworkHashPs(message){
 				    icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
                             },
 			    fields: [
-                                    {
-                                            name: 'Network hashrate',
-                                            value: '**' + Number(hashrate / 1000000000).toFixed(3)+ ' GH/s**',
-                                            inline: false
+                                    
+				    {
+					    name: 'X16RT',
+                                            value: '**' + Number(mininginfo.networkhashps_x16rt / 1000000000).toFixed(3)+ ' GH/s**',
+                                            inline: true
+				    },
+				    {
+                                            name: 'MinotaurX',
+                                            value: '**' + Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(3)+ ' KH/s**',
+                                            inline: true
                                     }
                             ]
 
@@ -1192,18 +1197,33 @@ function getMiningInfo(message){
 					    inline: true
 				    },
 				    {
-                                            name: 'Network hashrate',
-                                            value: '' + Number(mininginfo.networkhashps / 1000000000).toFixed(3)+ ' GH/s',
+                                            name: 'Network hashrate (X16RT)',
+                                            value: '' + Number(mininginfo.networkhashps_x16rt / 1000000000).toFixed(3)+ ' GH/s',
+                                            inline: true
+                                    },
+				    {
+                                            name: '\u200b',
+                                            value: '\u200b',
                                             inline: true
                                     },
 				    {
 				    	    name: 'Network difficulty (X16RT)',
-					    value: '' + Number(mininginfo.difficulty) + '',
+					    value: '' + Number(mininginfo.difficulty_x16rt) + '',
 					    inline: true
 				    },
 				    {
+					    name: 'Network hashrate (MinotaurX)',
+					    value: '' + Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(3)+ ' KH/s',
+					    inline: true
+				    },
+				    {
+                                            name: '\u200b',
+                                            value: '\u200b',
+                                            inline: true
+                                    },
+				    {
 					    name: "Network difficulty (MinotaurX)",
-					    value: '' + Number(mininginfo.crowdifficulty) + '',
+					    value: '' + Number(mininginfo.difficulty_minotaurx) + '',
 					    inline: true
 				    },
 				    {
@@ -1270,14 +1290,29 @@ function getBlockchainInfo(message){
                                             value: '' + chaininfo.headers.toString() + '',
                                             inline: true
                                     },
-                                    {
-                                            name: 'Network difficulty',
-                                            value: '' + Number(chaininfo.difficulty) + '',
+				    {
+                                            name: 'Network difficulty (X16RT)',
+                                            value: '' + Number(chaininfo.difficulty_x16rt) + '',
+                                            inline: true
+                                    },
+				    {
+                                            name: '\u200b',
+                                            value: '\u200b',
+                                            inline: true
+                                    },
+				    {
+                                            name: 'Network difficulty (MinotaurX)',
+                                            value: '' + Number(chaininfo.difficulty_minotaurx) + '',
                                             inline: true
                                     },
                                     {
                                             name: 'Size on disk',
                                             value: '' + Number(chaininfo.size_on_disk / 1000000).toFixed(2) + ' MB (' + Number(chaininfo.size_on_disk / 1000000000).toFixed(2) + ' GB)',
+                                            inline: true
+                                    },
+				    {
+                                            name: '\u200b',
+                                            value: '\u200b',
                                             inline: true
                                     },
 				    {

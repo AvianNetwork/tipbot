@@ -162,9 +162,11 @@ function checkMessageForCommand(msg, isEdit) {
           bot.user.mention().length + cmdTxt.length + config.prefix.length + 1
         );
       } catch (e) {
-        //no command
-        msg.channel.send('Yes?');
-        return;
+	      if (message.author.bot) return false;
+	      if (message.content.includes("@here") || message.content.includes("@everyone") || message.type == "REPLY") return false;
+	      //no command
+	      msg.channel.send('Yes?');
+	      return;
       }
     }
     var cmd = commands[cmdTxt];

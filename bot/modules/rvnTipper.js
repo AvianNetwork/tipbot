@@ -185,7 +185,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				    name: ':moneybag:  Wallet commands  :moneybag:',
-				    value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' tip <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' tip private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
+				    value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate** : Display Avian Foundation donation address\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' tip <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' tip private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
 				    inline: false
 			    },
 			    {
@@ -2760,9 +2760,45 @@ function dmMe(message){
 function doDonation(message, tipper, words, helpmsg) {
 
         if (words.length < 3) {
+ 
+		message.channel.send({ embeds: [ {
+                
+			description: '**:outbox_tray::money_with_wings::moneybag:  ' + coinname + ' (' + coinsymbol + ') Donation Address  :moneybag::money_with_wings::outbox_tray:**\n\u200b',
+			color: 1363892,
+			footer: {
+	                                text: 'Thank you for donating to the Avian Foundation!',
+	                                icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                                },
 
-                doHelp(message, helpmsg);
-                return;
+			fields: [
+                        
+				{
+					name: '__Avian Foundation donation adress__',
+	                                value: '' + donationaddress + '\n*(Send ' + coinsymbol.toUpperCase() + ' only)*',
+        	                        inline: false
+                	        },
+                        	{
+                                	name: '__To donate from your bot wallet__',
+	                                value: '`!avn donate <amount>`',
+        	                        inline: false
+                	        }
+
+                	]
+
+
+		} ] }).then(msg => {
+                
+			let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+                
+			if(message.channel.type == 'DM'){
+                        
+				clearTimeout(publichantimeout);
+                
+			}
+
+		});                
+
+		return;
 
         }
 

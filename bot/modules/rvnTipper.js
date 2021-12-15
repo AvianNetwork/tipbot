@@ -27,7 +27,6 @@ let webwallet = config.get('project').webwalleturl;
 let projectexplorerurl = config.get('explorer').explorerurl;
 let nomicsapikey = config.get('nomics').apikey;
 let donationaddress = config.get('project').donationaddress;
-let oldcoinsymbol = "RVL";
 
 const rvn = new bitcoin.Client(walletConfig);
 
@@ -1370,7 +1369,7 @@ function getPrice(message, cur, amt){
 	const options = {
 		hostname: 'www.exbitron.com',
 		port: 443,
-		path: '/api/v2/peatio/public/markets/' + oldcoinsymbol.toLowerCase() + cur + '/tickers',
+		path: '/api/v2/peatio/public/markets/' + coinsymbol.toLowerCase() + cur + '/tickers',
 		method: 'GET',
 	}
                 
@@ -1414,7 +1413,7 @@ function getPrice(message, cur, amt){
 						  
 						{
 							name: 'Exbitron (' + coinsymbol + '/'+cur.toUpperCase()+')',
-							value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/'+oldcoinsymbol.toLowerCase()+cur,
+							value: '**https://exbitron.com**\nhttps://www.exbitron.com/trading/'+coinsymbol.toLowerCase()+cur,
 							inline: false
 						},
 						{
@@ -2491,7 +2490,7 @@ function listExchanges(message){
 
 			{
 				name: ':chart_with_upwards_trend:  Exbitron Exchange  :chart_with_upwards_trend:',
-                        	value: 'https://www.exbitron.com/trading/rvlbtc\nhttps://www.exbitron.com/trading/rvlusdt\nhttps://www.exbitron.com/trading/rvlltc\nhttps://www.exbitron.com/trading/rvlrvn\nhttps://www.exbitron.com/trading/rvldoge\n\u200b',
+                        	value: 'https://www.exbitron.com/trading/' + coinsymbol.toLowerCase() + 'btc\nhttps://www.exbitron.com/trading/' + coinsymbol.toLowerCase()+ 'usdt\nhttps://www.exbitron.com/trading/' + coinsymbol.toLowerCase() + 'ltc\nhttps://www.exbitron.com/trading/' + coinsymbol.toLowerCase() + 'rvn\nhttps://www.exbitron.com/trading/' + coinsymbol.toLowerCase() + 'doge\n\u200b',
 	                        inline: false
                         },
                         {

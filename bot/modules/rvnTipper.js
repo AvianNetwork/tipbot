@@ -118,6 +118,9 @@ exports.avn = {
       case 'validateaddr':
 	validateAddress(msg, words[2]);
       break;
+      case 'walletversion':
+	getWalletVersion(msg);
+      break;
       case 'nomics':
 	if(words[2] === undefined){
 		doHelp(msg, helpmsg)
@@ -185,7 +188,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				    name: ':moneybag:  Wallet commands  :moneybag:',
-				    value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate** : Display Avian Foundation donation address\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' tip <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' tip private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
+				    value: '**' + prefix + botcmd + ' balance** : get your balance\n**' + prefix + botcmd + ' deposit** : get address for your deposits\n**' + prefix + botcmd + ' donate** : Display Avian Foundation donation address\n**' + prefix + botcmd + ' donate <amount>** : Donate to the Avian Foundation\n**' + prefix + botcmd + ' withdraw <address> <amount>** : withdraw coins to specified address\n**' + prefix + botcmd + ' tip <@user> <amount>** : mention a user with @ and then the amount to tip them\n**' + prefix + botcmd + ' tip private <user> <amount>** : put private before Mentioning a user to tip them privately.\n**' + prefix + botcmd + ' walletversion** : Display bot wallet version info\n**' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n\u200b',
 				    inline: false
 			    },
 			    {
@@ -2682,6 +2685,72 @@ function validateAddress(message, address){
         })
 
 }
+
+////////////////////////////////////
+// Get wallet version information //
+////////////////////////////////////
+
+function getWalletVersion(message){
+
+	rvn.getNetworkInfo(function(err, networkinfo) {
+		                
+		var time = new Date();
+		                
+		if (err) {
+					                        
+			message.reply(err.message).then(msg => {
+									                                
+				setTimeout(() => msg.delete(), errmsgtimeout)
+									                        
+			});
+					                
+		} else {
+
+                    message.channel.send({ embeds: [ {
+
+                            description: '**:robot: ' + coinname + ' (' + coinsymbol + ') Bot Wallet Version Info :robot:**',
+                            color: 1363892,
+                            footer: {
+                                    text: 'Avian Network',
+                                    icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                            },
+                            fields: [
+
+                                    {
+                                            name: '__Wallet Version__',
+                                            value: '**' + networkinfo['version'] + '**',
+                                            inline: true
+                                    },
+                                    {
+
+                                            name: '__Sub version__',
+                                            value: '**' + networkinfo['subversion'] + '**',
+                                            inline: true
+                                    },
+				    {
+					    name: '__Protocol version__',
+					    value: '**' + networkinfo['protocolversion'] + '**',
+					    inline: true
+				    }
+
+                            ]
+
+                    } ] }).then(msg => {
+
+                            let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+
+                            if(message.channel.type == 'DM'){
+
+                                    clearTimeout(publichantimeout);
+
+                            }
+
+                    });
+		}
+	});
+
+}
+
 
 /////////////////////////////////
 // Start a DM session with user//

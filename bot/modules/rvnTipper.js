@@ -177,8 +177,8 @@ function doHelp(message, helpmsg) {
 	        color: 1363892,
 	        fields: [
 			    {
-				    name: ':left_right_arrow:  Transaction Fees  :left_right_arrow:',
-			            value: '' + paytxfee + ' ' + coinsymbol + '\n\u200b',
+				    name: ':left_right_arrow:  Transaction fee for withdrawals  :left_right_arrow:',
+			            value: '' + paytxfee + ' ' + coinsymbol + '\n(no fees on tips)\n\u200b',
 			            inline: false
 		            },
 			    {

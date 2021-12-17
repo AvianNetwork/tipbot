@@ -640,10 +640,10 @@ function doTip(bot, message, tipper, words, helpmsg) {
 
 		} else {
 
-			if (Number(amount) + Number(paytxfee) > Number(balance)) {
+			if (Number(amount) > Number(balance)) {
+				
+				message.channel.send('' + Number(amount) + ' ' + coinsymbol + ' is greater than your balance.').then(msg => {
 
-				message.channel.send('Please leave atleast ' + paytxfee + ' ' + coinname + ' (' + coinsymbol + ') for transaction fees!').then(msg => {
-		
 					setTimeout(() => msg.delete(), errmsgtimeout)
 	
 				});
@@ -700,8 +700,7 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
 
 		} else {
 
-			rvn.sendFrom(tipper, address, Number(amount), 1, null, null, function(err, txId) {
-
+			rvn.move(tipper, recipient.toString(), Number(amount), 1, null, function(err, res) {
 				if (err) {
 
 					message.reply(err.message).then(msg => {
@@ -756,18 +755,8 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
 								inline: true
 							},
 							{
-								name: '__txid__',
-								value: '**' + txId + '**\n' + txLink(txId),
-								inline: false
-							},
-							{
 								name: '__Amount__',
 								value: '**' + amount.toString() + ' ' + coinsymbol + '**',
-								inline: true
-							},
-							{
-								name: '__Fee__',
-								value: '**' + paytxfee.toString() + '**',
 								inline: true
 							}
 
@@ -793,8 +782,8 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
                                                                 inline: false
                                                         },
                                                         {
-                                                                name: 'Your tip was successfully sent and your txid is:',
-                                                                value: '**' + txId + '**\n' + txLink(txId),
+								name: '__Tip status__',
+                                                                value: '**Sent!**',
                                                                 inline: false
                                                         }
 
@@ -821,11 +810,6 @@ function sendRVN(bot, message, tipper, recipient, amount, privacyFlag) {
 								name: '__Sender__',
 								value: '<@' + message.author.id + '>',
 								inline: true
-							},
-							{
-								name: '__txid__',
-								value: '**' + txId + '**\n' + txLink(txId),
-								inline: false
 							},
 							{
 								name: '__Amount__',

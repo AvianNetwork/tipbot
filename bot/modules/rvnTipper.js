@@ -23,6 +23,7 @@ let projectreddit = config.get('project').redditurl;
 let projectdiscord = config.get('project').discordurl;
 let projecttelegram = config.get('project').telegramurl;
 let projecttelegramann = config.get('project').telegramannurl;
+let projectbitcointalkurl = config.get('project').bitcointalkurl;
 let webwallet = config.get('project').webwalleturl;
 let projectexplorerurl = config.get('explorer').explorerurl;
 let nomicsapikey = config.get('nomics').apikey;
@@ -2537,6 +2538,11 @@ function listURLs(message){
                                         value: '*' + projectexplorerurl + '*',
                                         inline: false
                                 },
+				{
+					name: '__Project Bitcointalk__',
+					value: '*' + projectbitcointalkurl + '*',
+					inline: true
+				},
 				{
 					name: '__Project Twitter__',
 					value: '*' + projecttwitter + '*',

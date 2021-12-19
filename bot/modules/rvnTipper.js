@@ -1523,6 +1523,7 @@ function getPrice(message, cur, amt){
 			//console.log(`statusCode: ${res.statusCode}`)
 			res.on('data', d => {
 			
+				var time2 = new Date();
 				var d = JSON.parse(d);
 				var djson = JSON.stringify(d);
 				//console.log("d=" + djson);
@@ -1596,7 +1597,7 @@ function getPrice(message, cur, amt){
 						},
 						{
 							name: 'Time',
-							value: '' + time,
+							value: '' + time2,
 							inline: false
 						}
 

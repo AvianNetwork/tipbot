@@ -85,12 +85,15 @@ exports.avn = {
       case 'ltc':
 	getPrice(msg, 'ltc', words[2]);
 	break;
+      case 'cap':	
+	getMarketCap(msg, words[2]);
+	break;
       case 'privkey':
 	dumpPrivKey(msg, tipper);
-      break;
+        break;
       case 'wavn':
 	getWAVN(msg);
-      break;
+        break;
       case 'sushi':
 	getSushi(msg);
       break;
@@ -195,12 +198,12 @@ function doHelp(message, helpmsg) {
 			    {
 			    
 				    name: ':chart_with_upwards_trend:  Market Data  :chart_with_upwards_trend:',
-				    value: '**' + prefix + botcmd + ' exchanges** : Display ' + coinsymbol + ' exchange listings\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n**' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n**' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n**' + prefix + botcmd + ' nomics <avn|wavn>** : Display ' + coinsymbol + ' or W' + coinsymbol + ' market information\n\u200b',
+				    value: '**' + prefix + botcmd + ' exchanges** : Display ' + coinsymbol + ' exchange listings\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n**' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n**' + prefix + botcmd + ' cap <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' marketcap data in selected currency\n**' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n**' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n**' + prefix + botcmd + ' nomics <avn|wavn>** : Display ' + coinsymbol + ' or W' + coinsymbol + ' market information\n\u200b',
 				    inline: false
 			    },
 			    {
 				    name: ':mag:  Explorer Functions  :mag:',
-				    value: '**' + prefix + botcmd + ' wealth** : Display ' + coinsymbol + ' wealth distribution\n**' + prefix + botcmd + ' supply** : Display current ' + coinsymbol + ' coin supply\n**' + prefix + botcmd + ' qr <address>** : Display QR Code for  ' + coinsymbol + ' address\n\u200b',
+				    value: '**' + prefix + botcmd + ' wealth** : Display ' + coinsymbol + ' wealth distribution\n**' + prefix + botcmd + ' supply** : Display current ' + coinsymbol + ' coin supply and market capacity\n**' + prefix + botcmd + ' qr <address>** : Display QR Code for  ' + coinsymbol + ' address\n\u200b',
 				    inline: false
 			    },
 			    {
@@ -3028,9 +3031,11 @@ function doDonation(message, tipper, words, helpmsg) {
 // Explorer - Get money supply  //
 //////////////////////////////////
 
-function getMoneySupply(message){
+async function getMoneySupply(message){
 
-        const https = require('https')
+	let last = await getLast('usdt');
+
+	const https = require('https')
         const options = {
 
                 hostname: 'explorer-us.avn.network',
@@ -3048,6 +3053,7 @@ function getMoneySupply(message){
                         var d = JSON.parse(d);
 
                         var supply = Number(d).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var mktcap = Number(last * Number(d)).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
                         // console.log("suppply="+ supply);
                         var time = new Date();
 
@@ -3066,10 +3072,12 @@ function getMoneySupply(message){
                                                 name: '__Total coin supply__',
                                                 value: '' + supply + '',
                                                 inline: false
+                                        },
+					{
+                                                name: '__Current Market Capacity__',
+                                                value: '' + mktcap + ' USDT',
+                                                inline: false
                                         }
-
-
-
 
                                 ]
 
@@ -3353,6 +3361,180 @@ function listMiners(message){
 	});
 
 }
+
+///////////////////////////
+// get last market price //
+///////////////////////////
+
+function getLast(cur){
+
+	const rp = require('request-promise');
+	
+	return new Promise((resolve, reject)=>{
+
+		//console.log("cur="+cur);
+
+		const https = require('https')
+
+		const options = {
+                
+			hostname: 'www.exbitron.com',
+			port: 443,
+			path: '/api/v2/peatio/public/markets/' + coinsymbol.toLowerCase() + cur + '/tickers',
+			method: 'GET',
+		}
+
+		const req = https.request(options, res => {
+			
+			//console.log(`statusCode: ${res.statusCode}`)
+			
+			res.on('data', d => {
+				
+				var d = JSON.parse(d);
+				var djson = JSON.stringify(d);
+	                        //console.log("d=" + djson);
+        	                var time = Number(d['at'] * 1000);
+                	        var time = new Date(time);
+                        	var low = d['ticker'].low;
+	                        var low = Number(low).toFixed(8);
+        	                var high = d['ticker'].high;
+                	        var high = Number(high).toFixed(8);
+                        	var open = d['ticker'].open;
+	                        var open = Number(open).toFixed(8);
+        	                var last = d['ticker'].last;
+                	        var last = Number(last).toFixed(8);
+                        	var volume = d['ticker'].volume;
+	                        var volume = Number(volume).toFixed(8);
+        	                var amount = d['ticker'].amount;
+                	        var amount = Number(amount).toFixed(2);
+                        	var avg = d['ticker'].avg_price;
+	                        var avg = Number(avg).toFixed(8);
+        	                var change = d['ticker'].price_change_percent;
+				
+				//console.log("last="+last);
+				
+				resolve(last);
+			
+			})
+		
+		});
+
+		req.on('error', error => {
+		
+			console.error(error)
+			resolve("0");
+	
+		})
+		
+		req.end();
+	});
+}
+
+//////////////////////////////
+// Get Markt Capacity Data  //
+//////////////////////////////
+
+async function getMarketCap(message, cur){
+	
+	if(cur === ''){
+
+		doHelp(message);
+		return;
+	}
+
+	if(cur !== 'usdt' && cur !== 'USDT' && cur !== 'btc' && cur !== 'BTC' && cur !== 'doge' && cur !== 'DOGE' && cur !== 'rvn' && cur !== 'RVN' && cur !== 'ltc' && cur !== 'LTC'){
+	
+		doHelp(message);
+		return;	
+	}
+
+	cur = cur.toLowerCase();
+        
+	let last = await getLast(cur);
+
+        const https = require('https')
+        const options = {
+
+                hostname: 'explorer-us.avn.network',
+                port: 443,
+                path: '/ext/getmoneysupply',
+                method: 'GET'
+
+        }
+        // console.log(options);
+        const req = https.request(options, res => {
+                // console.log(`statusCode: ${res.statusCode}`)
+                // console.log(req);
+                res.on('data', d => {
+
+                        var d = JSON.parse(d);
+
+                        var supply = Number(d).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+                        var mktcap = Number(last * Number(d)).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+                        // console.log("suppply="+ supply);
+                        var time = new Date();
+
+                        message.channel.send({ embeds: [ {
+
+                                description: '**:bar_chart:  ' + coinname + ' (' + coinsymbol + ') market capacity  :bar_chart:**',
+                                color: 1363892,
+                                thumbnail: {
+
+                                        url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                                },
+
+                                fields: [
+
+                                        {
+                                                name: '__Total coin supply__',
+                                                value: '' + supply + '',
+                                                inline: false
+                                        },
+					{
+						name: '__'+ coinsymbol + ' current price__',
+						value: '' + last + ' ' + cur.toUpperCase(),
+						inline: false
+					},
+                                        {
+                                                name: '__Current market capacity__',
+                                                value: '' + mktcap + ' ' + cur.toUpperCase(),
+                                                inline: false
+                                        }
+
+                                ]
+
+                        } ] }).then(msg => {
+
+                                let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+
+                                if(message.channel.type == 'DM'){
+
+                                        clearTimeout(publichantimeout);
+
+                                }
+
+                                                        });
+
+                                        })
+
+
+                        })
+
+                req.on('error', error => {
+
+                                        console.error(error)
+
+                                })
+                req.end();
+
+                return;
+
+}
+
+
+
+///////////////////////////////////
+
 
 ////////
 function inPrivateorSpamChannel(msg) {

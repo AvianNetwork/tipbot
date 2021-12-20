@@ -3332,7 +3332,7 @@ function listMiners(message){
 			},
 			{
 				name: '__CPU ( MinotaurX )__\n\u200b',
-				value: '__rplant8 cpuminer-opt__\n*https://github.com/rplant8/cpuminer-opt-rplant/releases/tag/5.0.24*\n\n__litecoincash-project cpuminer-multi__\n*https://github.com/litecoincash-project/cpuminer-multi*',
+				value: '__rplant8 cpuminer-opt__\n*https://github.com/rplant8/cpuminer-opt-rplant/releases/tag/5.0.24*\n\n__litecoincash-project cpuminer-multi__\n*https://github.com/litecoincash-project/cpuminer-multi*\n\n__SRBMiner-multi__\n*https://github.com/doktor83/SRBMiner-Multi/releases*',
 				inline: false
 			}
 

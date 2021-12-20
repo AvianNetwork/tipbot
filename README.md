@@ -27,6 +27,7 @@ Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/c
     <p align="center" style="text-align:center;margin: 0 auto;"><h4>Official Project Links</h4></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Project home:&nbsp;<a target="_blank" rel="noopener" href="https://avn.network">https://avn.network</strong></a></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>GitHub:&nbsp;<a target="_blank"  rel="noopener" href="https://github.com/AvianNetwork/Avian/">https://github.com/AvianNetwork/Avian/</strong></a></p>
+    <p align="center" style="text-align:center;margin: 0 auto;"><strong>BitcoinTalk:&nbsp;<a target="_blank" rel="noopener" href="https://bitcointalk.org/index.php?topic=5377648">https://bitcointalk.org/index.php?topic=5377648</strong></a></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Twitter:&nbsp;<a target="_blank" rel="noopener" href="https://twitter.com/avianfoundation">https://twitter.com/avianfoundation</strong></a></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Reddit:&nbsp;<a target="_blank" rel="noopener" href="https://www.reddit.com/r/aviannetwork">https://www.reddit.com/r/aviannetwork</strong></a></p>
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Discord:&nbsp;<a target="_blank" rel="noopener" href="https://discord.gg/xDDMYA2SqV">https://discord.gg/xDDMYA2SqV<a></p>

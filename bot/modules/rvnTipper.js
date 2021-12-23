@@ -154,6 +154,9 @@ exports.avn = {
       case 'qr':
 	getQRCode(msg, words[2]);
       break;
+      case 'uptime':
+	walletUptime(msg);
+      break;
       default:
         doHelp(msg, helpmsg);
     }
@@ -208,9 +211,15 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				   name: ':chains:  Blockchain and Mining  :pick:',
-				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info\n**' + prefix + botcmd + ' miners** : Display compatible mining software**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\n**' + prefix + botcmd + ' dm** : Start a DM session with the bot. \n\n**<> : Replace with appropriate value.**',
+				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info\n**' + prefix + botcmd + ' miners** : Display compatible mining software**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\u200b',
 				   inline: false
-			    }
+			    },
+			    {							
+				    
+				    name: ':tools:  Bot Wallet Utilities  :tools:',
+				    value: '**' + prefix + botcmd + ' uptime** : Display current bot wallet uptime\n\n**' + prefix + botcmd + ' dm** : Start a DM session with the bot. \n\n**<> : Replace with appropriate value.**',
+				    inline: false
+			    },
 
 			    ]
 	      } ] }).then(msg => {
@@ -3431,7 +3440,7 @@ function getLast(cur){
 }
 
 //////////////////////////////
-// Get Markt Capacity Data  //
+// Get Market Capacity Data  //
 //////////////////////////////
 
 async function getMarketCap(message, cur){
@@ -3532,9 +3541,105 @@ async function getMarketCap(message, cur){
 }
 
 
+/////////////////////////////
+//  Display wallet uptime //
+/////////////////////////////
 
-///////////////////////////////////
 
+async function walletUptime(message){
+
+	let wlt = await getUptime();
+	let days = Number(wlt.result / (3600 * 24)).toLocaleString("en-US", {minimumFractionDigits: 3, maximumFractionDigits: 3});
+	var time = new Date();
+
+	message.channel.send({ embeds: [ {
+
+		description: '**:tools::robot:  ' + coinname + ' (' + coinsymbol + ') bot wallet uptime  :robot::tools:**',
+                                color: 1363892,
+                                thumbnail: {
+
+                                        url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                                },
+
+                                fields: [
+
+                                        {
+                                                name: '__Current wallet uptime__',
+                                                value: '' + days + ' days ',
+                                                inline: false
+                                        },
+					{
+                                                name: ':clock: Time',
+                                                value: '' + time,
+                                                inline: false
+                                        }
+                                ]
+
+                        } ] }).then(msg => {
+
+                                let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+
+                                if(message.channel.type == 'DM'){
+
+                                        clearTimeout(publichantimeout);
+
+                                }
+
+                                                        
+			});
+
+                        
+}
+
+////////////////////////
+//  Get wallet uptime //
+///////////////////////
+
+async function getUptime(){
+	
+	const request = require('request');
+	
+	return new Promise((resolve, reject)=>{
+                    
+		let options = {
+			
+			url: "http://127.0.0.1:" + config.avn.config.port,
+                        method: "post",
+                        headers:{
+                                "content-type": "text/plain"
+			},
+                        auth: {
+                            user: config.avn.config.user,
+                            pass: config.avn.config.pass
+                        },
+		
+			body: JSON.stringify( {"jsonrpc": "1.0", "id": "curltest", "method": "uptime", "params": [] })
+                        
+		};
+		
+		request(options, (error, response, body) => {
+                
+			if (error) {
+                        
+				resolve(false);
+				console.log("getUptime():");
+				console.error('An error has occurred: ', error);
+
+			} else {
+                        
+				resolve(JSON.parse(body));
+				//console.log("getUptime(): Post successful: response: ", body);
+
+			}
+                        
+		});
+
+	});
+
+}
+
+
+///////////////////////
 
 ////////
 function inPrivateorSpamChannel(msg) {

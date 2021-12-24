@@ -3191,9 +3191,13 @@ function getWealthDistrib(message){
                         var top5175ttl = Number(d.t_51_75.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
 			var top76100 = Number(d.t_76_100.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         var top76100ttl = Number(d.t_76_100.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
-			var top101plus = Number(d.t_101plus.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        var top101plusttl = Number(d.t_101plus.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
-
+			var top101150 = Number(d.t_101_150.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			var top101150ttl = Number(d.t_101_150.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top151200 =  Number(d.t_151_200.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			var top151200ttl = Number(d.t_151_200.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top201plus =  Number(d.t_151_200.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        var top201plusttl = Number(d.t_151_200.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			
                         //console.log("suppply="+ supply);
                         var time = new Date();
 
@@ -3274,8 +3278,8 @@ function getWealthDistrib(message){
                                                 inline: true
                                         },
 					{
-                                                name: '__Top 100+__',
-                                                value: '' + top101plus + '%',
+                                                name: '__Top 100-150__',
+                                                value: '' + top101150 + '%',
                                                 inline: true
                                         },
                                         {
@@ -3285,9 +3289,39 @@ function getWealthDistrib(message){
                                         },
                                         {
                                                 name: '__Total coins held__',
-                                                value: '' + top101plusttl + '',
+                                                value: '' + top101150ttl + '',
                                                 inline: true
                                         },
+					{
+						name: '__Top 151-200__',
+						value: '' + top151200 + '%',
+						inline: true
+					},
+					{
+						name: '\u200b',
+						value: '\u200b',
+						inline: true
+					},
+					{
+						name: '__Total coins held__',
+						value: '' + top151200ttl + '',
+						inline: true
+					},
+					{
+						name: '__Top 201+__',
+						value: '' + top201plus + '%',
+						inline: true
+					},
+					{
+						name: '\u200b',
+						value: '\u200b',
+						inline: true
+					},
+					{
+						name: '__Total coins held__',
+						value: '' + top201plusttl + '',
+						inline: true
+					},
                                         {
                                                 name: ':clock: Time',
                                                 value: '' + time,

@@ -107,7 +107,11 @@ exports.avn = {
 	getMiningInfo(msg);
       break;
       case 'miningcalc':
-	miningCalc(msg, words[2]);
+	if(words[2] === undefined || words[2] !== 'minx' && words[2] !== 'x16rt'){
+		doHelp(msg);
+	}else{
+		miningCalc(msg, words[2], words[3]);
+	}
       break;
       case 'chaininfo':
 	getBlockchainInfo(msg);
@@ -211,7 +215,7 @@ function doHelp(message, helpmsg) {
 			    },
 			    {
 				   name: ':chains:  Blockchain and Mining  :pick:',
-				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info\n**' + prefix + botcmd + ' miners** : Display compatible mining software**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\u200b',
+				   value: '**' + prefix + botcmd + ' diff** : Display current network difficulty\n**' + prefix + botcmd + ' hash** : Display current network hashrate\n**' + prefix + botcmd + ' mininginfo** : Display network mining info\n**' + prefix + botcmd + ' miningcalc <minx|x16rt> <KH/s|MH/s>** : Calculate mining returns for MinotaurX or X16RT (Supply hashrate in KH/s for MinX and MH/s for X16RT)\n**' + prefix + botcmd + ' chaininfo** : Display blockchain info\n**' + prefix + botcmd + ' miners** : Display compatible mining software**\n' + prefix + botcmd + ' validate <address>** : Validate ' + coinsymbol + ' address\n\u200b',
 				   inline: false
 			    },
 			    {							
@@ -2354,96 +2358,180 @@ function getSushi(message){
 /// miningCalc - Calculate mininig returns
 ////////////////////////////////////////////
 
-function miningCalc(message, hashrate) {
-		
-	rvn.getDifficulty(function(err, difficulty) {
-			
+async function miningCalc(message, algo, hashrate) {
+
+	let last = await getLast('usdt');
+
+	rvn.getMiningInfo(function(err, mininginfo) {
+		            
 		if (err) {
-				
+				                        
 			message.reply(err.message).then(msg => {
-					
-				setTimeout(() => msg.delete(), 10000)
-				
+								                            
+				setTimeout(() => msg.delete(), errmsgtimeout)
+								                    
 			});
-			
+				                
 		} else {
-				
-			var netdiff = difficulty
-			difficulty = difficulty.toString().replace(".", "").padEnd(13, "0");
-			difficulty = Number(difficulty);
+
 			// check for negative number
 			if(hashrate <= 0){
 			
-				hashrate = "Please supply a positive number in ";
-				hashpersec = "0";
-				secondsSolo = "0";
-				minutesSolo = ":infinity:";
-				hoursSolo = ":infinity:";
-				profitability = "0";
+				reqhash = "Please supply a positive number.";
+				pcnt = "0";
+				secssolo = "0";
+				minssolo = ":infinity:";
+				hrssolo = ":infinity:";
+				profitpermin = "0";
+				profitperhr = "0";
+				profitperday = "0";
+				netdiff = '-';
+				nethashconvert = '0';
+				nhunit = '-';
+				unit = '';
+				algoname = '-';
 
 			}else if(isNaN(hashrate)){
 				
-				hashrate = "Please supply a number in ";
-				hashpersec = "0";
-				secondsSolo = "0";
-				minutesSolo = ":infinity:";
-				hoursSolo = ":infinity:";
-				profitability = "0";
+				reqhash = "Please supply a number.";
+				pcnt = "0";
+				secssolo = "0";
+				minssolo = ":infinity:";
+				hrssolo = ":infinity:";
+				profitpermin = "0";
+				profitperhr = "0";
+				profitperday = "0";
+				netdiff = '-';
+				nethashconvert = '0';
+				nhunit = '-';
+				unit = '';
+				algoname = '-';
 
 			}else{
-					
-				//console.log("difficulty="+difficulty);
-				var hashpersec = Number(hashrate * 1000000);
-				//console.log("hashpersec="+hashpersec)
-				var secondsSolo = Number(difficulty * 4294967296 / hashpersec / 10000000000000);
-				//console.log("secondsSolo="+secondsSolo);
-				var minutesSolo = Number(secondsSolo / 60).toFixed(2);
-				var hoursSolo = Number(secondsSolo / 360).toFixed(2);
-				var profitability = Number(hashpersec * 86400 * 2500 * 1000000000000 / difficulty / 4294967296).toFixed(8);
-				var hrlyprofit = Number(profitability / 24).toFixed(8);
-				var minuteprofit = Number(hrlyprofit / 60).toFixed(8);
-				//console.log("profitability="+profitability);
 				
+				if(algo === 'minx'){
+					
+					var algoname = 'MinotaurX';
+					var reqhash = hashrate;
+					hashrate = hashrate * 1000; // KH to H
+					var nethash = mininginfo.networkhashps_minotaurx;
+					var pcnt = Number(hashrate / nethash * 100).toFixed(5);
+					var nethashconvert = Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(8);
+					var secssolo = nethash / hashrate * 60;
+					var minssolo = Number(secssolo / 60).toFixed(3);
+					var hrssolo = Number(minssolo / 60).toFixed(3);
+					var unit = 'KH/s';
+					var nhunit = 'MH/s';
+					var netdiff = mininginfo.difficulty_minotaurx;
+
+					var profitpersec = 2500 / secssolo;
+					var profitpermin = Number(profitpersec * 60).toFixed(8);
+					var profitperhr = Number(profitpersec * 3600).toFixed(8);
+					var profitperday = Number(profitperhr * 24).toFixed(8);
+					var ppminusdt = Number(last * profitpermin).toFixed(8);
+					var pphrusdt = Number(last * profitperhr).toFixed(8);
+					var ppdayusdt = Number(last * profitperday).toFixed(8);
+
+				}else if(algo === 'x16rt'){
+
+					var algoname = 'X16RT';
+					var reqhash = hashrate;
+					hashrate = hashrate * 1000000;  //MH to H
+					var nethash = mininginfo.networkhashps_x16rt;
+					var pcnt = Number(hashrate / nethash * 100).toFixed(5);
+					var nethashconvert = Number(mininginfo.networkhashps_x16rt / 1000000000).toFixed(8);
+					var secssolo = nethash / hashrate * 60;
+					var minssolo = Number(secssolo / 60).toFixed(3);
+					var hrssolo = Number(minssolo / 60).toFixed(3);
+					var unit = 'MH/s';
+					var nhunit = 'GH/s';
+					var netdiff = mininginfo.difficulty_x16rt;
+
+					var profitpersec = 2500 / secssolo;
+                                        var profitpermin = Number(profitpersec * 60).toFixed(8);
+                                        var profitperhr = Number(profitpersec * 3600).toFixed(8);
+                                        var profitperday = Number(profitperhr * 24).toFixed(8);
+					var ppminusdt = Number(last * profitpermin).toFixed(8);
+                                        var pphrusdt = Number(last * profitperhr).toFixed(8);
+                                        var ppdayusdt = Number(last * profitperday).toFixed(8);
+
+				}else{
+				
+					doHelp(message);
+					return;
+
+				}
+
 			}
 				
 			var time = new Date();
 				
 			message.channel.send({ embeds: [ {
 					
-				description: '**:abacus: ' + coinsymbol + ' Mining Calculator :abacus:\n\u200b**',
+				description: '**:abacus: ' + coinsymbol + ' Mining Calculator (' + algoname + '):abacus:\n\u200b**',
 				color: 1363892,
 				fields: [
 				
 					{
-						name: 'Hashrate',
-						value: '' + hashrate + 'MH/s',
+						name: 'Miner Hashrate',
+						value: '' + reqhash + ' ' + unit + ' (' + pcnt + '%)',
 						inline: true
 					},
 					{
-						name: 'Difficulty',
+						name: 'Network Hashrate',
+						value: '' + nethashconvert + ' ' + nhunit,
+						inline: true
+					},
+					{
+						name: 'Network Difficulty',
 						value: '' + netdiff + '',
 						inline: true
 					},
 					{
 						name: 'Time to find (solo)',
-						value: hoursSolo + ' hrs (' + minutesSolo + ' mins)',
+						value: hrssolo + ' hrs (' + minssolo + ' mins)',
+						inline: true
+					},
+					{
+	                                        name: '\u200b',
+						value: '\u200b',
+						inline: true
+					},
+					{
+						name: '\u200b',
+						value: '\u200b',
 						inline: true
 					},
 					{
 						name: '' + coinsymbol + ' per minute',
-						value: '' + minuteprofit,
+						value: '' + profitpermin,
 						inline: true
 					},
 					{
 						name: '' + coinsymbol + ' per hour',
-						value: '' + hrlyprofit,
+						value: '' + profitperhr,
 						inline: true
 					},
 					{
 						name: '' + coinsymbol + ' per day',
-						value: '' + profitability,
+						value: '' + profitperday,
 						inline: true
 					},
+					{
+                                                name: 'USDT per minute',
+                                                value: '' + ppminusdt,
+				                inline: true
+				        },
+				        {
+				                name: 'USDT per hour',
+				                value: '' + pphrusdt,
+				                inline: true
+				        },
+				        {
+				                name: 'USDT per day',
+				                value: '' + ppdayusdt,
+				                inline: true
+                                        },
 					{
 						name: ':clock: Time',
 						value: '' + time,

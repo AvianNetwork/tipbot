@@ -161,9 +161,6 @@ exports.avn = {
       case 'uptime':
 	walletUptime(msg);
       break;
-      case 'test':
-	getPowAverages('minotaurx', '720');
-      break;
       default:
         doHelp(msg, helpmsg);
     }

@@ -161,6 +161,9 @@ exports.avn = {
       case 'uptime':
 	walletUptime(msg);
       break;
+      case 'test':
+	getPowAverages('minotaurx', '720');
+      break;
       default:
         doHelp(msg, helpmsg);
     }
@@ -2361,6 +2364,20 @@ function getSushi(message){
 async function miningCalc(message, algo, hashrate) {
 
 	let last = await getLast('usdt');
+	
+	let _id = 'minotaurx';
+
+	if(algo === 'minx'){
+
+		_id = 'minotaurx'
+
+	}else if(algo === 'x16rt'){
+
+		_id = 'x16rt';
+	}
+
+	let hashavg12 = Number(await getPowAverages(_id, '720')).toFixed(8);
+	let hashavg24 = Number(await getPowAverages(_id, '1440')).toFixed(8);
 
 	rvn.getMiningInfo(function(err, mininginfo) {
 		            
@@ -2414,46 +2431,92 @@ async function miningCalc(message, algo, hashrate) {
 					var algoname = 'MinotaurX';
 					var reqhash = hashrate;
 					hashrate = hashrate * 1000; // KH to H
+					var hashavgraw12 = Number(hashavg12 * 1000000).toFixed(8);
+					var hashavgraw24 = Number(hashavg24 * 1000000).toFixed(8);
 					var nethash = mininginfo.networkhashps_minotaurx;
 					var pcnt = Number(hashrate / nethash * 100).toFixed(5);
+					var pcnt12 = Number(hashrate / hashavgraw12 * 100).toFixed(5);
+					var pcnt24 = Number(hashrate / hashavgraw24 * 100).toFixed(5);
 					var nethashconvert = Number(mininginfo.networkhashps_minotaurx / 1000000).toFixed(8);
 					var secssolo = nethash / hashrate * 60;
+					var secssolo12 = hashavgraw12 / hashrate * 60;
+					var secssolo24 = hashavgraw24 / hashrate * 60;
 					var minssolo = Number(secssolo / 60).toFixed(3);
 					var hrssolo = Number(minssolo / 60).toFixed(3);
+					var hrssolo12 = Number(secssolo12 / 3600).toFixed(3);
+					var hrssolo24 = Number(secssolo24 / 3600).toFixed(3);
 					var unit = 'KH/s';
 					var nhunit = 'MH/s';
 					var netdiff = mininginfo.difficulty_minotaurx;
 
 					var profitpersec = 2500 / secssolo;
+					var profitpersec12 = 2500 / secssolo12;
+					var profitpersec24 = 2500 / secssolo24;
 					var profitpermin = Number(profitpersec * 60).toFixed(8);
+					var profitpermin12 = Number(profitpersec12 * 60).toFixed(8);
+					var profitpermin24 = Number(profitpersec24 * 60).toFixed(8);
 					var profitperhr = Number(profitpersec * 3600).toFixed(8);
+					var profitperhr12 = Number(profitpersec12 * 3600).toFixed(8);
+					var profitperhr24 = Number(profitpersec24 * 3600).toFixed(8);
 					var profitperday = Number(profitperhr * 24).toFixed(8);
+					var profitperday12 = Number(profitperhr12 * 24).toFixed(8);
+					var profitperday24 = Number(profitperhr24 * 24).toFixed(8);
 					var ppminusdt = Number(last * profitpermin).toFixed(8);
+					var ppminusdt12 = Number(last * profitpermin12).toFixed(8);
+					var ppminusdt24 = Number(last * profitpermin24).toFixed(8);
 					var pphrusdt = Number(last * profitperhr).toFixed(8);
+					var pphrusdt12 = Number(last * profitperhr12).toFixed(8);
+					var pphrusdt24 = Number(last * profitperhr24).toFixed(8);
 					var ppdayusdt = Number(last * profitperday).toFixed(8);
+					var ppdayusdt12 = Number(last * profitperday12).toFixed(8);
+					var ppdayusdt24 = Number(last * profitperday24).toFixed(8);
+
 
 				}else if(algo === 'x16rt'){
 
 					var algoname = 'X16RT';
 					var reqhash = hashrate;
 					hashrate = hashrate * 1000000;  //MH to H
+					var hashavgraw12 = Number(hashavg12 * 1000000000).toFixed(8);
+					var hashavgraw24 = Number(hashavg24 * 1000000000).toFixed(8);
 					var nethash = mininginfo.networkhashps_x16rt;
 					var pcnt = Number(hashrate / nethash * 100).toFixed(5);
+					var pcnt12 = Number(hashrate / hashavgraw12 * 100).toFixed(5);
+                                        var pcnt24 = Number(hashrate / hashavgraw24 * 100).toFixed(5);
 					var nethashconvert = Number(mininginfo.networkhashps_x16rt / 1000000000).toFixed(8);
 					var secssolo = nethash / hashrate * 60;
+					var secssolo12 = hashavgraw12 / hashrate * 60;
+					var secssolo24 = hashavgraw24 / hashrate * 60;
 					var minssolo = Number(secssolo / 60).toFixed(3);
 					var hrssolo = Number(minssolo / 60).toFixed(3);
+					var hrssolo12 = Number(secssolo12 / 3600).toFixed(3);
+					var hrssolo24 = Number(secssolo24 / 3600).toFixed(3);
 					var unit = 'MH/s';
 					var nhunit = 'GH/s';
 					var netdiff = mininginfo.difficulty_x16rt;
 
 					var profitpersec = 2500 / secssolo;
+					var profitpersec12 = 2500 / secssolo12;
+					var profitpersec24 = 2500 / secssolo24;
                                         var profitpermin = Number(profitpersec * 60).toFixed(8);
+					var profitpermin12 = Number(profitpersec12 * 60).toFixed(8);
+					var profitpermin24 = Number(profitpersec24 * 60).toFixed(8);
                                         var profitperhr = Number(profitpersec * 3600).toFixed(8);
+					var profitperhr12 = Number(profitpersec12 * 3600).toFixed(8);
+					var profitperhr24 = Number(profitpersec24 * 3600).toFixed(8);
                                         var profitperday = Number(profitperhr * 24).toFixed(8);
+					var profitperday12 = Number(profitperhr12 * 24).toFixed(8);
+					var profitperday24 = Number(profitperhr24 * 24).toFixed(8);
 					var ppminusdt = Number(last * profitpermin).toFixed(8);
-                                        var pphrusdt = Number(last * profitperhr).toFixed(8);
+					var ppminusdt12 = Number(last * profitpermin12).toFixed(8);
+                                        var ppminusdt24 = Number(last * profitpermin24).toFixed(8);
+					var pphrusdt = Number(last * profitperhr).toFixed(8);
+					var pphrusdt12 = Number(last * profitperhr12).toFixed(8);
+                                        var pphrusdt24 = Number(last * profitperhr24).toFixed(8);
                                         var ppdayusdt = Number(last * profitperday).toFixed(8);
+					var ppdayusdt12 = Number(last * profitperday12).toFixed(8);
+                                        var ppdayusdt24 = Number(last * profitperday24).toFixed(8);
+
 
 				}else{
 				
@@ -2468,68 +2531,56 @@ async function miningCalc(message, algo, hashrate) {
 				
 			message.channel.send({ embeds: [ {
 					
-				description: '**:abacus: ' + coinsymbol + ' Mining Calculator (' + algoname + '):abacus:\n\u200b**',
+				description: '**:abacus: ' + coinsymbol + ' Mining Calculator (' + algoname + ') :abacus:\n\u200b**',
 				color: 1363892,
+				footer: {
+					text: 'now = momentary, 12hr = nethash avg over last 12hr, 24hr = nethash avg over last 24hr',
+				},
 				fields: [
 				
 					{
 						name: 'Miner Hashrate',
-						value: '' + reqhash + ' ' + unit + ' (' + pcnt + '%)',
+						value: '**now:** ' + reqhash + ' ' + unit + ' (' + pcnt + '%)\n**12hr:** ' + reqhash + unit + ' (' + pcnt12 + '%)\n**24hr:** ' + reqhash + unit + ' (' + pcnt24 + '%)',
 						inline: true
 					},
 					{
-						name: 'Network Hashrate',
-						value: '' + nethashconvert + ' ' + nhunit,
-						inline: true
-					},
-					{
-						name: 'Network Difficulty',
-						value: '' + netdiff + '',
+						name: 'Network Hashrate (' + nhunit + ')',
+						value: '**now:** ' + nethashconvert + '\n**12hr:** ' + hashavg12 + '\n**24hr:** '+ hashavg24,
 						inline: true
 					},
 					{
 						name: 'Time to find (solo)',
-						value: hrssolo + ' hrs (' + minssolo + ' mins)',
-						inline: true
-					},
-					{
-	                                        name: '\u200b',
-						value: '\u200b',
-						inline: true
-					},
-					{
-						name: '\u200b',
-						value: '\u200b',
+						value: '**now:** ' + hrssolo + ' hrs\n**12hr:** ' + hrssolo12 + ' hrs\n**24hr:** ' + hrssolo24 + ' hrs',
 						inline: true
 					},
 					{
 						name: '' + coinsymbol + ' per minute',
-						value: '' + profitpermin,
+						value: '**now:** ' + profitpermin + '\n**12hr:** ' + profitpermin12 + '\n**24hr:** ' + profitpermin24,
 						inline: true
 					},
 					{
 						name: '' + coinsymbol + ' per hour',
-						value: '' + profitperhr,
+						value: '**now:** ' + profitperhr + '\n**12hr:** ' + profitperhr12 + '\n**24hr:** ' + profitperhr24,
 						inline: true
 					},
 					{
 						name: '' + coinsymbol + ' per day',
-						value: '' + profitperday,
+						value: '**now:** ' + profitperday + '\n**12hr:** ' + profitperday12 + '\n**24hr:** ' + profitperday24,
 						inline: true
 					},
 					{
                                                 name: 'USDT per minute',
-                                                value: '' + ppminusdt,
+                                                value: '**now:** ' + ppminusdt + '\n**12hr:** ' + ppminusdt12 + '\n**24hr:** ' + ppminusdt24,
 				                inline: true
 				        },
 				        {
 				                name: 'USDT per hour',
-				                value: '' + pphrusdt,
+				                value: '**now:** ' + pphrusdt + '\n**12hr:** ' + pphrusdt12 + '\n**24hr:** ' + pphrusdt24,
 				                inline: true
 				        },
 				        {
 				                name: 'USDT per day',
-				                value: '' + ppdayusdt,
+				                value: '**now:** ' + ppdayusdt + '\n**12hr:** ' + ppdayusdt12 + '\n**24hr:** ' + ppdayusdt24,
 				                inline: true
                                         },
 					{
@@ -2558,6 +2609,53 @@ async function miningCalc(message, algo, hashrate) {
 		
 	})
 }
+
+/////////////////////////////////////
+// Get PoW averages from explorer  //
+////////////////////////////////////
+
+async function getPowAverages(algo, numblocks){
+
+	const rp = require('request-promise');
+
+        return new Promise((resolve, reject)=>{
+
+		const https = require('https')
+
+		const options = {
+
+			hostname: 'explorer-us.avn.network',
+			port: 443,
+			path: '/ext/powaverages/' + algo + '/' + numblocks,
+			method: 'GET'
+
+		}
+		// console.log(options);
+		const req = https.request(options, res => {
+			// console.log(`statusCode: ${res.statusCode}`)
+			// console.log(req);
+                
+			res.on('data', d => {
+
+				var d = JSON.parse(d);
+				resolve(d[0]['nethashavg']);
+
+			})
+	
+		})
+
+		req.on('error', error => {
+
+			console.error(error)
+
+		})
+	
+		req.end();
+
+	});
+
+}
+
 
 ///////////////////////////////////
 // List current exchange listings

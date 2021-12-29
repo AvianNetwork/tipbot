@@ -3593,7 +3593,7 @@ function listMiners(message){
 ///////////////////////////
 
 function getLast(cur){
-
+	
 	const rp = require('request-promise');
 	
 	return new Promise((resolve, reject)=>{

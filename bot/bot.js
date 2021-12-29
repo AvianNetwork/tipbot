@@ -5,6 +5,7 @@ const Discord = require('discord.js');
 let moment = require('moment-timezone');
 // Load config!
 let config = require('config');
+let coinsymbol = config.get('avn').coinsymbol;
 let logChannel = config.get('moderation').logchannel;
 let pm2Name = config.get('moderation').pm2Name;
 config = config.get('bot');
@@ -81,28 +82,20 @@ bot.on('ready', function() {
         'avn in Discord for a commands list.'
     )});
 
-  bot.user.setPresence({
-     game:{
-       name: 'Ready!'
-     },
-     status:'online'
-  });
+  change();
 
-  var text = ['avn.network'];
   var counter = 0;
-  setInterval(change, 10000);
+  setInterval(change, 60000);
 
-  function change() {
-    bot.user.setPresence({
-       game:{
-         name: text[counter]
-       },
-       status:'online'
-    });
-    counter++;
-    if (counter >= text.length) {
-      counter = 0;
-    }
+  async function change() {
+  
+	  let last = await getLast('usdt');
+	  bot.user.setActivity(': ' + last + ' USDT', { type: 'WATCHING' }) ;
+	  
+	  counter++;
+	  if (counter >= 1) {
+	  counter = 0;
+   }
   }
 });
 
@@ -250,3 +243,72 @@ exports.commandCount = function() {
 };
 
 bot.login(config.token);
+
+//////////////////////
+// Get last price   //
+//////////////////////
+
+function getLast(cur){
+
+        const rp = require('request-promise');
+
+        return new Promise((resolve, reject)=>{
+
+                //console.log("cur="+cur);
+
+                const https = require('https')
+
+                const options = {
+
+                        hostname: 'www.exbitron.com',
+                        port: 443,
+                        path: '/api/v2/peatio/public/markets/' + coinsymbol.toLowerCase() + cur + '/tickers',
+                        method: 'GET',
+                }
+
+                const req = https.request(options, res => {
+
+                        //console.log(`statusCode: ${res.statusCode}`)
+
+                        res.on('data', d => {
+
+                                var d = JSON.parse(d);
+                                var djson = JSON.stringify(d);
+                                //console.log("d=" + djson);
+                                var time = Number(d['at'] * 1000);
+                                var time = new Date(time);
+                                var low = d['ticker'].low;
+                                var low = Number(low).toFixed(8);
+                                var high = d['ticker'].high;
+                                var high = Number(high).toFixed(8);
+                                var open = d['ticker'].open;
+                                var open = Number(open).toFixed(8);
+                                var last = d['ticker'].last;
+                                var last = Number(last).toFixed(8);
+                                var volume = d['ticker'].volume;
+                                var volume = Number(volume).toFixed(8);
+                                var amount = d['ticker'].amount;
+                                var amount = Number(amount).toFixed(2);
+                                var avg = d['ticker'].avg_price;
+                                var avg = Number(avg).toFixed(8);
+                                var change = d['ticker'].price_change_percent;
+
+                                //console.log("last="+last);
+
+                                resolve(last);
+
+                        })
+
+                });
+
+                req.on('error', error => {
+
+                        console.error(error)
+                        resolve("No Data");
+
+                })
+
+
+                req.end();
+        });
+}

@@ -3418,8 +3418,8 @@ function getWealthDistrib(message){
 			var top101150ttl = Number(d.t_101_150.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
 			var top151200 =  Number(d.t_151_200.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
 			var top151200ttl = Number(d.t_151_200.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
-			var top201plus =  Number(d.t_151_200.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                        var top201plusttl = Number(d.t_151_200.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
+			var top201plus =  Number(d.t_201plus.percent).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        var top201plusttl = Number(d.t_201plus.total).toLocaleString("en-US", {minimumFractionDigits: 8, maximumFractionDigits: 8});
 			
                         //console.log("suppply="+ supply);
                         var time = new Date();

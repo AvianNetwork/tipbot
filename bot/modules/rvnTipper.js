@@ -40,8 +40,6 @@ botcmd = botcmd.replace("']", "");
 
 exports.avn = {
   usage: '<subcommand>',
-  description:
-  '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n    **' + prefix + botcmd + ' exchanges** : Display ' + coinsymbol + ' exchange listings\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n   **<> : Replace with appropriate value.**',
     process: async function(bot, msg, suffix) {
     let tipper = msg.author.id.replace('!', ''),
       words = msg.content
@@ -50,13 +48,10 @@ exports.avn = {
         .filter(function(n) {
 	  return n !== '';
         }),
-      subcommand = words.length >= 2 ? words[1] : 'help',
-      helpmsg =
-        '__**' + coinname + ' (' + coinsymbol + ') Tipper**__\nTransaction Fees: **' + paytxfee + '**\n    **' + prefix + botcmd + '** : Displays This Message\n    **' + prefix + botcmd + ' balance** : get your balance\n    **' + prefix + botcmd + ' deposit** : get address for your deposits\n    **' + prefix + botcmd + ' withdraw <ADDRESS> <AMOUNT>** : withdraw coins to specified address\n    **' + prefix + botcmd + ' <@user> <amount>** :mention a user with @ and then the amount to tip them\n    **' + prefix + botcmd + ' private <user> <amount>** : put private before Mentioning a user to tip them privately.\n    **' + prefix + botcmd + ' privkey** : dump privkey for your wallet(result sent via DM)\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge>** : Display ' + coinsymbol + ' market data\n    **' + prefix + botcmd + ' <usdt|btc|ltc|rvn|doge> <number of coins>** : Calculate market value of ' + coinsymbol + ' coins in selected currency\n    **' + prefix + botcmd + ' exchanges** : Display ' + coinsymbol + ' exchange listings\n    **' + prefix + botcmd + ' wavn** : Display w' + coinsymbol + ' information\n    **' + prefix + botcmd + ' sushi** : Display w' + coinsymbol + ' Sushi Swap Information\n    **' + prefix + botcmd + ' diff** : Display current network difficulty\n    **' + prefix + botcmd + ' hash** : Display current network hashrate\n    **' + prefix + botcmd + ' mininginfo** : Display network mining info\n    **' + prefix + botcmd + ' miningcalc <MH/s>** : Calculate mining returns (MH/s)\n    **' + prefix + botcmd + ' chaininfo** : Display blockchain info\n\n    **<> : Replace with appropriate value.**',
-      channelwarning = 'Please use <#bot_spot> or DMs to talk to bots.';
+      subcommand = words.length >= 2 ? words[1] : 'help';
     switch (subcommand) {
       case 'help':
-	privateorSpamChannel(msg, channelwarning, doHelp, [helpmsg]);
+	privateorSpamChannel(msg, doHelp, []);
         break;
       case 'dm':
 	dmMe(msg);
@@ -65,122 +60,158 @@ exports.avn = {
         doBalance(msg, tipper);
         break;
       case 'deposit':
-        privateorSpamChannel(msg, channelwarning, doDeposit, [tipper]);
+        privateorSpamChannel(msg, doDeposit, [tipper]);
         break;
       case 'withdraw':
-        privateorSpamChannel(msg, channelwarning, doWithdraw, [tipper, words, helpmsg]);
+        privateorSpamChannel(msg, doWithdraw, [tipper, words]);
         break;
       case 'usdt':
-        getPrice(msg, 'usdt', words[2]);
+	privateorSpamChannel(msg, getPrice, ['usdt', words[2]]);
         break;
       case 'btc':
-	getPrice(msg, 'btc', words[2]);
+	privateorSpamChannel(msg, getPrice, ['btc', words[2]]);
 	break;
       case 'rvn':
-	getPrice(msg, 'rvn', words[2]);
+	privateorSpamChannel(msg, getPrice, ['rvn', words[2]]);
 	break;
       case 'doge':
-        getPrice(msg, 'doge', words[2]);
+	privateorSpamChannel(msg, getPrice, ['doge', words[2]]);
         break;
       case 'ltc':
-	getPrice(msg, 'ltc', words[2]);
+	privateorSpamChannel(msg, getPrice, ['ltc', words[2]]);
 	break;
       case 'cap':	
-	getMarketCap(msg, words[2]);
+	privateorSpamChannel(msg, getMarketCap, [words[2]]);
 	break;
       case 'privkey':
-	dumpPrivKey(msg, tipper);
+	 privateorSpamChannel(msg, dumpPrivKey, [tipper]);
         break;
       case 'wavn':
-	getWAVN(msg);
+	privateorSpamChannel(msg, getWAVN, []);
         break;
       case 'sushi':
-	getSushi(msg);
+	privateorSpamChannel(msg, getSushi, []);
       break;
       case 'diff':
-	getDifficulty(msg);
+	privateorSpamChannel(msg, getDifficulty, []);
       break;
       case 'hash':
-	getNetworkHashPs(msg);
+	privateorSpamChannel(msg, getNetworkHashPs, []);
       break;
       case 'mininginfo':
-	getMiningInfo(msg);
+	privateorSpamChannel(msg, getMiningInfo, []);
       break;
       case 'miningcalc':
 	if(words[2] === undefined || words[2] !== 'minx' && words[2] !== 'x16rt'){
-		doHelp(msg);
+		privateorSpamChannel(msg, doHelp, []);
 	}else{
-		miningCalc(msg, words[2], words[3]);
+		privateorSpamChannel(msg, miningCalc, [words[2],  words[3]]);
 	}
       break;
       case 'chaininfo':
-	getBlockchainInfo(msg);
+	privateorSpamChannel(msg, getBlockchainInfo, []);
       break;
       case 'exchanges':
-	listExchanges(msg);
+	privateorSpamChannel(msg, listExchanges, []);
       break;
       case 'links':
-	listURLs(msg);
+	privateorSpamChannel(msg, listURLs, []);
       break;
       case 'validate':
       case 'validateaddr':
-	validateAddress(msg, words[2]);
+	privateorSpamChannel(msg, validateAddress, [words[2]]);
       break;
       case 'walletversion':
-	getWalletVersion(msg);
+	privateorSpamChannel(msg, getWalletVersion, []);
       break;
       case 'nomics':
 	if(words[2] === undefined){
-		doHelp(msg, helpmsg)
+		privateorSpamChannel(msg, doHelp, [])
 	}else if(words[2].toLowerCase() === 'wavn'){
-        	getNomics(msg);
+        	privateorSpamChannel(msg, getNomics, []);
 	}else if(words[2].toLowerCase() === 'avn'){
-		getNomicsAVN3(msg);
+		privateorSpamChannel(msg, getNomicsAVN3, []);
 	}else{
-		doHelp(msg, helpmsg);
+		privateorSpamChannel(msg, doHelp, []);
 	}
       break;
       case 'donate':
-	doDonation(msg, tipper, words, helpmsg);
+	privateorSpamChannel(msg, doDonation, [tipper, words]);
       break;
       case 'tip':
-        doTip(bot, msg, tipper, words, helpmsg);
+        doTip(bot, msg, tipper, words);
       break;
       case 'miners':
-	listMiners(msg);
+	privateorSpamChannel(msg, listMiners, []);
       break;
       case 'wealth':
-	getWealthDistrib(msg);
+	privateorSpamChannel(msg, getWealthDistrib, []);
       break;
       case 'supply':
-	getMoneySupply(msg);
+	privateorSpamChannel(msg, getMoneySupply, []);
       break;
       case 'qr':
-	getQRCode(msg, words[2]);
+	privateorSpamChannel(msg, getQRCode, [words[2]]);
       break;
       case 'uptime':
-	walletUptime(msg);
+	privateorSpamChannel(msg, walletUptime, []);
       break;
       default:
-        doHelp(msg, helpmsg);
+        privateorSpamChannel(msg, doHelp, []);
     }
   }
 };
 
-function privateorSpamChannel(message, wrongchannelmsg, fn, args) {
-  if (!inPrivateorSpamChannel(message)) {
-    message.reply(wrongchannelmsg);
-    return;
-  }
-  fn.apply(null, [message, ...args]);
+function privateorSpamChannel(message, fn, args) {
+
+	if (!inPrivateorSpamChannel(message)) {
+		
+		message.channel.send({ embeds: [ {
+		  
+			description: '**:robot: ' + coinname + ' (' + coinsymbol + ') Bot :robot:**',
+			color: 1363892,
+		  
+			footer: {
+				text: 'Avian Network',
+				icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+			},
+		  
+			fields: [
+
+				{
+				
+					name: 'Hello!',
+					value: 'Please use <#' + spamchannels[0] + '> or DM\'s to talk to bots\nInitialize DM session with `!avn dm`',
+					inline: true
+				}
+
+			]
+			  
+		} ] }).then(msg => {
+				  
+			let publichantimeout = setTimeout(() => msg.delete(), msgtimeout);
+				  
+			if(message.channel.type == 'DM'){
+					  
+				clearTimeout(publichantimeout);
+				  
+			}
+			  
+		});
+
+		return;
+  
+	}
+
+	fn.apply(null, [message, ...args]);
+
 }
 
 //////////////////////////
 // Display help message //
 //////////////////////////
 
-function doHelp(message, helpmsg) {
-//  message.reply(helpmsg);
+function doHelp(message) {
 
     message.channel.send({ embeds: [ {
 	
@@ -445,11 +476,11 @@ function doDeposit(message, tipper) {
 // Make a withdrawal //
 ///////////////////////
 
-function doWithdraw(message, tipper, words, helpmsg) {
+function doWithdraw(message, tipper, words) {
 
 	if (words.length < 4) {
 		
-		doHelp(message, helpmsg);
+		doHelp(message);
 		return;
 	
 	}
@@ -614,11 +645,11 @@ function doWithdraw(message, tipper, words, helpmsg) {
 // Send a tip  //
 /////////////////
 
-function doTip(bot, message, tipper, words, helpmsg) {
+function doTip(bot, message, tipper, words) {
 
 	if (words.length < 4 || !words) {
 
-		doHelp(message, helpmsg);
+		doHelp(message);
 		return;
 
 	}
@@ -2359,7 +2390,7 @@ function getSushi(message){
 ////////////////////////////////////////////
 
 async function miningCalc(message, algo, hashrate) {
-
+	
 	let last = await getLast('usdt');
 	
 	let _id = 'minotaurx';
@@ -2388,33 +2419,36 @@ async function miningCalc(message, algo, hashrate) {
 				                
 		} else {
 
-			// check for negative number
-			if(hashrate <= 0){
+			// check for negative number or non-numeric
+			if(hashrate <= 0 || isNaN(hashrate)){
 			
-				reqhash = "Please supply a positive number.";
+				reqhash = "Please supply a positive number";
 				pcnt = "0";
+				pcnt12 = "0";
+				pcnt24 = "0";
 				secssolo = "0";
 				minssolo = ":infinity:";
 				hrssolo = ":infinity:";
+				hrssolo12 = ":infinity:";
+				hrssolo24 = ":infinity:";
 				profitpermin = "0";
+				profitpermin12 = "0";
+				profitpermin24 = "0";
 				profitperhr = "0";
+				profitperhr12 = "0";
+				profitperhr24 = "0";
 				profitperday = "0";
-				netdiff = '-';
-				nethashconvert = '0';
-				nhunit = '-';
-				unit = '';
-				algoname = '-';
-
-			}else if(isNaN(hashrate)){
-				
-				reqhash = "Please supply a number.";
-				pcnt = "0";
-				secssolo = "0";
-				minssolo = ":infinity:";
-				hrssolo = ":infinity:";
-				profitpermin = "0";
-				profitperhr = "0";
-				profitperday = "0";
+				profitperday12 = "0";
+				profitperday24 = "0";
+				ppminusdt = "0";
+				ppminusdt12 = "0";
+				ppminusdt24 = "0";
+				pphrusdt = "0";
+				pphrusdt12 = "0";
+				pphrusdt24 = "0";
+				ppdayusdt = "0";
+				ppdayusdt12 = "0";
+				ppdayusdt24 = "0";
 				netdiff = '-';
 				nethashconvert = '0';
 				nhunit = '-';
@@ -2612,7 +2646,7 @@ async function miningCalc(message, algo, hashrate) {
 ////////////////////////////////////
 
 async function getPowAverages(algo, numblocks){
-
+	
 	const rp = require('request-promise');
 
         return new Promise((resolve, reject)=>{
@@ -2635,6 +2669,7 @@ async function getPowAverages(algo, numblocks){
 			res.on('data', d => {
 
 				var d = JSON.parse(d);
+				
 				resolve(d[0]['nethashavg']);
 
 			})
@@ -2943,25 +2978,30 @@ function getWalletVersion(message){
 ////////////////////////////////
 function dmMe(message){
 
-	message.channel.send({ embeds: [ {
+	if(message.channel.type !== 'DM'){
+	
+		message.channel.send({ embeds: [ {
+		
+			description: '**:robot: ' + coinname + ' (' + coinsymbol + ') Bot :robot:**',
+			color: 1363892,
+			fields: [
+			
+				{
+					name: '__DM session__',
+					value: 'Initiating',
+					inline: false
+				}
 
-		description: '**:robot: ' + coinname + ' (' + coinsymbol + ') Bot :robot:**',
-		color: 1363892,
-		fields: [
+			]
 
-			{
-				name: '__DM session__',
-				value: 'Initiating',
-				inline: false
-			}
 
-		]
-
-	} ] }).then(msg => {
+		} ] }).then(msg => {
 		                        
-		setTimeout(() => msg.delete(), msgtimeout)
-
-	});
+			setTimeout(() => msg.delete(), msgtimeout)
+	
+		});
+	
+	}
 
 	message.author.send({ embeds: [ {
                                                 
@@ -3012,7 +3052,7 @@ function dmMe(message){
 // Make a Donation //
 /////////////////////
 
-function doDonation(message, tipper, words, helpmsg) {
+function doDonation(message, tipper, words) {
 
         if (words.length < 3) {
  

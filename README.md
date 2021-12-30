@@ -20,7 +20,7 @@ If you liked this repository, feel free to leave a star ⭐ to help promote Avia
 *   :pick:  **Blockchain and Mining**: `diff`, `hash`, `mininginfo`, `miningcalc`, `chaininfo` and `validate ` 
 *   ❔  **Help**: `help`
 
-Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/contributors) that helped to develop the Avian Network project.
+Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/contributors) that have helped to develop the Avian Network Tipbot.
 
 <div align="center" style="text-align:center;margin: 0 auto"><a target="_blank" rel="noopener" href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/avian_256x256x32.png"></a></div>
 <div align="center" style="text-align:center;margin: 0 auto">

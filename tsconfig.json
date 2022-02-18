@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "target": "ESNEXT",
+        "target": "esnext",
+        "module": "esnext",
         "strict": true,
         "outDir": "build",
         "sourceMap": true,
@@ -9,6 +10,7 @@
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "esModuleInterop": true,
+        "moduleResolution": "node",
     },
     "include": [
         "src/**/*"

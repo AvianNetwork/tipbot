@@ -1,7 +1,11 @@
-export default {
+export const config = {
     "bot": {
         "token": "",
         "prefix": "!",
+        "timezone": [
+            "Europe/Amsterdam",
+            "HH:mm:ss DD/MM/YYYY"
+        ]
     },
     "project": {
         "siteurl": "",

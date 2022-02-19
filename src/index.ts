@@ -17,6 +17,7 @@ import * as exbitron from "./exbitron.js";
 
 // We can only fetch channels within the bot.on(`ready`) function
 let logChannel: Discord.TextChannel;
+let spamChannel: Discord.TextChannel;
 
 // Create the bot
 const bot = new Discord.Client({
@@ -38,6 +39,14 @@ bot.on(`ready`, async () => {
         process.exit(1);
     } else {
         logChannel = <Discord.TextChannel>tempLogChannel;
+    }
+
+    const tempSpamChannel = await bot.channels.fetch(config.moderation.botspamchannel);
+    if (!tempSpamChannel) {
+        console.error(`[${helper.getTime()}] Discord bot error: Log channel not found.`);
+        process.exit(1);
+    } else {
+        spamChannel = <Discord.TextChannel>tempSpamChannel;
     }
 
     // Send startup messages
@@ -97,7 +106,18 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     // Make sure the message starts with the prefix
     if (!message.content.startsWith(config.bot.prefix)) return;
 
-    console.log(message.content);
+    // Get the command and the parameters from the command
+    const command = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[0];
+    const parameters = message.content.slice(config.bot.prefix.length).trim().split(/ +/g).slice(1);
+
+    switch (command) {
+        case `help`:
+            helper.spamOrDM(message, helper.sendHelpMessage);
+            break;
+        default:
+            helper.spamOrDM(message, helper.sendHelpMessage);
+            break;
+    }
 });
 
 bot.login(config.bot.token);

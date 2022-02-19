@@ -1,7 +1,8 @@
 export const config = {
     "bot": {
         "token": "",
-        "prefix": "!",
+        "prefix": "!avn",
+        "msgtimeout": 120000, // 2 minutes
         "timezone": [
             "Europe/Amsterdam",
             "HH:mm:ss DD/MM/YYYY"
@@ -37,10 +38,7 @@ export const config = {
         ],
         "botDev": "[Developer Team]",
         "logchannel": "",
-        "botspamchannels": [
-            "ID",
-            "ID"
-        ]
+        "botspamchannel": ""
     },
     "explorer": {
         "explorerurl": "",

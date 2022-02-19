@@ -29,7 +29,7 @@ const bot = new Discord.Client({
     partials: [`CHANNEL`]
 });
 
-// After the bot logged in
+// When the bot logged in
 bot.on(`ready`, async () => {
     // Set the channels
     const tempLogChannel = await bot.channels.fetch(config.moderation.logchannel);
@@ -46,8 +46,14 @@ bot.on(`ready`, async () => {
 
     // Set the bot presence
     setInterval(async () => {
-        const price = (await exbitron.getTicker())[`ticker`][`last`];
-        bot.user?.setActivity(`${price} USDT`, { type: `WATCHING` });
+        const ticker = await exbitron.getTicker("usdt").catch((error) => {
+            console.error(`[${helper.getTime()}] Error while fetching Exbitron price: ${error}`);
+            logChannel.send(`[${helper.getTime()}] Error while fetching Exbitron price: ${error}`);
+            return undefined;
+        });
+        if (ticker === undefined) return;
+
+        bot.user?.setActivity(`${ticker[`last`]} USDT`, { type: `WATCHING` });
     }, 60 * 1000); // Every minute
 });
 
@@ -78,6 +84,7 @@ bot.on(`error`, (error) => {
     process.exit(1);
 });
 
+// When a user sends a message
 bot.on(`messageCreate`, async (message: Discord.Message) => {
     // Ignore messages from ourself
     if (message.author.id === bot.user?.id) return;

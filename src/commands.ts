@@ -109,7 +109,7 @@ export const help = (message: Discord.Message) => {
 }
 
 export const links = (message: Discord.Message) => {
-    var time = new Date();
+    const date = `${new Date().toUTCString().replace(",", " ")}+0000 (Coordinated Universal Time)`;
 
     message.channel.send({
         embeds: [{
@@ -117,63 +117,63 @@ export const links = (message: Discord.Message) => {
             color: 1363892,
             fields: [
                 {
-                    name: '__Project Website__',
-                    value: '*' + config.project.siteurl + '*',
+                    name: `__Project Website__`,
+                    value: `*${config.project.siteurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Project GitHub__',
-                    value: '*' + config.project.githuburl + '*',
+                    name: `__Project GitHub__`,
+                    value: `*${config.project.githuburl}*`,
                     inline: false
                 },
                 {
-                    name: '__Project Explorer__',
-                    value: '*' + config.explorer.explorerurl + '*',
+                    name: `__Project Explorer__`,
+                    value: `*${config.explorer.explorerurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Project Bitcointalk__',
-                    value: '*' + config.project.bitcointalkurl + '*',
+                    name: `__Project Bitcointalk__`,
+                    value: `*${config.project.bitcointalkurl}*`,
                     inline: true
                 },
                 {
-                    name: '__Project Twitter__',
-                    value: '*' + config.project.twitterurl + '*',
+                    name: `__Project Twitter__`,
+                    value: `*${config.project.twitterurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Reddit__',
-                    value: '*' + config.project.redditurl + '*',
+                    name: `__Reddit__`,
+                    value: `*${config.project.redditurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Discord__',
-                    value: '*' + config.project.discordurl + '*',
+                    name: `__Discord__`,
+                    value: `*${config.project.discordurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Telegram__',
-                    value: '*' + config.project.telegramurl + '*',
+                    name: `__Telegram__`,
+                    value: `*${config.project.telegramurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Telegram Announcements__',
-                    value: '*' + config.project.telegramannurl + '*',
+                    name: `__Telegram Announcements__`,
+                    value: `*${config.project.telegramannurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Coin Wrapping__',
-                    value: '*' + config.wavn.coinwrapurl + '*',
+                    name: `__Coin Wrapping__`,
+                    value: `*${config.wavn.coinwrapurl}*`,
                     inline: false
                 },
                 {
-                    name: '__Web Wallet__',
-                    value: '*' + config.project.webwalleturl + '*\n\u200b',
+                    name: `__Web Wallet__`,
+                    value: `*${config.project.webwalleturl}*\n\u200b`,
                     inline: false
                 },
                 {
-                    name: ':clock: Time',
-                    value: '' + time,
+                    name: `:clock: Time`,
+                    value: date,
                     inline: false
                 },
             ],

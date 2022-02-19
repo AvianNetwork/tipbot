@@ -112,13 +112,17 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     const parameters = message.content.slice(config.bot.prefix.length).trim().split(/ +/g).slice(1);
 
     switch (command) {
+        // If the command is help
         case `help`:
             helper.spamOrDM(message, commands.sendHelpMessage);
             break;
+
+        // If the command doesn't exist, send the help message
         default:
             helper.spamOrDM(message, commands.sendHelpMessage);
             break;
     }
 });
 
+// Start the bot
 bot.login(config.bot.token);

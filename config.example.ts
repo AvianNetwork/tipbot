@@ -21,7 +21,7 @@ export const config = {
         "webwalleturl": ""
     },
     "coin": {
-        "coinname": "avian",
+        "coinname": "Avian",
         "coinsymbol": "avn",
         "paytxfee": 0.005,
         "rpc": {

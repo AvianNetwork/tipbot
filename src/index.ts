@@ -13,6 +13,7 @@ dayjs.extend(dayjs_timezone);
 
 // Import helper functions
 import * as helper from "./helper.js";
+import * as commands from "./commands.js";
 import * as exbitron from "./exbitron.js";
 
 // We can only fetch channels within the bot.on(`ready`) function
@@ -112,10 +113,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
     switch (command) {
         case `help`:
-            helper.spamOrDM(message, helper.sendHelpMessage);
+            helper.spamOrDM(message, commands.sendHelpMessage);
             break;
         default:
-            helper.spamOrDM(message, helper.sendHelpMessage);
+            helper.spamOrDM(message, commands.sendHelpMessage);
             break;
     }
 });

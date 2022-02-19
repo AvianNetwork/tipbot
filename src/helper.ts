@@ -27,21 +27,22 @@ export const getTime = () => {
 }
 
 export const spamOrDM = async (message: Discord.Message, callback: Function) => {
+    // Check if the message is in a DM or in the spam channel
     if (message.channel.type === `DM` || message.channel.id === config.moderation.botspamchannel) {
         callback(message);
     } else {
         message.channel.send({
             embeds: [{
-                description: '**:robot: ' + config.coin.coinname + ' (' + config.coin.coinsymbol + ') Bot :robot:**',
+                description: `**:robot: ${config.coin.coinname} (${config.coin.coinsymbol}) bot :robot:**`,
                 color: 1363892,
                 footer: {
-                    text: 'Avian Network',
-                    icon_url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                    text: `Avian Network`,
+                    icon_url: `https://explorer.avn.network/images/avian_256x256x32.png`,
                 },
                 fields: [
                     {
                         name: `Hello!`,
-                        value: 'Please use <#' + config.moderation.botspamchannel + '> or DM\'s to talk to bots\nInitialize DM session with `!avn dm`',
+                        value: `Please use <#${config.moderation.botspamchannel}> or DM\'s to talk to bots\nInitialize DM session with` + '`!avn dm`',
                         inline: true
                     }
                 ]
@@ -53,7 +54,3 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
         })
     }
 };
-
-export const sendHelpMessage = async (message: Discord.Message) => {
-    message.channel.send("help");
-}

@@ -22,7 +22,7 @@ const bot = new Discord.Client({
     partials: [`CHANNEL`]
 });
 
-export const sendHelpMessage = (message: Discord.Message) => {
+export const help = (message: Discord.Message) => {
     // Send the help message
     message.channel.send({
         embeds: [{
@@ -107,3 +107,86 @@ export const sendHelpMessage = (message: Discord.Message) => {
         }
     });
 }
+
+export const links = (message: Discord.Message) => {
+    var time = new Date();
+
+    message.channel.send({
+        embeds: [{
+            description: `**:globe_with_meridians:  ${config.coin.coinname} (${config.coin.coinsymbol}) Official Links  :globe_with_meridians:\n\u200b**`,
+            color: 1363892,
+            fields: [
+                {
+                    name: '__Project Website__',
+                    value: '*' + config.project.siteurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Project GitHub__',
+                    value: '*' + config.project.githuburl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Project Explorer__',
+                    value: '*' + config.explorer.explorerurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Project Bitcointalk__',
+                    value: '*' + config.project.bitcointalkurl + '*',
+                    inline: true
+                },
+                {
+                    name: '__Project Twitter__',
+                    value: '*' + config.project.twitterurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Reddit__',
+                    value: '*' + config.project.redditurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Discord__',
+                    value: '*' + config.project.discordurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Telegram__',
+                    value: '*' + config.project.telegramurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Telegram Announcements__',
+                    value: '*' + config.project.telegramannurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Coin Wrapping__',
+                    value: '*' + config.wavn.coinwrapurl + '*',
+                    inline: false
+                },
+                {
+                    name: '__Web Wallet__',
+                    value: '*' + config.project.webwalleturl + '*\n\u200b',
+                    inline: false
+                },
+                {
+                    name: ':clock: Time',
+                    value: '' + time,
+                    inline: false
+                },
+            ],
+        }],
+    }).then((sentMessage) => {
+        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+        // If it was sent in a DM, don't delete it.
+        if (sentMessage.channel.type === "DM") {
+            return;
+        } else {
+            setTimeout(() => {
+                sentMessage.delete();
+            }, config.bot.msgtimeout);
+        }
+    });
+};

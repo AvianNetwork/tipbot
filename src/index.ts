@@ -114,12 +114,17 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     switch (command) {
         // If the command is help
         case `help`:
-            helper.spamOrDM(message, commands.sendHelpMessage);
+            helper.spamOrDM(message, commands.help);
+            break;
+
+        // If the command is links
+        case `links`:
+            helper.spamOrDM(message, commands.links);
             break;
 
         // If the command doesn't exist, send the help message
         default:
-            helper.spamOrDM(message, commands.sendHelpMessage);
+            helper.spamOrDM(message, commands.help);
             break;
     }
 });

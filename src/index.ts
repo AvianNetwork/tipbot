@@ -160,7 +160,9 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `mininginfo`:
             helper.spamOrDM(message, commands.mininginfo);
             break;
-        // TODO: !avn miningcalc
+        case `miningcalc`:
+            helper.spamOrDM(message, commands.miningcalc);
+            break;
         case `chaininfo`:
         case `blockchaininfo`:
             helper.spamOrDM(message, commands.blockchaininfo);
@@ -168,7 +170,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `miners`:
             helper.spamOrDM(message, commands.miners);
             break;
-        // TODO: !avn validate
+        case `validateaddress`:
+        case `validate`:
+            helper.spamOrDM(message, commands.validate);
+            break;
 
         // Bot wallet Utilities
         case `uptime`:

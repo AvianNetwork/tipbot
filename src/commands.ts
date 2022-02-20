@@ -314,10 +314,10 @@ const uptime = async (message: Discord.Message) => {
 };
 
 // Export functions.
-export {uptime, help, links, exchanges}
+export { uptime, help, links, exchanges }
 
 import { supply, wealth, qr } from "./explorer.js";
 export { supply, wealth, qr };
 
-import { mininginfo, blockchaininfo, miners } from "./blockchainandmining.js";
-export {mininginfo, blockchaininfo, miners};
+import { mininginfo, miningcalc, blockchaininfo, miners, validate } from "./blockchainandmining.js";
+export { mininginfo, miningcalc, blockchaininfo, miners, validate };

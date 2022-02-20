@@ -110,6 +110,86 @@ export const mininginfo = async (message: Discord.Message) => {
     }
 };
 
+export const miningcalc = async (message: Discord.Message) => {
+    const date = new Date().toUTCString().replace(`,`, ` `);
+    const algorithm = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
+    const hashrate = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
+
+    if (!algorithm || !hashrate) { // Make sure the user specified both an algorithm and their hashrate.
+        message.reply({
+            embeds: [{
+                description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                },
+                fields: [
+                    {
+                        name: `:x:  Error  :x:`,
+                        value: `*Please specify an address.*`,
+                        inline: false,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === `DM`) {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    } else if (algorithm.toUpperCase() !== `X16RT` || algorithm.toUpperCase() !== `MINOTAURX`) { // Make sure the user specified a valid algorithm.
+        message.reply({
+            embeds: [{
+                description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                },
+                fields: [
+                    {
+                        name: `:x:  Error  :x:`,
+                        value: `*Please specify a valid algorithm (x16rt or minotaurx).*`,
+                        inline: false,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === `DM`) {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    } else if (isNaN(parseFloat(hashrate))){
+        const algoToUse = algorithm.toUpperCase();
+        const hashrateToUse = Number(parseFloat(hashrate).toFixed(3));
+
+        const currentPriceTicker = await helper.getTicker(`usdt`).catch((error) => {
+            main.log(`Error while fetching price: ${error}`);
+            return undefined;
+        });
+    }
+};
+
 export const blockchaininfo = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
 
@@ -251,4 +331,90 @@ export const miners = (message: Discord.Message) => {
             }, config.bot.msgtimeout);
         }
     });
+};
+
+export const validate = async (message: Discord.Message) => {
+    const date = new Date().toUTCString().replace(`,`, ` `);
+    const address = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
+
+    if (!address) {
+        message.reply({
+            embeds: [{
+                description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                },
+                fields: [
+                    {
+                        name: `:x:  Error  :x:`,
+                        value: `*Please specify an address.*`,
+                        inline: false,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === `DM`) {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    } else {
+        const valid = config.coin.address.test(address);
+        let validity
+        if (valid) {
+            validity = `:white_check_mark: Valid ${config.coin.coinname} address.`;
+        } else {
+            validity = `:x: Invalid ${config.coin.coinname} address.`;
+        }
+
+        message.reply({
+            embeds: [{
+                description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
+                color: 1363892,
+                fields: [
+                    {
+                        name: `Address`,
+                        value: address,
+                        inline: true,
+                    },
+                    {
+                        name: `\u200b`,
+                        value: `\u200b`,
+                        inline: true,
+                    },
+                    {
+                        name: `Validity`,
+                        value: validity,
+                        inline: true,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === `DM`) {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    }
 };

@@ -115,7 +115,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
     // Get the command and the parameters from the command
     const command = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[0];
-    const parameters = message.content.slice(config.bot.prefix.length).trim().split(/ +/g).slice(1);
 
     switch (command) {
         case `help`:
@@ -156,6 +155,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
         case `mininginfo`:
             helper.spamOrDM(message, commands.mininginfo);
+            break;
+
+        case `supply`:
+            helper.spamOrDM(message, commands.supply);
             break;
 
         // If the command doesn't exist, send the help message

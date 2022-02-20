@@ -17,7 +17,7 @@ import * as helper from "./helper.js";
 import * as exbitron from "./exbitron.js";
 
 export const help = (message: Discord.Message) => {
-    message.channel.send({
+    message.reply({
         embeds: [{
             description: `__**${config.coin.coinname} (${config.coin.coinsymbol}) Tipper**__`,
             color: 1363892,
@@ -102,9 +102,9 @@ export const help = (message: Discord.Message) => {
 }
 
 export const links = (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
+    const date = new Date().toUTCString().replace(",", " ");
 
-    message.channel.send({
+    message.reply({
         embeds: [{
             description: `**:globe_with_meridians:  ${config.coin.coinname} (${config.coin.coinsymbol}) Official Links  :globe_with_meridians:\n\u200b**`,
             color: 1363892,
@@ -185,13 +185,13 @@ export const links = (message: Discord.Message) => {
 };
 
 export const uptime = async (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
+    const date = new Date().toUTCString().replace(",", " ");
 
     // Get the current uptime of the wallet.
     const walletUptimeData = await helper.rpc(`uptime`, []);
 
     if (walletUptimeData[0]) { // If an error occurred while fetching the uptime, send the error message.
-        message.channel.send({
+        message.reply({
             embeds: [{
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
                 color: 1363892,
@@ -232,7 +232,7 @@ export const uptime = async (message: Discord.Message) => {
         const botUptime = Number(process.uptime() / (3600 * 24)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
 
         // Send the embed containing the information
-        message.channel.send({
+        message.reply({
             embeds: [{
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
                 color: 1363892,
@@ -272,13 +272,13 @@ export const uptime = async (message: Discord.Message) => {
 };
 
 export const blockchaininfo = async (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
+    const date = new Date().toUTCString().replace(",", " ");
 
     // Get the blockchain inforamation
     const blockchainInfoData = await helper.rpc(`getblockchaininfo`, []);
 
     if (blockchainInfoData[0]) { // If an error occurred while fetching the blockchain information, send the error message.
-        message.channel.send({
+        message.reply({
             embeds: [{
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :robot::tools:**`,
                 color: 1363892,
@@ -310,7 +310,7 @@ export const blockchaininfo = async (message: Discord.Message) => {
             }
         });
     } else {
-        message.channel.send({
+        message.reply({
             embeds: [{
                 description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :chains:**`,
                 color: 1363892,
@@ -372,9 +372,9 @@ export const blockchaininfo = async (message: Discord.Message) => {
 };
 
 export const chaininfo = (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
+    const date = new Date().toUTCString().replace(",", " ");
 
-    message.channel.send({
+    message.reply({
         embeds: [{
             description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :chains:**`,
             color: 1363892,
@@ -405,7 +405,7 @@ export const chaininfo = (message: Discord.Message) => {
 };
 
 export const miners = (message: Discord.Message) => {
-    message.channel.send({
+    message.reply({
         embeds: [{
             description: `**:pick:  ${config.coin.coinname} (${config.coin.coinsymbol}) Compatible Mining Software  :pick:**\n\u200b`,
             color: 1363892,
@@ -448,9 +448,9 @@ export const miners = (message: Discord.Message) => {
 };
 
 export const exchanges = (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
+    const date = new Date().toUTCString().replace(",", " ");
 
-    message.channel.send({
+    message.reply({
         embeds: [{
             description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Exchange listings  :chart_with_upwards_trend:\n\u200b**`,
             color: 1363892,
@@ -491,8 +491,9 @@ export const exchanges = (message: Discord.Message) => {
 };
 
 export const diff = (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
-    message.channel.send({
+    const date = new Date().toUTCString().replace(",", " ");
+
+    message.reply({
         embeds: [{
             description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Difficulty  :chart_with_upwards_trend:\n\u200b**`,
             color: 1363892,
@@ -523,8 +524,9 @@ export const diff = (message: Discord.Message) => {
 };
 
 export const hash = (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
-    message.channel.send({
+    const date = new Date().toUTCString().replace(",", " ");
+
+    message.reply({
         embeds: [{
             description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) network hashrate  :chart_with_upwards_trend:\n\u200b**`,
             color: 1363892,
@@ -555,13 +557,13 @@ export const hash = (message: Discord.Message) => {
 };
 
 export const mininginfo = async (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}`;
+    const date = new Date().toUTCString().replace(",", " ");
 
     // Get the blockchain inforamation
     const miningInfoData = await helper.rpc(`getmininginfo`, []);
 
     if (miningInfoData[0]) { // If an error occurred while fetching the mining information, send the error message.
-        message.channel.send({
+        message.reply({
             embeds: [{
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) mining information  :robot::tools:**`,
                 color: 1363892,
@@ -593,7 +595,7 @@ export const mininginfo = async (message: Discord.Message) => {
             }
         });
     } else {
-        message.channel.send({
+        message.reply({
             embeds: [{
                 description: `**:pick: ${config.coin.coinname} (${config.coin.coinsymbol}) network mining info :pick:**`,
                 color: 1363892,
@@ -645,6 +647,77 @@ export const mininginfo = async (message: Discord.Message) => {
                     sentMessage.delete();
                 }, config.bot.msgtimeout);
             }
+        });
+    }
+};
+
+export const supply = async (message: Discord.Message) => {
+    const date = new Date().toUTCString().replace(",", " ");
+    const price = await exbitron.getTicker("usdt").catch((error) => {
+        main.log(`Error fetching price: ${error}`);
+        return undefined;
+    });
+    const supplyData: any = await (await fetch(`${config.explorer.explorerurl}ext/getmoneysupply`)).text().catch((error) => {
+        main.log(`Error fetching the supply: ${error}`);
+        return undefined;
+    });
+
+    if (!supplyData || !price) {
+        message.reply({
+            embeds: [{
+                description: `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) coin supply  :bar_chart:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                },
+                fields: [
+                    {
+                        name: `:x:  Error  :x:`,
+                        value: `*Error fetching the supply or price.*`,
+                        inline: false,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === "DM") {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    } else {
+        const marketCapacity = Number(parseFloat(price[`last`]) * Number(supplyData)).toLocaleString("en-US", { minimumFractionDigits: 8, maximumFractionDigits: 8 });
+        const supply = Number(supplyData).toLocaleString("en-US", { minimumFractionDigits: 8, maximumFractionDigits: 8 });
+        
+        message.reply({
+            embeds: [{
+                description: `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) coin supply  :bar_chart:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                },
+                fields: [
+                    {
+                        name: `__Total coin supply__`,
+                        value: supply,
+                        inline: false,
+                    },
+                    {
+                        name: `__Current Market Capacity__`,
+                        value: `${marketCapacity} USDT`,
+                        inline: false,
+                    }
+                ],
+            }],
         });
     }
 };

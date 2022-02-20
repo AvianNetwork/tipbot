@@ -161,6 +161,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.supply);
             break;
 
+        case `wealth`:
+            helper.spamOrDM(message, commands.wealth);
+            break;
+
         // If the command doesn't exist, send the help message
         default:
             helper.spamOrDM(message, commands.help);

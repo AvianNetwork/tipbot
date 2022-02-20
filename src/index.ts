@@ -133,12 +133,9 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.miners);
             break;
 
+        case `chaininfo`:
         case `blockchaininfo`:
             helper.spamOrDM(message, commands.blockchaininfo);
-            break;
-
-        case `chaininfo`:
-            helper.spamOrDM(message, commands.chaininfo);
             break;
 
         case `exchanges`:
@@ -146,13 +143,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             break;
 
         case `diff`:
-            helper.spamOrDM(message, commands.diff);
-            break;
-
         case `hash`:
-            helper.spamOrDM(message, commands.hash);
-            break;
-
         case `mininginfo`:
             helper.spamOrDM(message, commands.mininginfo);
             break;

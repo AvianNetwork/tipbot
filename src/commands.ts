@@ -371,39 +371,6 @@ export const blockchaininfo = async (message: Discord.Message) => {
     }
 };
 
-export const chaininfo = (message: Discord.Message) => {
-    const date = new Date().toUTCString().replace(",", " ");
-
-    message.reply({
-        embeds: [{
-            description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :chains:**`,
-            color: 1363892,
-            fields: [
-                {
-                    name: `:x:  Error  :x:`,
-                    value: `Please use ` + "`!blockchaininfo`" + ` to get the current blockchain information.`,
-                    inline: false
-                },
-                {
-                    name: `:clock: Time`,
-                    value: date,
-                    inline: false,
-                },
-            ],
-        }],
-    }).then((sentMessage) => {
-        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-        // If it was sent in a DM, don't delete it.
-        if (sentMessage.channel.type === "DM") {
-            return;
-        } else {
-            setTimeout(() => {
-                sentMessage.delete();
-            }, config.bot.msgtimeout);
-        }
-    });
-};
-
 export const miners = (message: Discord.Message) => {
     message.reply({
         embeds: [{
@@ -468,72 +435,6 @@ export const exchanges = (message: Discord.Message) => {
                 {
                     name: `:chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:`,
                     value: `https://tradeogre.com/exchange/BTC-${config.coin.coinsymbol.toUpperCase()}\n\u200b`,
-                    inline: false
-                },
-                {
-                    name: `:clock: Time`,
-                    value: date,
-                    inline: false,
-                },
-            ],
-        }],
-    }).then((sentMessage) => {
-        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-        // If it was sent in a DM, don't delete it.
-        if (sentMessage.channel.type === "DM") {
-            return;
-        } else {
-            setTimeout(() => {
-                sentMessage.delete();
-            }, config.bot.msgtimeout);
-        }
-    });
-};
-
-export const diff = (message: Discord.Message) => {
-    const date = new Date().toUTCString().replace(",", " ");
-
-    message.reply({
-        embeds: [{
-            description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Difficulty  :chart_with_upwards_trend:\n\u200b**`,
-            color: 1363892,
-            fields: [
-                {
-                    name: `:x:  Error  :x:`,
-                    value: `Please use ` + "`!blockchaininfo` or `!mininginfo`" + ` to get the current difficulty.`,
-                    inline: false
-                },
-                {
-                    name: `:clock: Time`,
-                    value: date,
-                    inline: false,
-                },
-            ],
-        }],
-    }).then((sentMessage) => {
-        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-        // If it was sent in a DM, don't delete it.
-        if (sentMessage.channel.type === "DM") {
-            return;
-        } else {
-            setTimeout(() => {
-                sentMessage.delete();
-            }, config.bot.msgtimeout);
-        }
-    });
-};
-
-export const hash = (message: Discord.Message) => {
-    const date = new Date().toUTCString().replace(",", " ");
-
-    message.reply({
-        embeds: [{
-            description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) network hashrate  :chart_with_upwards_trend:\n\u200b**`,
-            color: 1363892,
-            fields: [
-                {
-                    name: `:x:  Error  :x:`,
-                    value: `Please use ` + "`!mininginfo`" + ` to get the current network hashrate.`,
                     inline: false
                 },
                 {

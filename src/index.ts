@@ -150,8 +150,8 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.diff);
             break;
 
-        case `difficulty`:
-            helper.spamOrDM(message, commands.diff);
+        case `hash`:
+            helper.spamOrDM(message, commands.hash);
             break;
 
         // If the command doesn't exist, send the help message

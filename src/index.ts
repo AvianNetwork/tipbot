@@ -148,12 +148,15 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.mininginfo);
             break;
 
+        // Explorer functions
         case `supply`:
             helper.spamOrDM(message, commands.supply);
             break;
-
         case `wealth`:
             helper.spamOrDM(message, commands.wealth);
+            break;
+        case `qr`:
+            helper.spamOrDM(message, commands.qr);
             break;
 
         // If the command doesn't exist, send the help message

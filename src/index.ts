@@ -67,6 +67,12 @@ bot.on(`ready`, async () => {
     }, 60 * 1000); // Every minute
 });
 
+// Function to send messages to the log channel as well as the console
+export const log = (message: string) => {
+    console.error(`[${helper.getTime()}] ${message}`);
+    logChannel.send(`[${helper.getTime()}] ${message}`);
+};
+
 // General error handling
 process.on(`uncaughtException`, (error) => {
     const message: string = `[${helper.getTime()}] uncaughtException: ${error}`;

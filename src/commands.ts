@@ -12,22 +12,11 @@ dayjs.extend(dayjs_utc);
 dayjs.extend(dayjs_timezone);
 
 // Import helper functions
+import * as main from "./index.js";
 import * as helper from "./helper.js";
 import * as exbitron from "./exbitron.js";
 
-// Create the bot
-const bot = new Discord.Client({
-    intents: [
-        `GUILDS`,
-        `GUILD_MESSAGES`,
-        `DIRECT_MESSAGES`,
-        `GUILD_PRESENCES`
-    ],
-    partials: [`CHANNEL`]
-});
-
 export const help = (message: Discord.Message) => {
-    // Send the help message
     message.channel.send({
         embeds: [{
             description: `__**${config.coin.coinname} (${config.coin.coinsymbol}) Tipper**__`,
@@ -198,9 +187,10 @@ export const links = (message: Discord.Message) => {
 export const uptime = async (message: Discord.Message) => {
     const date = `${new Date().toUTCString().replace(",", " ")}`;
 
+    // Get the current uptime of the wallet.
     const walletUptimeData = await helper.rpc(`uptime`, []);
 
-    if (walletUptimeData[0]) {
+    if (walletUptimeData[0]) { // If an error occurred while fetching the uptime, send the error message.
         message.channel.send({
             embeds: [{
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
@@ -232,11 +222,16 @@ export const uptime = async (message: Discord.Message) => {
                 }, config.bot.msgtimeout);
             }
         });
+
+        // Log the error
+        main.log(`Error while fetching uptime: ${walletUptimeData[0]}`);
         return;
     } else {
+        // Get the wallet uptime and bot uptime in days
         const walletUptime = Number(walletUptimeData[1] / (3600 * 24)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
         const botUptime = Number(process.uptime() / (3600 * 24)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
 
+        // Send the embed containing the information
         message.channel.send({
             embeds: [{
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,

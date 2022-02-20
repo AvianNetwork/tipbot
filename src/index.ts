@@ -130,6 +130,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.uptime);
             break;
 
+        case `miners`:
+            helper.spamOrDM(message, commands.miners);
+            break;
+
         case `chaininfo`:
             helper.spamOrDM(message, commands.chaininfo);
             break;

@@ -370,3 +370,46 @@ export const chaininfo = async (message: Discord.Message) => {
         });
     }
 };
+
+export const miners = (message: Discord.Message) => {
+    message.channel.send({
+        embeds: [{
+            description: `**:pick:  ${config.coin.coinname} (${config.coin.coinsymbol}) Compatible Mining Software  :pick:**\n\u200b`,
+            color: 1363892,
+            fields: [
+                {
+                    name: `**NVIDIA GPU ( X16RT )**\n\u200b`,
+                    value:
+                        `__T-Rex Miner ( <= v19.14)__\n*https://github.com/trexminer/T-Rex/releases/tag/0.19.14*\n\n` +
+                        `__CryptoDredge__\nhttps://cryptodredge.org/get/\n\n` +
+                        `__WildRig-Multi__\nhttps://github.com/andru-kun/wildrig-multi\n\u200b`,
+                    inline: false,
+                },
+                {
+                    name: `__AMD GPU ( X16RT )__\n\u200b`,
+                    value:
+                        `__TeamRedMiner__\n*https://github.com/todxx/teamredminer*\n\n` +
+                        `__WildRig-Multi__\n*https://github.com/andru-kun/wildrig-multi*\n\u200b`,
+                    inline: false,
+                },
+                {
+                    name: `__CPU ( MinotaurX )__\n\u200b`,
+                    value: `__rplant8 cpuminer-opt__\n*https://github.com/rplant8/cpuminer-opt-rplant/releases/tag/5.0.24*\n\n` +
+                        `__litecoincash-project cpuminer-multi__\n*https://github.com/litecoincash-project/cpuminer-multi*\n\n` +
+                        `__SRBMiner-multi__\n*https://github.com/doktor83/SRBMiner-Multi/releases*`,
+                    inline: false,
+                },
+            ],
+        }],
+    }).then((sentMessage) => {
+        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+        // If it was sent in a DM, don't delete it.
+        if (sentMessage.channel.type === "DM") {
+            return;
+        } else {
+            setTimeout(() => {
+                sentMessage.delete();
+            }, config.bot.msgtimeout);
+        }
+    });
+};

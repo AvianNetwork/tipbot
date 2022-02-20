@@ -270,3 +270,103 @@ export const uptime = async (message: Discord.Message) => {
         });
     }
 };
+
+export const chaininfo = async (message: Discord.Message) => {
+    const date = `${new Date().toUTCString().replace(",", " ")}`;
+
+    // Get the blockchain inforamation
+    const blockchainInfoData = await helper.rpc(`getblockchaininfo`, []);
+
+    if (blockchainInfoData[0]) { // If an error occurred while fetching the blockchain information, send the error message.
+        message.channel.send({
+            embeds: [{
+                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet blockchain information  :robot::tools:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                },
+                fields: [
+                    {
+                        name: `:x:  Error  :x:`,
+                        value: `*Error fetching blockchain information.*`,
+                        inline: false,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === "DM") {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    } else {
+        message.channel.send({
+            embeds: [{
+                description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain info  :chains:**`,
+                color: 1363892,
+                fields: [
+                    {
+                        name: `Network difficulty (X16RT)`,
+                        value: JSON.stringify(blockchainInfoData[1].difficulty_x16rt),
+                        inline: true,
+                    },
+                    {
+                        name: `Headers`,
+                        value: JSON.stringify(blockchainInfoData[1].headers),
+                        inline: true,
+                    },
+                    {
+                        name: `Chain`,
+                        value: blockchainInfoData[1].chain,
+                        inline: true,
+                    },
+                    {
+                        name: `Network difficulty (MinotaurX)`,
+                        value: JSON.stringify(blockchainInfoData[1].difficulty_minotaurx),
+                        inline: true,
+                    },
+                    {
+                        name: `Blocks`,
+                        value: JSON.stringify(blockchainInfoData[1].blocks),
+                        inline: true,
+                    },
+                    {
+                        name: `Size on disk`,
+                        value: `${Number(blockchainInfoData[1].size_on_disk / 1000000).toFixed(2)} MB (${Number(blockchainInfoData[1].size_on_disk / 1000000000).toFixed(2)} GB)`,
+                        inline: true,
+                    },
+                    {
+                        name: `Best Blockhash`,
+                        value: blockchainInfoData[1].bestblockhash,
+                        inline: true,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === "DM") {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    }
+};

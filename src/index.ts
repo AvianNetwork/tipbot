@@ -130,6 +130,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.uptime);
             break;
 
+        case `chaininfo`:
+            helper.spamOrDM(message, commands.chaininfo);
+            break;
+
         // If the command doesn't exist, send the help message
         default:
             helper.spamOrDM(message, commands.help);

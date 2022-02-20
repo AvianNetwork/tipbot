@@ -112,14 +112,16 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     const parameters = message.content.slice(config.bot.prefix.length).trim().split(/ +/g).slice(1);
 
     switch (command) {
-        // If the command is help
         case `help`:
             helper.spamOrDM(message, commands.help);
             break;
 
-        // If the command is links
         case `links`:
             helper.spamOrDM(message, commands.links);
+            break;
+
+        case `uptime`:
+            helper.spamOrDM(message, commands.uptime);
             break;
 
         // If the command doesn't exist, send the help message

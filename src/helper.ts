@@ -59,3 +59,27 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
         })
     }
 };
+
+export const rpc = (method: string, params: any[]): Promise<[string | undefined, any]> => { // [error, result]
+    return new Promise(async (resolve, reject) => {
+        const data: any = await (await fetch(`http://${config.coin.rpc.host}:${config.coin.rpc.port}`, {
+            method: `POST`,
+            headers: {
+                "Content-Type": `application/json`,
+                Authorization: `Basic ${Buffer.from(`${config.coin.rpc.user}:${config.coin.rpc.pass}`, `utf8`).toString(`base64`)}`,
+            },
+            body: JSON.stringify({
+                jsonrpc: `1.0`,
+                id: `avn-tipbot`,
+                method: method,
+                params: params,
+            }),
+        })).json().catch(() => undefined);
+    
+        if (!data || !data[`id`] || data[`error`] || !data[`result`]) {
+            resolve([data[`error`].toString(), undefined]);
+        } else {
+            resolve([undefined, data[`result`]]);
+        }
+    });
+};

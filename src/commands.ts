@@ -11,6 +11,10 @@ import dayjs_timezone from "dayjs/plugin/timezone.js";
 dayjs.extend(dayjs_utc);
 dayjs.extend(dayjs_timezone);
 
+// Import helper functions
+import * as helper from "./helper.js";
+import * as exbitron from "./exbitron.js";
+
 // Create the bot
 const bot = new Discord.Client({
     intents: [
@@ -109,7 +113,7 @@ export const help = (message: Discord.Message) => {
 }
 
 export const links = (message: Discord.Message) => {
-    const date = `${new Date().toUTCString().replace(",", " ")}+0000 (Coordinated Universal Time)`;
+    const date = `${new Date().toUTCString().replace(",", " ")}`;
 
     message.channel.send({
         embeds: [{
@@ -189,4 +193,85 @@ export const links = (message: Discord.Message) => {
             }, config.bot.msgtimeout);
         }
     });
+};
+
+export const uptime = async (message: Discord.Message) => {
+    const date = `${new Date().toUTCString().replace(",", " ")}`;
+
+    const walletUptimeData = await helper.rpc(`uptime`, []);
+
+    if (walletUptimeData[0]) {
+        message.channel.send({
+            embeds: [{
+                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                },
+                fields: [
+                    {
+                        name: `:x:  Error  :x:`,
+                        value: `*Error fetching uptime.*`,
+                        inline: false
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === "DM") {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+        return;
+    } else {
+        const walletUptime = Number(walletUptimeData[1] / (3600 * 24)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+        const botUptime = Number(process.uptime() / (3600 * 24)).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+
+        message.channel.send({
+            embeds: [{
+                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                },
+                fields: [
+                    {
+                        name: `__Current wallet uptime__`,
+                        value: `${walletUptime} days`,
+                        inline: false,
+                    },
+                    {
+                        name: `__Current bot uptime__`,
+                        value: `${botUptime} days`,
+                        inline: false,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === "DM") {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    }
 };

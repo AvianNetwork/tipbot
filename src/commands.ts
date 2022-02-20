@@ -280,7 +280,7 @@ export const blockchaininfo = async (message: Discord.Message) => {
     if (blockchainInfoData[0]) { // If an error occurred while fetching the blockchain information, send the error message.
         message.channel.send({
             embeds: [{
-                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet blockchain information  :robot::tools:**`,
+                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :robot::tools:**`,
                 color: 1363892,
                 thumbnail: {
                     url: 'https://explorer.avn.network/images/avian_256x256x32.png',
@@ -552,4 +552,99 @@ export const hash = (message: Discord.Message) => {
             }, config.bot.msgtimeout);
         }
     });
+};
+
+export const mininginfo = async (message: Discord.Message) => {
+    const date = `${new Date().toUTCString().replace(",", " ")}`;
+
+    // Get the blockchain inforamation
+    const miningInfoData = await helper.rpc(`getmininginfo`, []);
+
+    if (miningInfoData[0]) { // If an error occurred while fetching the mining information, send the error message.
+        message.channel.send({
+            embeds: [{
+                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) mining information  :robot::tools:**`,
+                color: 1363892,
+                thumbnail: {
+                    url: 'https://explorer.avn.network/images/avian_256x256x32.png',
+                },
+                fields: [
+                    {
+                        name: `:x:  Error  :x:`,
+                        value: `*Error fetching mining information.*`,
+                        inline: false,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === "DM") {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    } else {
+        message.channel.send({
+            embeds: [{
+                description: `**:pick: ${config.coin.coinname} (${config.coin.coinsymbol}) network mining info :pick:**`,
+                color: 1363892,
+                fields: [
+                    {
+                        name: `Network hashrate (X16RT)`,
+                        value: `${Number(miningInfoData[1].networkhashps_x16rt / 1000000000).toFixed(3)} GH/s`,
+                        inline: true,
+                    },
+                    {
+                        name: `\u200b`,
+                        value: `\u200b`,
+                        inline: true,
+                    },
+                    {
+                        name: `Network difficulty (X16RT)`,
+                        value: JSON.stringify(miningInfoData[1].difficulty_x16rt),
+                        inline: true,
+                    },
+                    {
+                        name: `Network hashrate (MinotaurX)`,
+                        value: `${(miningInfoData[1].networkhashps_minotaurx / 1000000).toFixed(3)} MH/s`,
+                        inline: true,
+                    },
+                    {
+                        name: `\u200b`,
+                        value: `\u200b`,
+                        inline: true,
+                    },
+                    {
+                        name: `Network difficulty (MinotaurX)`,
+                        value: JSON.stringify(miningInfoData[1].difficulty_minotaurx),
+                        inline: true,
+                    },
+                    {
+                        name: `:clock: Time`,
+                        value: date,
+                        inline: false,
+                    },
+                ],
+            }],
+        }).then((sentMessage) => {
+            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+            // If it was sent in a DM, don't delete it.
+            if (sentMessage.channel.type === "DM") {
+                return;
+            } else {
+                setTimeout(() => {
+                    sentMessage.delete();
+                }, config.bot.msgtimeout);
+            }
+        });
+    }
 };

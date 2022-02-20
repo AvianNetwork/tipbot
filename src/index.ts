@@ -154,6 +154,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.hash);
             break;
 
+        case `mininginfo`:
+            helper.spamOrDM(message, commands.mininginfo);
+            break;
+
         // If the command doesn't exist, send the help message
         default:
             helper.spamOrDM(message, commands.help);

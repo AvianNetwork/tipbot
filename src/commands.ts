@@ -456,3 +456,35 @@ export const exchanges = (message: Discord.Message) => {
         }
     });
 };
+
+export const diff = (message: Discord.Message) => {
+    const date  = `${new Date().toUTCString().replace(",", " ")}`;
+    message.channel.send({
+        embeds: [{
+            description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Difficulty  :chart_with_upwards_trend:\n\u200b**`,
+            color: 1363892,
+            fields: [
+                {
+                    name: `:x:  Error  :x:`,
+                    value: `Please use ` + "`!blockchaininfo` or `!mininginfo`" + ` to get the current difficulty.`,
+                    inline: false
+                },
+                {
+                    name: `:clock: Time`,
+                    value: date,
+                    inline: false,
+                },
+            ],
+        }],
+    }).then((sentMessage) => {
+        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+        // If it was sent in a DM, don't delete it.
+        if (sentMessage.channel.type === "DM") {
+            return;
+        } else {
+            setTimeout(() => {
+                sentMessage.delete();
+            }, config.bot.msgtimeout);
+        }
+    });
+};

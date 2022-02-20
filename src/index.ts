@@ -117,36 +117,32 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     const command = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[0];
 
     switch (command) {
-        case `help`:
-            helper.spamOrDM(message, commands.help);
-            break;
-
+        // Project info
         case `links`:
             helper.spamOrDM(message, commands.links);
             break;
 
-        case `uptime`:
-            helper.spamOrDM(message, commands.uptime);
-            break;
+        // Wallet commands
+        // TODO: !avn balance
+        // TODO: !avn deposit
+        // TODO: !avn donate
+        // TODO: !avn donate <amount>
+        // TODO: !avn withdraw <address> <amount>
+        // TODO: !avn tip <@user> <amount>
+        // TODO: !avn tip private <user> <amount>
+        // TODO: !avn walletversion
+        // TODO: !avn privkey
 
-        case `miners`:
-            helper.spamOrDM(message, commands.miners);
-            break;
-
-        case `chaininfo`:
-        case `blockchaininfo`:
-            helper.spamOrDM(message, commands.blockchaininfo);
-            break;
-
+        // Market data
         case `exchanges`:
             helper.spamOrDM(message, commands.exchanges);
             break;
-
-        case `diff`:
-        case `hash`:
-        case `mininginfo`:
-            helper.spamOrDM(message, commands.mininginfo);
-            break;
+        // TODO: !avn <usdt|btc|ltc|rvn|doge>
+        // TODO: !avn <usdt|btc|ltc|rvn|doge> <number of coins>
+        // TODO: !avn cap <usdt|btc|ltc|rvn|doge>
+        // TODO: !avn wavn
+        // TODO: !avn sushi
+        // TODO: !avn nomics <avn|wavn>
 
         // Explorer functions
         case `supply`:
@@ -158,6 +154,33 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `qr`:
             helper.spamOrDM(message, commands.qr);
             break;
+
+        // Blockchain and mining
+        case `diff`:
+        case `hash`:
+        case `mininginfo`:
+            helper.spamOrDM(message, commands.mininginfo);
+            break;
+        // TODO: !avn miningcalc
+        case `chaininfo`:
+        case `blockchaininfo`:
+            helper.spamOrDM(message, commands.blockchaininfo);
+            break;
+        case `miners`:
+            helper.spamOrDM(message, commands.miners);
+            break;
+        // TODO: !avn validate
+
+        // Bot wallet Utilities
+        case `uptime`:
+            helper.spamOrDM(message, commands.uptime);
+            break;
+
+        // Others
+        case `help`:
+            helper.spamOrDM(message, commands.help);
+            break;
+        // TODO: !avn dm
 
         // If the command doesn't exist, send the help message
         default:

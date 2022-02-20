@@ -63,11 +63,11 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
 export const rpc = (method: string, params: any[]): Promise<[string | undefined, any]> => { // [error, result]
     return new Promise(async (resolve, reject) => {
         // Create the request
-        const data: any = await (await fetch(`http://${config.coin.rpc.host}:${config.coin.rpc.port}`, {
+        const data: any = await (await fetch(`http://${config.coin.rpc.hostname}:${config.coin.rpc.port}`, {
             method: `POST`,
             headers: {
                 "Content-Type": `application/json`,
-                Authorization: `Basic ${Buffer.from(`${config.coin.rpc.user}:${config.coin.rpc.pass}`, `utf8`).toString(`base64`)}`,
+                Authorization: `Basic ${Buffer.from(`${config.coin.rpc.username}:${config.coin.rpc.password}`, `utf8`).toString(`base64`)}`,
             },
             body: JSON.stringify({
                 jsonrpc: `1.0`,

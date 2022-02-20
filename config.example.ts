@@ -5,7 +5,7 @@ export const config = {
         msgtimeout: 120000, // 2 minutes
         timezone: [
             `Europe/Amsterdam`,
-            `HH:mm:ss DD/MM/YYYY`
+            `HH:mm:ss DD/MM/YYYY`,
         ],
     },
     project: {
@@ -26,10 +26,10 @@ export const config = {
         paytxfee: 0.005,
         address: /^[R][a-zA-Z0-9]{32}$/,
         rpc: {
-            host: `localhost`,
+            hostname: `localhost`,
             port: 1234,
-            user: `username`,
-            pass: `password`,
+            username: `username`,
+            password: `password`,
         },
     },
     moderation: {

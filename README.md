@@ -17,7 +17,7 @@ If you liked this repository, feel free to leave a star ⭐ to help promote Avia
 
 *   :dollar:  **Wallet**: `balance`, `deposit`, `withdraw`, `privkey` and more! 
 *   :chart:  **Market Data**: `exchanges`, `wavn`, `sushi` and more!
-*   :pick:  **Blockchain and Mining**: `diff`, `hash`, `mininginfo`, `miningcalc`, `chaininfo` and `validate ` 
+*   :pick:  **Blockchain and Mining**: `mininginfo`, `miningcalc`, `blockchaininfo` and `validate ` 
 *   ❔  **Help**: `help`
 
 Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/contributors) that have helped to develop the Avian Network Tipbot.

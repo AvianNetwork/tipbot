@@ -14,7 +14,6 @@ dayjs.extend(dayjs_timezone);
 // Import helper functions
 import * as main from "./index.js";
 import * as helper from "./helper.js";
-import * as exbitron from "./exbitron.js";
 
 export const help = (message: Discord.Message) => {
     message.reply({

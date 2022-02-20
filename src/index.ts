@@ -14,7 +14,6 @@ dayjs.extend(dayjs_timezone);
 // Import helper functions
 import * as helper from "./helper.js";
 import * as commands from "./commands.js";
-import * as exbitron from "./exbitron.js";
 
 // We can only fetch channels within the bot.on(`ready`) function
 let logChannel: Discord.TextChannel;
@@ -56,7 +55,7 @@ bot.on(`ready`, async () => {
 
     // Set the bot presence
     setInterval(async () => {
-        const ticker = await exbitron.getTicker("usdt").catch((error) => {
+        const ticker = await helper.getTicker("usdt").catch((error) => {
             console.error(`[${helper.getTime()}] Error while fetching Exbitron price: ${error}`);
             logChannel.send(`[${helper.getTime()}] Error while fetching Exbitron price: ${error}`);
             return undefined;

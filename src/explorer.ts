@@ -14,11 +14,10 @@ dayjs.extend(dayjs_timezone);
 // Import helper functions
 import * as main from "./index.js";
 import * as helper from "./helper.js";
-import * as exbitron from "./exbitron.js";
 
 export const supply = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
-    const price = await exbitron.getTicker(`usdt`).catch((error) => {
+    const price = await helper.getTicker(`usdt`).catch((error) => {
         main.log(`Error fetching price: ${error}`);
         return undefined;
     });

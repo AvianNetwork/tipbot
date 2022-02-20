@@ -134,6 +134,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.miners);
             break;
 
+        case `blockchaininfo`:
+            helper.spamOrDM(message, commands.blockchaininfo);
+            break;
+
         case `chaininfo`:
             helper.spamOrDM(message, commands.chaininfo);
             break;

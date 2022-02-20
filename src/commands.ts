@@ -73,7 +73,7 @@ export const help = (message: Discord.Message) => {
                         `**${config.bot.prefix} hash:** Display the current network hashrate.\n` +
                         `**${config.bot.prefix} mininginfo:** Display network mining info.\n` +
                         `**${config.bot.prefix} miningcalc <MinotaurX|X16RT> <KH/s|MH/s>:** Calculate mining returns for MinotaurX or X16RT (Supply hashrate in KH/s for MinotaurX and MH/s for X16RT).\n` +
-                        `**${config.bot.prefix} chaininfo:** Display blockchain info.\n` +
+                        `**${config.bot.prefix} blockchaininfo:** Display blockchain information.\n` +
                         `**${config.bot.prefix} miners:** Display compatible mining software.\n` +
                         `**${config.bot.prefix} validate <address>:** Validate an ${config.coin.coinname} address.\n\u200b`,
                     inline: false,
@@ -271,7 +271,7 @@ export const uptime = async (message: Discord.Message) => {
     }
 };
 
-export const chaininfo = async (message: Discord.Message) => {
+export const blockchaininfo = async (message: Discord.Message) => {
     const date = `${new Date().toUTCString().replace(",", " ")}`;
 
     // Get the blockchain inforamation
@@ -312,7 +312,7 @@ export const chaininfo = async (message: Discord.Message) => {
     } else {
         message.channel.send({
             embeds: [{
-                description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain info  :chains:**`,
+                description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :chains:**`,
                 color: 1363892,
                 fields: [
                     {
@@ -369,6 +369,39 @@ export const chaininfo = async (message: Discord.Message) => {
             }
         });
     }
+};
+
+export const chaininfo = (message: Discord.Message) => {
+    const date = `${new Date().toUTCString().replace(",", " ")}`;
+
+    message.channel.send({
+        embeds: [{
+            description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :chains:**`,
+            color: 1363892,
+            fields: [
+                {
+                    name: `:x:  Error  :x:`,
+                    value: `Please use ` + "`!blockchaininfo`" + ` to get the current blockchain information.`,
+                    inline: false
+                },
+                {
+                    name: `:clock: Time`,
+                    value: date,
+                    inline: false,
+                },
+            ],
+        }],
+    }).then((sentMessage) => {
+        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+        // If it was sent in a DM, don't delete it.
+        if (sentMessage.channel.type === "DM") {
+            return;
+        } else {
+            setTimeout(() => {
+                sentMessage.delete();
+            }, config.bot.msgtimeout);
+        }
+    });
 };
 
 export const miners = (message: Discord.Message) => {
@@ -458,7 +491,7 @@ export const exchanges = (message: Discord.Message) => {
 };
 
 export const diff = (message: Discord.Message) => {
-    const date  = `${new Date().toUTCString().replace(",", " ")}`;
+    const date = `${new Date().toUTCString().replace(",", " ")}`;
     message.channel.send({
         embeds: [{
             description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Difficulty  :chart_with_upwards_trend:\n\u200b**`,

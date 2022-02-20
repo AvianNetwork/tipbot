@@ -413,3 +413,46 @@ export const miners = (message: Discord.Message) => {
         }
     });
 };
+
+export const exchanges = (message: Discord.Message) => {
+    const date = `${new Date().toUTCString().replace(",", " ")}`;
+
+    message.channel.send({
+        embeds: [{
+            description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Exchange listings  :chart_with_upwards_trend:\n\u200b**`,
+            color: 1363892,
+            fields: [
+                {
+                    name: `:chart_with_upwards_trend:  Exbitron Exchange  :chart_with_upwards_trend:`,
+                    value:
+                        `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}btc\n` +
+                        `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}usdt\n` +
+                        `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}ltc\n` +
+                        `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}rvn\n` +
+                        `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}doge\n\u200b`,
+                    inline: false
+                },
+                {
+                    name: `:chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:`,
+                    value: `https://tradeogre.com/exchange/BTC-${config.coin.coinsymbol.toUpperCase()}\n\u200b`,
+                    inline: false
+                },
+                {
+                    name: `:clock: Time`,
+                    value: date,
+                    inline: false,
+                },
+            ],
+        }],
+    }).then((sentMessage) => {
+        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+        // If it was sent in a DM, don't delete it.
+        if (sentMessage.channel.type === "DM") {
+            return;
+        } else {
+            setTimeout(() => {
+                sentMessage.delete();
+            }, config.bot.msgtimeout);
+        }
+    });
+};

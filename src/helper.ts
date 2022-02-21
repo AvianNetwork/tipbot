@@ -46,7 +46,7 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
                 fields: [
                     {
                         name: `Hello!`,
-                        value: `Please use <#${config.moderation.botspamchannel}> or DM\'s to talk to bots\nInitialize DM session with` + '`!avn dm`',
+                        value: `Please use <#${config.moderation.botspamchannel}> or DM\'s to talk to bots`,
                         inline: true
                     }
                 ]
@@ -111,5 +111,40 @@ export const getTicker = async (asset: string = "usdt"): Promise<{ // Set this b
         // If no error has occurred, resolve the promise
         resolve(data[`ticker`]);
         return;
+    });
+};
+
+export const sendErrorMessage = (message: Discord.Message, description: string, error: string) => {
+    const date = new Date().toUTCString().replace(`,`, ` `);
+    message.reply({
+        embeds: [{
+            description: description,
+            color: 1363892,
+            thumbnail: {
+                url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+            },
+            fields: [
+                {
+                    name: `:x:  Error  :x:`,
+                    value: error,
+                    inline: false,
+                },
+                {
+                    name: `:clock: Time`,
+                    value: date,
+                    inline: false,
+                },
+            ],
+        }],
+    }).then((sentMessage) => {
+        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+        // If it was sent in a DM, don't delete it.
+        if (sentMessage.channel.type === `DM`) {
+            return;
+        } else {
+            setTimeout(() => {
+                sentMessage.delete();
+            }, config.bot.msgtimeout);
+        }
     });
 };

@@ -27,37 +27,9 @@ export const supply = async (message: Discord.Message) => {
     });
 
     if (!supplyData || !price) {
-        message.reply({
-            embeds: [{
-                description: `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) coin supply  :bar_chart:**`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Error fetching the supply or price.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        helper.sendErrorMessage(message,
+            `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) coin supply  :bar_chart:**`,
+            `*Error fetching the supply or price.*`);
     } else {
         const marketCapacity = Number(parseFloat(price[`last`]) * Number(supplyData)).toLocaleString(`en-US`, { minimumFractionDigits: 8, maximumFractionDigits: 8 });
         const supply = Number(supplyData).toLocaleString(`en-US`, { minimumFractionDigits: 8, maximumFractionDigits: 8 });
@@ -104,37 +76,9 @@ export const wealth = async (message: Discord.Message) => {
     });
 
     if (!wealthData) {
-        message.reply({
-            embeds: [{
-                description: `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) wealth distribution information  :bar_chart:**`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Error fetching the wealth distribution.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        helper.sendErrorMessage(message,
+            `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) wealth distribution information  :bar_chart:**`,
+            `*Error fetching the wealth distribution.*`);
     } else {
         const supply = Number(wealthData.supply).toLocaleString(`en-US`, { minimumFractionDigits: 8, maximumFractionDigits: 8 });
 
@@ -303,71 +247,14 @@ export const wealth = async (message: Discord.Message) => {
 export const qr = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
     const address = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
-    console.log(address)
     if (!address) { // Make sure the user specified an address.
-        message.reply({
-            embeds: [{
-                description: `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Please specify an address.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        helper.sendErrorMessage(message,
+            `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
+            `*Please specify an address.*`);
     } else if (!config.coin.address.test(address)) { // Make sure it's an valid address.
-        message.reply({
-            embeds: [{
-                description: `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Please specify a valid address.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        helper.sendErrorMessage(message,
+            `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
+            `*Please specify a valid address.*`);
     } else {
         message.reply({
             embeds: [{

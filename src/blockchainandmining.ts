@@ -22,37 +22,9 @@ export const mininginfo = async (message: Discord.Message) => {
     const miningInfoData = await helper.rpc(`getmininginfo`, []);
 
     if (miningInfoData[0]) { // If an error occurred while fetching the mining information, send the error message.
-        message.reply({
-            embeds: [{
-                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) mining information  :robot::tools:**`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Error fetching mining information.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        helper.sendErrorMessage(message,
+            `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) mining information  :robot::tools:**`,
+            `*Error fetching mining information.*`);
     } else {
         message.reply({
             embeds: [{
@@ -197,37 +169,9 @@ export const blockchaininfo = async (message: Discord.Message) => {
     const blockchainInfoData = await helper.rpc(`getblockchaininfo`, []);
 
     if (blockchainInfoData[0]) { // If an error occurred while fetching the blockchain information, send the error message.
-        message.reply({
-            embeds: [{
-                description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :robot::tools:**`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Error fetching blockchain information.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        helper.sendErrorMessage(message,
+            `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :robot::tools:**`,
+            `*Error fetching blockchain information.*`);
     } else {
         message.reply({
             embeds: [{
@@ -338,37 +282,9 @@ export const validate = async (message: Discord.Message) => {
     const address = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
 
     if (!address) {
-        message.reply({
-            embeds: [{
-                description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Please specify an address.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        helper.sendErrorMessage(message,
+            `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
+            `*Please specify an address.*`);
     } else {
         const valid = config.coin.address.test(address);
         let validity

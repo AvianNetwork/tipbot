@@ -207,7 +207,6 @@ const help = (message: Discord.Message) => {
                     name: `:tools:  Bot Wallet Utilities  :tools:`,
                     value:
                         `**${config.bot.prefix} uptime:** Display current bot and wallet uptime.\n` +
-                        `**${config.bot.prefix} dm:** Start a DM session with the bot.\n\n` +
                         `Replace ` + "`<>`" + ` with the appropriate value.`,
                     inline: false,
                 },

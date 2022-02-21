@@ -184,7 +184,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `help`:
             helper.spamOrDM(message, commands.help);
             break;
-        // TODO: !avn dm
 
         // If the command doesn't exist, send the help message
         default:

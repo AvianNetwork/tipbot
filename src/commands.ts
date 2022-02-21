@@ -166,7 +166,6 @@ const help = (message: Discord.Message) => {
                         `**${config.bot.prefix} donate <amount>:** Donate to the Avian Foundation.\n` +
                         `**${config.bot.prefix} withdraw <address> <amount>:** Withdraw ${config.coin.coinname} to specified address.\n` +
                         `**${config.bot.prefix} tip <@user> <amount>:** Mention an user with @ and the amount to tip them.\n` +
-                        `**${config.bot.prefix} tip private <user> <amount>:** Put private before Mentioning a user to tip them privately.\n` + // TODO: update description
                         `**${config.bot.prefix} walletversion:** Display the bots' wallet version.\n` +
                         `**${config.bot.prefix} privkey:** Send the private key for your wallet to your DM.\n\u200b`,
                     inline: false,

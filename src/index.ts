@@ -128,7 +128,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         // TODO: !avn donate <amount>
         // TODO: !avn withdraw <address> <amount>
         // TODO: !avn tip <@user> <amount>
-        // TODO: !avn tip private <user> <amount>
         // TODO: !avn walletversion
         // TODO: !avn privkey
 

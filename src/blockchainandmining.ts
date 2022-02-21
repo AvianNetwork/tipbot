@@ -88,77 +88,230 @@ export const miningcalc = async (message: Discord.Message) => {
     const hashrate = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
 
     if (!algorithm || !hashrate) { // Make sure the user specified both an algorithm and their hashrate.
-        message.reply({
-            embeds: [{
-                description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Please specify an address.*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
-    } else if (algorithm.toUpperCase() !== `X16RT` || algorithm.toUpperCase() !== `MINOTAURX`) { // Make sure the user specified a valid algorithm.
-        message.reply({
-            embeds: [{
-                description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
-                color: 1363892,
-                thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
-                },
-                fields: [
-                    {
-                        name: `:x:  Error  :x:`,
-                        value: `*Please specify a valid algorithm (x16rt or minotaurx).*`,
-                        inline: false,
-                    },
-                    {
-                        name: `:clock: Time`,
-                        value: date,
-                        inline: false,
-                    },
-                ],
-            }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
-    } else if (isNaN(parseFloat(hashrate))){
-        const algoToUse = algorithm.toUpperCase();
+        helper.sendErrorMessage(message,
+            `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator :abacus:**`,
+            `*Please specify both an algorithm and hashrate.*`);
+    } else if (algorithm.toLowerCase() !== `x16rt` && algorithm.toLowerCase() !== `minotaurx`) { // Make sure the user specified a valid algorithm.
+        helper.sendErrorMessage(message,
+            `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator  :abacus:**`,
+            `*Please specify a valid algorithm (x16rt or minotaurx).*`);
+    } else if (isNaN(parseFloat(hashrate)) || parseFloat(hashrate) < 0) { // Make sure the user specified a valid hashrate.
+        helper.sendErrorMessage(message,
+            `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator  :abacus:**`,
+            `*Please specify a valid hashrate.*`);
+    } else {
+        const algoToUse = algorithm.toLowerCase();
         const hashrateToUse = Number(parseFloat(hashrate).toFixed(3));
 
         const currentPriceTicker = await helper.getTicker(`usdt`).catch((error) => {
             main.log(`Error while fetching price: ${error}`);
             return undefined;
         });
+
+        if (!currentPriceTicker) {
+            helper.sendErrorMessage(message,
+                `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                `*An error occured while retrieving the price.*`);
+        } else {
+            // Get the POW averages from the explorer
+            const data_720: any = await (await fetch(`${config.explorer.explorerurl}ext/powaverages/${algoToUse}/720`)).json().catch((error) => {
+                main.log(`Error while fetching POW averages: ${error}`);
+                return undefined;
+            });
+            const data_1440: any = await (await fetch(`${config.explorer.explorerurl}ext/powaverages/${algoToUse}/1440`)).json().catch((error) => {
+                main.log(`Error while fetching POW averages: ${error}`);
+                return undefined;
+            });
+
+            if (!data_720 || !data_1440) {
+                helper.sendErrorMessage(message,
+                    `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                    `*An error occured while fetching the POW averages.*`);
+                return;
+            }
+
+            const hashavg12 = data_720[0][`nethashavg`];
+            const hashavg24 = data_1440[0][`nethashavg`];
+
+            // Get mininginfo
+            const miningInfoData = await helper.rpc(`getmininginfo`, []);
+            if (miningInfoData[0]) { // If an error occurred while fetching the mining information, send the error message.
+                helper.sendErrorMessage(message,
+                    `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                    `*Error fetching mining information.*`);
+                return;
+            }
+
+            // Get the current price
+            const tickerData = await helper.getTicker(`usdt`).catch((error) => {
+                main.log(`Error while fetching price: ${error}`);
+                return undefined;
+            });
+            if (tickerData === undefined) {
+                helper.sendErrorMessage(message,
+                    `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                    `*An error occured while retrieving the price.*`);
+                return;
+            }
+
+            const price = parseFloat(tickerData[`last`]);
+            const mininginfo = miningInfoData[1];
+
+            let hashrate: number;
+            let hashavgraw12: number;
+            let hashavgraw24: number;
+            let nethash: number;
+            let pcnt: number;
+            let pcnt12: number;
+            let pcnt24: number;
+            let nethashconvert: number;
+            let secssolo: number;
+            let secssolo12: number;
+            let secssolo24: number;
+            let minssolo: number;
+            let hrssolo: number;
+            let hrssolo12: number;
+            let hrssolo24: number;
+            let unit: string;
+            let nhunit: string;
+            let netdiff: number;
+
+            if (algoToUse === `x16rt`) {
+                hashrate = hashrateToUse * 1000000;  // Megahashes per second to hashes per second
+                hashavgraw12 = Number((hashavg12 * 1000000000).toFixed(8));
+                hashavgraw24 = Number((hashavg24 * 1000000000).toFixed(8));
+                nethash = mininginfo.networkhashps_x16rt;
+                pcnt = Number((hashrate / nethash * 100).toFixed(5));
+                pcnt12 = Number((hashrate / hashavgraw12 * 100).toFixed(5));
+                pcnt24 = Number((hashrate / hashavgraw24 * 100).toFixed(5));
+                nethashconvert = Number((mininginfo.networkhashps_x16rt / 1000000000).toFixed(8));
+                secssolo = nethash / hashrate * 60;
+                secssolo12 = hashavgraw12 / hashrate * 60;
+                secssolo24 = hashavgraw24 / hashrate * 60;
+                minssolo = Number((secssolo / 60).toFixed(3));
+                hrssolo = Number((minssolo / 60).toFixed(3));
+                hrssolo12 = Number((secssolo12 / 3600).toFixed(3));
+                hrssolo24 = Number((secssolo24 / 3600).toFixed(3));
+                unit = `MH/s`;
+                nhunit = `GH/s`;
+                netdiff = mininginfo.difficulty_x16rt;
+            } else {
+                const hashrate = hashrateToUse * 1000; // Kilohashes per second to hashes per second
+                hashavgraw12 = Number((hashavg12 * 1000000).toFixed(8));
+                hashavgraw24 = Number((hashavg24 * 1000000).toFixed(8));
+                nethash = mininginfo.networkhashps_minotaurx;
+                pcnt = Number((hashrate / nethash * 100).toFixed(5));
+                pcnt12 = Number((hashrate / hashavgraw12 * 100).toFixed(5));
+                pcnt24 = Number((hashrate / hashavgraw24 * 100).toFixed(5));
+                nethashconvert = Number((mininginfo.networkhashps_minotaurx / 1000000).toFixed(8));
+                secssolo = nethash / hashrate * 60;
+                secssolo12 = hashavgraw12 / hashrate * 60;
+                secssolo24 = hashavgraw24 / hashrate * 60;
+                minssolo = Number((secssolo / 60).toFixed(3));
+                hrssolo = Number((minssolo / 60).toFixed(3));
+                hrssolo12 = Number((secssolo12 / 3600).toFixed(3));
+                hrssolo24 = Number((secssolo24 / 3600).toFixed(3));
+                unit = `KH/s`;
+                nhunit = `MH/s`;
+                netdiff = mininginfo.difficulty_minotaurx;
+            }
+
+            const profitpersec = 2500 / secssolo;
+            const profitpersec12 = 2500 / secssolo12;
+            const profitpersec24 = 2500 / secssolo24;
+            const profitpermin = Number((profitpersec * 60).toFixed(8));
+            const profitpermin12 = Number((profitpersec12 * 60).toFixed(8));
+            const profitpermin24 = Number((profitpersec24 * 60).toFixed(8));
+            const profitperhr = Number((profitpersec * 3600).toFixed(8));
+            const profitperhr12 = Number((profitpersec12 * 3600).toFixed(8));
+            const profitperhr24 = Number((profitpersec24 * 3600).toFixed(8));
+            const profitperday = Number((profitperhr * 24).toFixed(8));
+            const profitperday12 = Number((profitperhr12 * 24).toFixed(8));
+            const profitperday24 = Number((profitperhr24 * 24).toFixed(8));
+            const ppminusdt = Number(price * profitpermin).toFixed(8);
+            const ppminusdt12 = Number(price * profitpermin12).toFixed(8);
+            const ppminusdt24 = Number(price * profitpermin24).toFixed(8);
+            const pphrusdt = Number(price * profitperhr).toFixed(8);
+            const pphrusdt12 = Number(price * profitperhr12).toFixed(8);
+            const pphrusdt24 = Number(price * profitperhr24).toFixed(8);
+            const ppdayusdt = Number(price * profitperday).toFixed(8);
+            const ppdayusdt12 = Number(price * profitperday12).toFixed(8);
+            const ppdayusdt24 = Number(price * profitperday24).toFixed(8);
+
+            message.channel.send({
+                embeds: [{
+
+                    description: `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                    color: 1363892,
+                    footer: {
+                        text: 'now = momentary, 12hr = nethash avg over last 12hr, 24hr = nethash avg over last 24hr',
+                    },
+                    fields: [
+
+                        {
+                            name: `Miner Hashrate`,
+                            value: `**now:** ${hashrateToUse + unit} (${pcnt}%)\n**12hr:** ${hashrateToUse + unit} (${pcnt12}%)\n**24hr:** ${hashrateToUse + unit} (${pcnt24}%)`,
+                            inline: true
+                        },
+                        {
+                            name: `Network Hashrate (${nhunit})`,
+                            value: `**now:** ${nethashconvert}\n**12hr:** ${hashavg12}\n**24hr:** ${hashavg24}`,
+                            inline: true
+                        },
+                        {
+                            name: `Time to find (solo)`,
+                            value: `**now:** ${hrssolo} hrs\n**12hr:** ${hrssolo12} hrs\n**24hr:** ${hrssolo24} hrs`,
+                            inline: true
+                        },
+                        {
+                            name: `${config.coin.coinname} per minute`,
+                            value: `**now:** ${profitpermin}\n**12hr:** ${profitpermin12}\n**24hr:** ${profitpermin24}`,
+                            inline: true
+                        },
+                        {
+                            name: `${config.coin.coinname} per hour`,
+                            value: `**now:** ${profitperhr}\n**12hr:** ${profitperhr12}\n**24hr:** ${profitperhr24}`,
+                            inline: true
+                        },
+                        {
+                            name: `${config.coin.coinname} per day`,
+                            value: `**now:** ${profitperday}\n**12hr:** ${profitperday12}\n**24hr:** ${profitperday24}`,
+                            inline: true
+                        },
+                        {
+                            name: `USDT per minute`,
+                            value: `**now:** ${ppminusdt}\n**12hr:** ${ppminusdt12}\n**24hr:** ${ppminusdt24}`,
+                            inline: true
+                        },
+                        {
+                            name: `USDT per hour`,
+                            value: `**now:** ${pphrusdt}\n**12hr:** ${pphrusdt12}\n**24hr:** ${pphrusdt24}`,
+                            inline: true
+                        },
+                        {
+                            name: `USDT per day`,
+                            value: `**now:** ${ppdayusdt}\n**12hr:** ${ppdayusdt12}\n**24hr:** ${ppdayusdt24}`,
+                            inline: true,
+                        },
+                        {
+                            name: `:clock: Time`,
+                            value: date,
+                            inline: false,
+                        },
+                    ],
+                }],
+            }).then((sentMessage) => {
+                // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+                // If it was sent in a DM, don't delete it.
+                if (sentMessage.channel.type === `DM`) {
+                    return;
+                } else {
+                    setTimeout(() => {
+                        sentMessage.delete();
+                    }, config.bot.msgtimeout);
+                }
+            });
+        }
     }
 };
 

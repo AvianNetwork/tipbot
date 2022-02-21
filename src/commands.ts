@@ -194,8 +194,6 @@ const help = (message: Discord.Message) => {
                 {
                     name: `:chains:  Blockchain and Mining  :pick:`,
                     value:
-                        `**${config.bot.prefix} diff:** Display the current network difficulty.\n` +
-                        `**${config.bot.prefix} hash:** Display the current network hashrate.\n` +
                         `**${config.bot.prefix} mininginfo:** Display network mining info.\n` +
                         `**${config.bot.prefix} miningcalc <MinotaurX|X16RT> <KH/s|MH/s>:** Calculate mining returns for MinotaurX or X16RT (Supply hashrate in KH/s for MinotaurX and MH/s for X16RT).\n` +
                         `**${config.bot.prefix} blockchaininfo:** Display blockchain information.\n` +

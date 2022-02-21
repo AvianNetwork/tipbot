@@ -175,12 +175,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.validate);
             break;
 
-        // Bot wallet Utilities
+        // Others
         case `uptime`:
             helper.spamOrDM(message, commands.uptime);
             break;
-
-        // Others
         case `help`:
             helper.spamOrDM(message, commands.help);
             break;

@@ -1,32 +1,32 @@
 {
-  "name": "tipbot",
-  "version": "1.0.0",
-  "description": "Tipbot for Avian",
-  "main": "build/src/index.js",
-  "type": "module",
-  "scripts": {
-    "start": "node build/src/index.js",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AvianNetwork/tipbot.git"
-  },
-  "keywords": [
-    "avian",
-    "avn",
-    "discord"
-  ],
-  "author": "The Avian Developers",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/AvianNetwork/tipbot/issues"
-  },
-  "homepage": "https://github.com/AvianNetwork/tipbot#readme",
-  "dependencies": {
-    "dayjs": "^1.10.7",
-    "discord.js": "^13.6.0",
-    "node-fetch": "^3.2.0",
-    "typescript": "^4.5.5"
-  }
+    "name": "tipbot",
+    "version": "1.0.0",
+    "description": "Tipbot for Avian",
+    "main": "build/src/index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node build/src/index.js",
+        "build": "tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AvianNetwork/tipbot.git"
+    },
+    "keywords": [
+        "avian",
+        "avn",
+        "discord"
+    ],
+    "author": "The Avian Developers",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/AvianNetwork/tipbot/issues"
+    },
+    "homepage": "https://github.com/AvianNetwork/tipbot#readme",
+    "dependencies": {
+        "dayjs": "^1.10.7",
+        "discord.js": "^13.6.0",
+        "node-fetch": "^3.2.0",
+        "typescript": "^4.5.5"
+    }
 }

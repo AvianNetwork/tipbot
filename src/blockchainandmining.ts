@@ -22,6 +22,7 @@ export const mininginfo = async (message: Discord.Message) => {
     const miningInfoData = await helper.rpc(`getmininginfo`, []);
 
     if (miningInfoData[0]) { // If an error occurred while fetching the mining information, send the error message.
+        main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
         helper.sendErrorMessage(message,
             `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) mining information  :robot::tools:**`,
             `*Error fetching mining information.*`);
@@ -136,6 +137,7 @@ export const miningcalc = async (message: Discord.Message) => {
             // Get mininginfo
             const miningInfoData = await helper.rpc(`getmininginfo`, []);
             if (miningInfoData[0]) { // If an error occurred while fetching the mining information, send the error message.
+                main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
                 helper.sendErrorMessage(message,
                     `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                     `*Error fetching mining information.*`);
@@ -322,6 +324,7 @@ export const blockchaininfo = async (message: Discord.Message) => {
     const blockchainInfoData = await helper.rpc(`getblockchaininfo`, []);
 
     if (blockchainInfoData[0]) { // If an error occurred while fetching the blockchain information, send the error message.
+        main.log(`Error while fetching blockchain information: ${blockchainInfoData[0]}`);
         helper.sendErrorMessage(message,
             `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :robot::tools:**`,
             `*Error fetching blockchain information.*`);

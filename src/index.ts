@@ -122,7 +122,9 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             break;
 
         // Wallet commands
-        // TODO: !avn balance
+        case `balance`:
+            helper.spamOrDM(message, commands.balance);
+            break;
         // TODO: !avn deposit
         // TODO: !avn donate
         // TODO: !avn donate <amount>

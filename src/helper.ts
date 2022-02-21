@@ -78,7 +78,7 @@ export const rpc = (method: string, params: any[]): Promise<[string | undefined,
         })).json().catch(() => undefined);
     
         // Resolve with an error if the RPC call failed
-        if (!data || !data[`id`] || data[`error`] || !data[`result`]) {
+        if (!data || !data[`id`] || data[`error`]) {
             resolve([JSON.stringify(data[`error`]), undefined]);
         } else {
             resolve([undefined, data[`result`]]);

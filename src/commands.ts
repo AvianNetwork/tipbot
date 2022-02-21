@@ -317,3 +317,6 @@ export { supply, wealth, qr };
 
 import { mininginfo, miningcalc, blockchaininfo, miners, validate } from "./blockchainandmining.js";
 export { mininginfo, miningcalc, blockchaininfo, miners, validate };
+
+import { balance } from "./wallet.js";
+export { balance };

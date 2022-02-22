@@ -19,12 +19,13 @@ export const config = {
         bitcointalkurl: `https://bitcointalk.org/index.php?topic=5377648`,
         donationaddress: `RDs4A4sDHp4otDHQQuFSaPDYEg2xx3hbdN`,
         webwalleturl: `https://wallet.avn.network/`,
+        explorerurl: `https://explorer.avn.network/`,
     },
     coin: {
         coinname: `Avian`,
         coinsymbol: `avn`,
         paytxfee: 0.005,
-        address: /^[R][a-zA-Z0-9]{32}$/,
+        address: /^[R][a-zA-Z0-9]{33}$/,
         rpc: {
             hostname: `localhost`,
             port: 1234,
@@ -35,11 +36,6 @@ export const config = {
     moderation: {
         logchannel: "",
         botspamchannel: ``,
-    },
-    explorer: {
-        explorerurl: `https://explorer.avn.network/`,
-        explorertxurl: ``,
-        exploreraddressurl: ``,
     },
     wavn: {
         contractaddress: ``,

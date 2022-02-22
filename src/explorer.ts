@@ -21,7 +21,7 @@ export const supply = async (message: Discord.Message) => {
         main.log(`Error fetching price: ${error}`);
         return undefined;
     });
-    const supplyData: any = await (await fetch(`${config.explorer.explorerurl}ext/getmoneysupply`)).text().catch((error) => {
+    const supplyData: any = await (await fetch(`${config.project.explorerurl}ext/getmoneysupply`)).text().catch((error) => {
         main.log(`Error fetching the supply: ${error}`);
         return undefined;
     });
@@ -39,7 +39,7 @@ export const supply = async (message: Discord.Message) => {
                 description: `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) coin supply  :bar_chart:**`,
                 color: 1363892,
                 thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                    url: `${config.project.explorerurl}images/avian_256x256x32.png`,
                 },
                 fields: [
                     {
@@ -70,7 +70,7 @@ export const supply = async (message: Discord.Message) => {
 
 export const wealth = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
-    const wealthData: any = await (await fetch(`${config.explorer.explorerurl}ext/getdistribution`)).json().catch((error) => {
+    const wealthData: any = await (await fetch(`${config.project.explorerurl}ext/getdistribution`)).json().catch((error) => {
         main.log(`Error fetching the supply: ${error}`);
         return undefined;
     });
@@ -110,7 +110,7 @@ export const wealth = async (message: Discord.Message) => {
                 fields: [
                     {
                         name: `__:mag:  ${config.coin.coinname} (${config.coin.coinsymbol}) Explorer  :mag:__`,
-                        value: `*${config.explorer.explorerurl}richlist*`,
+                        value: `*${config.project.explorerurl}richlist*`,
                         inline: false,
                     },
                     {
@@ -261,10 +261,10 @@ export const qr = async (message: Discord.Message) => {
                 description: `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
                 color: 1363892,
                 thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                    url: `${config.project.explorerurl}images/avian_256x256x32.png`,
                 },
                 image: {
-                    url: `${config.explorer.explorerurl}qr/${address}`
+                    url: `${config.project.explorerurl}qr/${address}`
                 },
                 fields: [
                     {

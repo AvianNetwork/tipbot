@@ -35,7 +35,7 @@ const links = (message: Discord.Message) => {
                 },
                 {
                     name: `__Project Explorer__`,
-                    value: `*${config.explorer.explorerurl}*`,
+                    value: `*${config.project.explorerurl}*`,
                     inline: false
                 },
                 {
@@ -234,7 +234,7 @@ const uptime = async (message: Discord.Message) => {
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
                 color: 1363892,
                 thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                    url: `${config.project.explorerurl}images/avian_256x256x32.png`,
                 },
                 fields: [
                     {
@@ -275,7 +275,7 @@ const uptime = async (message: Discord.Message) => {
                 description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
                 color: 1363892,
                 thumbnail: {
-                    url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                    url: `${config.project.explorerurl}images/avian_256x256x32.png`,
                 },
                 fields: [
                     {

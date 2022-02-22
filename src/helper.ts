@@ -121,7 +121,7 @@ export const sendErrorMessage = (message: Discord.Message, description: string, 
             description: description,
             color: 1363892,
             thumbnail: {
-                url: `${config.explorer.explorerurl}images/avian_256x256x32.png`,
+                url: `${config.project.explorerurl}images/avian_256x256x32.png`,
             },
             fields: [
                 {

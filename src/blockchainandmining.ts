@@ -115,11 +115,11 @@ export const miningcalc = async (message: Discord.Message) => {
                 `*An error occured while retrieving the price.*`);
         } else {
             // Get the POW averages from the explorer
-            const data_720: any = await (await fetch(`${config.explorer.explorerurl}ext/powaverages/${algoToUse}/720`)).json().catch((error) => {
+            const data_720: any = await (await fetch(`${config.project.explorerurl}ext/powaverages/${algoToUse}/720`)).json().catch((error) => {
                 main.log(`Error while fetching POW averages: ${error}`);
                 return undefined;
             });
-            const data_1440: any = await (await fetch(`${config.explorer.explorerurl}ext/powaverages/${algoToUse}/1440`)).json().catch((error) => {
+            const data_1440: any = await (await fetch(`${config.project.explorerurl}ext/powaverages/${algoToUse}/1440`)).json().catch((error) => {
                 main.log(`Error while fetching POW averages: ${error}`);
                 return undefined;
             });

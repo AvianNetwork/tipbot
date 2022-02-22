@@ -106,7 +106,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
     // Reply to pings
     if (message.content.includes(`<@!${bot.user?.id}>`)) {
-        message.channel.send(`yes?`);
+        message.reply(`yes?`);
     }
 
     // Make sure the message starts with the prefix

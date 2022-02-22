@@ -25,7 +25,7 @@ export const balance = async (message: Discord.Message) => {
         return;
     } else {
         if (message.channel.type !== `DM`) {
-            message.channel.send({
+            message.reply({
                 embeds: [{
                     description: `**:bank::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Balance sent!:moneybag::money_with_wings::bank:**`,
                     color: 1363892,
@@ -94,7 +94,7 @@ export const deposit = async (message: Discord.Message) => {
 
     if (addressesByAccount[1].length > 0) { // If the user already has a deposit address, send it
         if (message.channel.type !== `DM`) {
-            message.channel.send({
+            message.reply({
                 embeds: [{
                     description: `**:bank::card_index::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Deposit address sent!:moneybag::card_index::bank:**`,
                     color: 1363892,
@@ -157,7 +157,7 @@ export const deposit = async (message: Discord.Message) => {
         }
 
         if (message.channel.type !== `DM`) {
-            message.channel.send({
+            message.reply({
                 embeds: [{
                     description: `**:bank::card_index::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Deposit address sent!:moneybag::card_index::bank:**`,
                     color: 1363892,

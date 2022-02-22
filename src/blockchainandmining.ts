@@ -240,7 +240,7 @@ export const miningcalc = async (message: Discord.Message) => {
             const ppdayusdt12 = Number(price * profitperday12).toFixed(8);
             const ppdayusdt24 = Number(price * profitperday24).toFixed(8);
 
-            message.channel.send({
+            message.reply({
                 embeds: [{
 
                     description: `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,

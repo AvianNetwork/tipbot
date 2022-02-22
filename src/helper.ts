@@ -35,7 +35,7 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
         callback(message);
     } else {
         // If it isn't, send a message indicating the user should use the bot in the spam channel or DM
-        message.channel.send({
+        message.reply({
             embeds: [{
                 description: `**:robot: ${config.coin.coinname} (${config.coin.coinsymbol}) bot :robot:**`,
                 color: 1363892,

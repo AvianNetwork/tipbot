@@ -123,10 +123,13 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
         // Wallet commands
         case `balance`:
-            helper.spamOrDM(message, commands.balance);
+            commands.balance(message);
             break;
         case `deposit`:
             helper.spamOrDM(message, commands.deposit);
+            break;
+        case `donate`:
+            helper.spamOrDM(message, commands.donate);
             break;
         // TODO: !avn donate
         // TODO: !avn donate <amount>

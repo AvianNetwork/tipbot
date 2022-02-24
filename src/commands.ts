@@ -85,17 +85,7 @@ const links = (message: Discord.Message) => {
                 },
             ],
         }],
-    }).then((sentMessage) => {
-        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-        // If it was sent in a DM, don't delete it.
-        if (sentMessage.channel.type === `DM`) {
-            return;
-        } else {
-            setTimeout(() => {
-                sentMessage.delete();
-            }, config.bot.msgtimeout);
-        }
-    });
+    }).then(helper.deleteAfterTimeout);
 };
 
 const exchanges = (message: Discord.Message) => {
@@ -128,17 +118,7 @@ const exchanges = (message: Discord.Message) => {
                 },
             ],
         }],
-    }).then((sentMessage) => {
-        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-        // If it was sent in a DM, don't delete it.
-        if (sentMessage.channel.type === `DM`) {
-            return;
-        } else {
-            setTimeout(() => {
-                sentMessage.delete();
-            }, config.bot.msgtimeout);
-        }
-    });
+    }).then(helper.deleteAfterTimeout);
 };
 
 const help = (message: Discord.Message) => {
@@ -209,17 +189,7 @@ const help = (message: Discord.Message) => {
                 },
             ],
         }],
-    }).then((sentMessage) => {
-        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-        // If it was sent in a DM, don't delete it.
-        if (sentMessage.channel.type === `DM`) {
-            return;
-        } else {
-            setTimeout(() => {
-                sentMessage.delete();
-            }, config.bot.msgtimeout);
-        }
-    });
+    }).then(helper.deleteAfterTimeout);
 }
 
 const uptime = async (message: Discord.Message) => {
@@ -249,17 +219,7 @@ const uptime = async (message: Discord.Message) => {
                     },
                 ],
             }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        }).then(helper.deleteAfterTimeout);
 
         // Log the error
         main.log(`Error while fetching uptime: ${walletUptimeData[0]}`);
@@ -295,17 +255,7 @@ const uptime = async (message: Discord.Message) => {
                     },
                 ],
             }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        }).then(helper.deleteAfterTimeout);
     }
 };
 
@@ -318,5 +268,5 @@ export { supply, wealth, qr };
 import { mininginfo, miningcalc, blockchaininfo, miners, validate } from "./blockchainandmining.js";
 export { mininginfo, miningcalc, blockchaininfo, miners, validate };
 
-import { balance, deposit, donate } from "./wallet.js";
-export { balance, deposit, donate };
+import { balance, deposit, donate, withdraw } from "./wallet.js";
+export { balance, deposit, donate, withdraw };

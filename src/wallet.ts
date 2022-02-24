@@ -42,17 +42,7 @@ export const balance = async (message: Discord.Message) => {
                         },
                     ],
                 }],
-            }).then((sentMessage) => {
-                // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-                // If it was sent in a DM, don't delete it.
-                if (sentMessage.channel.type === `DM`) {
-                    return;
-                } else {
-                    setTimeout(() => {
-                        sentMessage.delete();
-                    }, config.bot.msgtimeout);
-                }
-            });
+            }).then(helper.deleteAfterTimeout);
         }
 
         // Send the balance via DM
@@ -111,17 +101,7 @@ export const deposit = async (message: Discord.Message) => {
                         },
                     ],
                 }],
-            }).then((sentMessage) => {
-                // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-                // If it was sent in a DM, don't delete it.
-                if (sentMessage.channel.type === `DM`) {
-                    return;
-                } else {
-                    setTimeout(() => {
-                        sentMessage.delete();
-                    }, config.bot.msgtimeout);
-                }
-            });
+            }).then(helper.deleteAfterTimeout);
         }
 
         message.author.send({
@@ -174,17 +154,7 @@ export const deposit = async (message: Discord.Message) => {
                         },
                     ],
                 }],
-            }).then((sentMessage) => {
-                // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-                // If it was sent in a DM, don't delete it.
-                if (sentMessage.channel.type === `DM`) {
-                    return;
-                } else {
-                    setTimeout(() => {
-                        sentMessage.delete();
-                    }, config.bot.msgtimeout);
-                }
-            });
+            }).then(helper.deleteAfterTimeout);
         }
 
         message.author.send({
@@ -258,17 +228,7 @@ export const donate = async (message: Discord.Message) => {
                         },
                     ],
                 }],
-            }).then((sentMessage) => {
-                // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-                // If it was sent in a DM, don't delete it.
-                if (sentMessage.channel.type === `DM`) {
-                    return;
-                } else {
-                    setTimeout(() => {
-                        sentMessage.delete();
-                    }, config.bot.msgtimeout);
-                }
-            });
+            }).then(helper.deleteAfterTimeout);
         }
 
         message.author.send({
@@ -331,17 +291,7 @@ export const donate = async (message: Discord.Message) => {
                         },
                     ],
                 }],
-            }).then((sentMessage) => {
-                // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-                // If it was sent in a DM, don't delete it.
-                if (sentMessage.channel.type === `DM`) {
-                    return;
-                } else {
-                    setTimeout(() => {
-                        sentMessage.delete();
-                    }, config.bot.msgtimeout);
-                }
-            })
+            }).then(helper.deleteAfterTimeout)
         });
     } else { // If the user didn't want to donate, show the donate menu
         message.reply({
@@ -365,17 +315,9 @@ export const donate = async (message: Discord.Message) => {
                     },
                 ],
             }],
-        }).then((sentMessage) => {
-            // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-            // If it was sent in a DM, don't delete it.
-            if (sentMessage.channel.type === `DM`) {
-                return;
-            } else {
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.msgtimeout);
-            }
-        });
+        }).then(helper.deleteAfterTimeout);
         return;
     }
 };
+
+export const withdraw = (message: Discord.Message) => {};

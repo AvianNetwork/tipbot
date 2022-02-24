@@ -76,7 +76,7 @@ export const rpc = (method: string, params: any[]): Promise<[string | undefined,
                 params: params,
             }),
         })).json().catch(() => undefined);
-    
+
         // Resolve with an error if the RPC call failed
         if (!data || !data[`id`] || data[`error`]) {
             resolve([JSON.stringify(data[`error`]), undefined]);
@@ -107,11 +107,23 @@ export const getTicker = async (asset: string = "usdt"): Promise<{ // Set this b
             reject(data[`error`][0]);
             return;
         }
-        
+
         // If no error has occurred, resolve the promise
         resolve(data[`ticker`]);
         return;
     });
+};
+
+export const deleteAfterTimeout = (sentMessage: Discord.Message) => {
+    // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
+    // If it was sent in a DM, don't delete it.
+    if (sentMessage.channel.type === `DM`) {
+        return;
+    } else {
+        setTimeout(() => {
+            sentMessage.delete();
+        }, config.bot.msgtimeout);
+    }
 };
 
 export const sendErrorMessage = (message: Discord.Message, description: string, error: string) => {
@@ -136,15 +148,5 @@ export const sendErrorMessage = (message: Discord.Message, description: string, 
                 },
             ],
         }],
-    }).then((sentMessage) => {
-        // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-        // If it was sent in a DM, don't delete it.
-        if (sentMessage.channel.type === `DM`) {
-            return;
-        } else {
-            setTimeout(() => {
-                sentMessage.delete();
-            }, config.bot.msgtimeout);
-        }
-    });
+    }).then(deleteAfterTimeout);
 };

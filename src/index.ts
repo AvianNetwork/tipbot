@@ -131,8 +131,9 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `donate`:
             helper.spamOrDM(message, commands.donate);
             break;
-        // TODO: !avn donate
-        // TODO: !avn donate <amount>
+        case `withdraw`:
+            helper.spamOrDM(message, commands.withdraw);
+            break;
         // TODO: !avn withdraw <address> <amount>
         // TODO: !avn tip <@user> <amount>
         // TODO: !avn walletversion

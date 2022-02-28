@@ -24,7 +24,7 @@ export const config = {
     coin: {
         coinname: `Avian`,
         coinsymbol: `avn`,
-        paytxfee: 0.005,
+        paytxfee: 0.01,
         address: /^[R][a-zA-Z0-9]{33}$/,
         rpc: {
             hostname: `localhost`,

@@ -169,7 +169,7 @@ export const miningcalc = async (message: Discord.Message) => {
             let netdiff: number;
 
             if (algoToUse === `x16rt`) {
-                hashrate = hashrateToUse * 1000000;  // Megahashes per second to hashes per second
+                hashrate = hashrateToUse * 1000000; // Megahashes per second to hashes per second
                 hashavgraw12 = Number((hashavg12 * 1000000000).toFixed(8));
                 hashavgraw24 = Number((hashavg24 * 1000000000).toFixed(8));
                 nethash = mininginfo.networkhashps_x16rt;
@@ -188,7 +188,7 @@ export const miningcalc = async (message: Discord.Message) => {
                 nhunit = `GH/s`;
                 netdiff = mininginfo.difficulty_x16rt;
             } else {
-                const hashrate = hashrateToUse * 1000; // Kilohashes per second to hashes per second
+                hashrate = hashrateToUse * 1000; // Kilohashes per second to hashes per second
                 hashavgraw12 = Number((hashavg12 * 1000000).toFixed(8));
                 hashavgraw24 = Number((hashavg24 * 1000000).toFixed(8));
                 nethash = mininginfo.networkhashps_minotaurx;
@@ -232,14 +232,12 @@ export const miningcalc = async (message: Discord.Message) => {
 
             message.reply({
                 embeds: [{
-
                     description: `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                     color: 1363892,
                     footer: {
-                        text: 'now = momentary, 12hr = nethash avg over last 12hr, 24hr = nethash avg over last 24hr',
+                        text: `now = momentary, 12hr = nethash avg over last 12hr, 24hr = nethash avg over last 24hr',`
                     },
                     fields: [
-
                         {
                             name: `Miner Hashrate`,
                             value: `**now:** ${hashrateToUse + unit} (${pcnt}%)\n**12hr:** ${hashrateToUse + unit} (${pcnt12}%)\n**24hr:** ${hashrateToUse + unit} (${pcnt24}%)`,
@@ -402,13 +400,7 @@ export const validate = async (message: Discord.Message) => {
             `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
             `*Please specify an address.*`);
     } else {
-        const valid = config.coin.address.test(address);
-        let validity
-        if (valid) {
-            validity = `:white_check_mark: Valid ${config.coin.coinname} address.`;
-        } else {
-            validity = `:x: Invalid ${config.coin.coinname} address.`;
-        }
+        const validity = config.coin.address.test(address) ? `:white_check_mark: Valid ${config.coin.coinname} address.` : `:x: Invalid ${config.coin.coinname} address.`;
 
         message.reply({
             embeds: [{

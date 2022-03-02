@@ -551,7 +551,50 @@ export const withdraw = async (message: Discord.Message) => {
 
 export const tip = (message: Discord.Message) => {};
 
-export const walletversion = (message: Discord.Message) => {};
+export const walletversion = async (message: Discord.Message) => {
+    const networkInfoData = await helper.rpc(`getnetworkinfo`, []);
+    if (networkInfoData[0]) {
+        helper.sendErrorMessage(
+            message,
+            `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Wallet Version :outbox_tray::money_with_wings::moneybag:**`,
+            `An error occured while getting the wallet version.`,
+        );
+        return;
+    }
+
+    // Send the message
+    message.channel
+        .send({
+            embeds: [
+                {
+                    description: `**:robot: ${config.coin.coinname} (${config.coin.coinsymbol}) Bot wallet version information :robot:**`,
+                    color: 1363892,
+                    footer: {
+                        text: `Avian Network`,
+                        icon_url: `https://explorer.avn.network/images/avian_256x256x32.png`,
+                    },
+                    fields: [
+                        {
+                            name: `__Wallet Version__`,
+                            value: `**${networkInfoData[1]["version"]}**`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Sub version__`,
+                            value: `**${networkInfoData[1]["subversion"]}**`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Protocol version__`,
+                            value: `**${networkInfoData[1]["protocolversion"]}**`,
+                            inline: true,
+                        },
+                    ],
+                },
+            ],
+        })
+        .then(helper.deleteAfterTimeout);
+};
 
 export const privatekey = async (message: Discord.Message) => {
     // Get the user's address

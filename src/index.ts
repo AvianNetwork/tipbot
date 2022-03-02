@@ -144,12 +144,10 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `walletversion`:
             helper.spamOrDM(message, commands.walletversion);
             break;
-        // TODO: !avn walletversion
         case `privkey`:
         case `privatekey`:
             helper.spamOrDM(message, commands.privatekey);
             break;
-        // TODO: !avn privkey
 
         // Market data
         case `exchanges`:

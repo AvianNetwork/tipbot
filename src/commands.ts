@@ -157,7 +157,7 @@ const help = (message: Discord.Message) => {
                                 `**${config.bot.prefix} withdraw <address> <amount>:** Withdraw ${config.coin.coinname} to specified address.\n` +
                                 `**${config.bot.prefix} tip <@user> <amount>:** Mention an user with @ and the amount to tip them.\n` +
                                 `**${config.bot.prefix} walletversion:** Display the bots' wallet version.\n` +
-                                `**${config.bot.prefix} privkey:** Send the private key for your wallet to your DM.\n\u200b`,
+                                `**${config.bot.prefix} privatekey:** Send the private key for your wallet to your DM.\n\u200b`,
                             inline: false,
                         },
                         {

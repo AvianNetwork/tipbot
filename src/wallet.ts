@@ -77,7 +77,7 @@ export const balance = async (message: Discord.Message) => {
                 helper.sendErrorMessage(
                     message,
                     `**:bank::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) balance :moneybag::money_with_wings::bank:**`,
-                    `**:x:  Balance was not able to be sent via DM, do you have DM's disabled?**`,
+                    `**Balance was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });
     }
@@ -156,7 +156,7 @@ export const deposit = async (message: Discord.Message) => {
                 helper.sendErrorMessage(
                     message,
                     `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
-                    `**:x:  Deposit address was not able to be sent via DM, do you have DM's disabled?**`,
+                    `**Deposit address was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });
     } else {
@@ -225,7 +225,7 @@ export const deposit = async (message: Discord.Message) => {
                 helper.sendErrorMessage(
                     message,
                     `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
-                    `**:x:  Deposit address was not able to be sent via DM, do you have DM's disabled?**`,
+                    `**Deposit address was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });
     }
@@ -351,7 +351,7 @@ export const donate = async (message: Discord.Message) => {
                                     },
                                     {
                                         name: `Uh oh!`,
-                                        value: `**:x:  Donation receipt was not able to be sent via DM, do you have DM's disabled?**`,
+                                        value: `**Donation receipt was not able to be sent via DM, do you have DM's disabled?**`,
                                         inline: false,
                                     },
                                     {
@@ -517,7 +517,7 @@ export const withdraw = async (message: Discord.Message) => {
                                         },
                                         {
                                             name: `Uh oh!`,
-                                            value: `**:x:  Withdrawal receipt was not able to be sent via DM, do you have DM\'s disabled?**`,
+                                            value: `**Withdrawal receipt was not able to be sent via DM, do you have DM\'s disabled?**`,
                                             inline: false,
                                         },
                                         {
@@ -553,4 +553,171 @@ export const tip = (message: Discord.Message) => {};
 
 export const walletversion = (message: Discord.Message) => {};
 
-export const privatekey = async (message: Discord.Message) => {};
+export const privatekey = async (message: Discord.Message) => {
+    // Get the user's address
+    const addressesByAccount = await helper.rpc(`getaddressesbyaccount`, [message.author.id]);
+    if (addressesByAccount[0]) {
+        main.log(
+            `Error while getting the address for user ${message.author.id}: ${addressesByAccount[0]}`,
+        );
+        helper.sendErrorMessage(
+            message,
+            `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+            `An error occured while getting your address.`,
+        );
+        return;
+    }
+
+    if (addressesByAccount[1].length > 0) {
+        // If the user already has an address, send the private key of it
+        const privateKey = await helper.rpc(`dumpprivkey`, [addressesByAccount[1][0]]);
+        if (privateKey[0]) {
+            main.log(
+                `Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`,
+            );
+            helper.sendErrorMessage(
+                message,
+                `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                `An error occured while dumping your private key.`,
+            );
+            return;
+        }
+
+        if (message.channel.type !== `DM`) {
+            message
+                .reply({
+                    embeds: [
+                        {
+                            description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key sent:moneybag::money_with_wings::closed_lock_with_key:**`,
+                            color: 1363892,
+                            fields: [
+                                {
+                                    name: `__User__`,
+                                    value: `<@${message.author.id}>`,
+                                    inline: false,
+                                },
+                                {
+                                    name: `Success!`,
+                                    value: `**:lock: Private key sent via DM**`,
+                                    inline: false,
+                                },
+                            ],
+                        },
+                    ],
+                })
+                .then(helper.deleteAfterTimeout);
+        }
+
+        message.author
+            .send({
+                embeds: [
+                    {
+                        description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) your private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                        color: 1363892,
+                        fields: [
+                            {
+                                name: `__User__`,
+                                value: `<@${message.author.id}>`,
+                                inline: false,
+                            },
+                            {
+                                name: `__Private key__`,
+                                value: `**${privateKey[1]}**`,
+                                inline: false,
+                            },
+                        ],
+                    },
+                ],
+            })
+            .catch(() => {
+                // If the user has their DMs disabled, send an error message
+                helper.sendErrorMessage(
+                    message,
+                    `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                    `**Your private key was not able to be sent via DM, do you have DM's disabled?**`,
+                );
+            });
+    } else {
+        // If the user doesn't have an address, generate one and send the private key of it
+        const newAddress = await helper.rpc(`getnewaddress`, [message.author.id]);
+        if (newAddress[0]) {
+            main.log(
+                `Error while generating new address for user ${message.author.id}: ${newAddress[0]}`,
+            );
+            helper.sendErrorMessage(
+                message,
+                `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
+                `An error occured while generating a new deposit address.`,
+            );
+            return;
+        }
+
+        const privateKey = await helper.rpc(`dumpprivkey`, [newAddress[1]]);
+        if (privateKey[0]) {
+            main.log(
+                `Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`,
+            );
+            helper.sendErrorMessage(
+                message,
+                `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                `An error occured while dumping your private key.`,
+            );
+            return;
+        }
+
+        if (message.channel.type !== `DM`) {
+            message
+                .reply({
+                    embeds: [
+                        {
+                            description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key sent:moneybag::money_with_wings::closed_lock_with_key:**`,
+                            color: 1363892,
+                            fields: [
+                                {
+                                    name: `__User__`,
+                                    value: `<@${message.author.id}>`,
+                                    inline: false,
+                                },
+                                {
+                                    name: `Success!`,
+                                    value: `**:lock: Private key sent via DM**`,
+                                    inline: false,
+                                },
+                            ],
+                        },
+                    ],
+                })
+                .then(helper.deleteAfterTimeout);
+        }
+
+        message.author
+            .send({
+                embeds: [
+                    {
+                        description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) your private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                        color: 1363892,
+                        fields: [
+                            {
+                                name: `__User__`,
+                                value: `<@${message.author.id}>`,
+                                inline: false,
+                            },
+                            {
+                                name: `__Private key__`,
+                                value: `**${privateKey[1]}**`,
+                                inline: false,
+                            },
+                        ],
+                    },
+                ],
+            })
+            .catch(() => {
+                // If the user has their DMs disabled, send an error message
+                helper.sendErrorMessage(
+                    message,
+                    `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                    `**Your private key was not able to be sent via DM, do you have DM's disabled?**`,
+                );
+            });
+    }
+};

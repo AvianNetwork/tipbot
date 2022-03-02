@@ -5,9 +5,9 @@
     "main": "build/src/index.js",
     "type": "module",
     "scripts": {
-        "start": "node build/src/index.js",
+        "start": "node .",
         "build": "tsc",
-        "format": "prettier src/**/* -w"
+        "format": "prettier -w src/**/*"
     },
     "repository": {
         "type": "git",

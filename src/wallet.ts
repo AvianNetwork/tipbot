@@ -441,3 +441,9 @@ export const withdraw = async (message: Discord.Message) => {
         return;
     }
 };
+
+export const tip = (message: Discord.Message) => {};
+
+export const walletversion = (message: Discord.Message) => {};
+
+export const privatekey = async (message: Discord.Message) => {};

@@ -134,9 +134,18 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `withdraw`:
             helper.spamOrDM(message, commands.withdraw);
             break;
-        // TODO: !avn withdraw <address> <amount>
+        case `tip`:
+            helper.spamOrDM(message, commands.tip);
+            break;
         // TODO: !avn tip <@user> <amount>
+        case `walletversion`:
+            helper.spamOrDM(message, commands.walletversion);
+            break;
         // TODO: !avn walletversion
+        case `privkey`:
+        case `privatekey`:
+            helper.spamOrDM(message, commands.privatekey);
+            break;
         // TODO: !avn privkey
 
         // Market data

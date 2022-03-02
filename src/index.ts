@@ -21,13 +21,8 @@ let spamChannel: Discord.TextChannel;
 
 // Create the bot
 const bot = new Discord.Client({
-    intents: [
-        `GUILDS`,
-        `GUILD_MESSAGES`,
-        `DIRECT_MESSAGES`,
-        `GUILD_PRESENCES`
-    ],
-    partials: [`CHANNEL`]
+    intents: [`GUILDS`, `GUILD_MESSAGES`, `DIRECT_MESSAGES`, `GUILD_PRESENCES`],
+    partials: [`CHANNEL`],
 });
 
 // When the bot logged in
@@ -50,8 +45,16 @@ bot.on(`ready`, async () => {
     }
 
     // Send startup messages
-    console.log(`[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${bot.user?.id}).`);
-    logChannel.send(`[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${bot.user?.id}).`);
+    console.log(
+        `[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${
+            bot.user?.id
+        }).`,
+    );
+    logChannel.send(
+        `[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${
+            bot.user?.id
+        }).`,
+    );
 
     // Set the bot presence
     setInterval(async () => {

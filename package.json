@@ -6,7 +6,8 @@
     "type": "module",
     "scripts": {
         "start": "node build/src/index.js",
-        "build": "tsc"
+        "build": "tsc",
+        "format": "prettier src/**/* -w"
     },
     "repository": {
         "type": "git",
@@ -28,5 +29,8 @@
         "discord.js": "^13.6.0",
         "node-fetch": "^3.2.1",
         "typescript": "^4.6.2"
+    },
+    "devDependencies": {
+        "prettier": "^2.5.1"
     }
 }

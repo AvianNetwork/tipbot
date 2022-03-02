@@ -3,10 +3,7 @@ export const config = {
         token: ``,
         prefix: `!avn`,
         msgtimeout: 120000, // 2 minutes
-        timezone: [
-            `Europe/Amsterdam`,
-            `HH:mm:ss DD/MM/YYYY`,
-        ],
+        timezone: [`Europe/Amsterdam`, `HH:mm:ss DD/MM/YYYY`],
     },
     project: {
         siteurl: `https://avn.network/`,
@@ -34,7 +31,7 @@ export const config = {
         },
     },
     moderation: {
-        logchannel: "",
+        logchannel: ``,
         botspamchannel: ``,
     },
     wavn: {

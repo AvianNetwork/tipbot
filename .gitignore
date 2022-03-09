@@ -2,7 +2,10 @@
 node_modules/
 
 # Build files
-build
+build/
 
-# Config files
+# Config file
 config.ts
+
+# Log files
+logs/

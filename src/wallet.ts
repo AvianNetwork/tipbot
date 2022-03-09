@@ -17,7 +17,9 @@ import * as helper from "./helper.js";
 export const balance = async (message: Discord.Message) => {
     const balanceData = await helper.rpc(`getbalance`, [message.author.id, 1]);
     if (balanceData[0]) {
-        main.log(`Error while fetching balance for user ${message.author.id}: ${balanceData[0]}`);
+        await main.log(
+            `Error while fetching balance for user ${message.author.id}: ${balanceData[0]}`,
+        );
         helper.sendErrorMessage(
             message,
             `**:bank::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) balance :moneybag::money_with_wings::bank:**`,
@@ -87,7 +89,7 @@ export const deposit = async (message: Discord.Message) => {
     // Check if the user already has a deposit address
     const addressesByAccount = await helper.rpc(`getaddressesbyaccount`, [message.author.id]);
     if (addressesByAccount[0]) {
-        main.log(
+        await main.log(
             `Error while generating new address for user ${message.author.id}: ${addressesByAccount[0]}`,
         );
         helper.sendErrorMessage(
@@ -163,7 +165,7 @@ export const deposit = async (message: Discord.Message) => {
         // If the user doesn't have a deposit address, generate one and send it
         const newAddress = await helper.rpc(`getnewaddress`, [message.author.id]);
         if (newAddress[0]) {
-            main.log(
+            await main.log(
                 `Error while generating new address for user ${message.author.id}: ${newAddress[0]}`,
             );
             helper.sendErrorMessage(
@@ -239,7 +241,9 @@ export const donate = async (message: Discord.Message) => {
         // Get the balance of the user
         const balance = await helper.rpc(`getbalance`, [message.author.id]);
         if (balance[0]) {
-            main.log(`Error while getting balance of user ${message.author.id}: ${balance[0]}`);
+            await main.log(
+                `Error while getting balance of user ${message.author.id}: ${balance[0]}`,
+            );
             helper.sendErrorMessage(
                 message,
                 `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
@@ -265,7 +269,9 @@ export const donate = async (message: Discord.Message) => {
             amount,
         ]);
         if (txidData[0]) {
-            main.log(`Error while donating to ${config.project.donationaddress}: ${txidData[0]}`);
+            await main.log(
+                `Error while donating to ${config.project.donationaddress}: ${txidData[0]}`,
+            );
             helper.sendErrorMessage(
                 message,
                 `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
@@ -408,7 +414,9 @@ export const withdraw = async (message: Discord.Message) => {
             // Get the balance of the user
             const balance = await helper.rpc("getbalance", [message.author.id]);
             if (balance[0]) {
-                main.log(`Error while getting balance of user ${message.author.id}: ${balance[0]}`);
+                await main.log(
+                    `Error while getting balance of user ${message.author.id}: ${balance[0]}`,
+                );
                 helper.sendErrorMessage(
                     message,
                     `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
@@ -434,7 +442,7 @@ export const withdraw = async (message: Discord.Message) => {
                 Number(amount),
             ]);
             if (txidData[0]) {
-                main.log(
+                await main.log(
                     `Error while donating to ${config.project.donationaddress}: ${txidData[0]}`,
                 );
                 helper.sendErrorMessage(
@@ -600,7 +608,7 @@ export const privatekey = async (message: Discord.Message) => {
     // Get the user's address
     const addressesByAccount = await helper.rpc(`getaddressesbyaccount`, [message.author.id]);
     if (addressesByAccount[0]) {
-        main.log(
+        await main.log(
             `Error while getting the address for user ${message.author.id}: ${addressesByAccount[0]}`,
         );
         helper.sendErrorMessage(
@@ -615,7 +623,7 @@ export const privatekey = async (message: Discord.Message) => {
         // If the user already has an address, send the private key of it
         const privateKey = await helper.rpc(`dumpprivkey`, [addressesByAccount[1][0]]);
         if (privateKey[0]) {
-            main.log(
+            await main.log(
                 `Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`,
             );
             helper.sendErrorMessage(
@@ -684,7 +692,7 @@ export const privatekey = async (message: Discord.Message) => {
         // If the user doesn't have an address, generate one and send the private key of it
         const newAddress = await helper.rpc(`getnewaddress`, [message.author.id]);
         if (newAddress[0]) {
-            main.log(
+            await main.log(
                 `Error while generating new address for user ${message.author.id}: ${newAddress[0]}`,
             );
             helper.sendErrorMessage(
@@ -697,7 +705,7 @@ export const privatekey = async (message: Discord.Message) => {
 
         const privateKey = await helper.rpc(`dumpprivkey`, [newAddress[1]]);
         if (privateKey[0]) {
-            main.log(
+            await main.log(
                 `Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`,
             );
             helper.sendErrorMessage(

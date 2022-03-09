@@ -23,7 +23,7 @@ export const mininginfo = async (message: Discord.Message) => {
 
     if (miningInfoData[0]) {
         // If an error occurred while fetching the mining information, send the error message.
-        main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
+        await main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
         helper.sendErrorMessage(
             message,
             `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) mining information  :robot::tools:**`,
@@ -114,8 +114,8 @@ export const miningcalc = async (message: Discord.Message) => {
         const algoToUse = algorithm.toLowerCase();
         const hashrateToUse = Number(parseFloat(hashrate).toFixed(3));
 
-        const currentPriceTicker = await helper.getTicker(`usdt`).catch((error) => {
-            main.log(`Error while fetching price: ${error}`);
+        const currentPriceTicker = await helper.getTicker(`usdt`).catch(async (error) => {
+            await main.log(`Error while fetching price: ${error}`);
             return undefined;
         });
 
@@ -131,16 +131,16 @@ export const miningcalc = async (message: Discord.Message) => {
                 await fetch(`${config.project.explorerurl}ext/powaverages/${algoToUse}/720`)
             )
                 .json()
-                .catch((error) => {
-                    main.log(`Error while fetching POW averages: ${error}`);
+                .catch(async (error) => {
+                    await main.log(`Error while fetching POW averages: ${error}`);
                     return undefined;
                 });
             const data_1440: any = await (
                 await fetch(`${config.project.explorerurl}ext/powaverages/${algoToUse}/1440`)
             )
                 .json()
-                .catch((error) => {
-                    main.log(`Error while fetching POW averages: ${error}`);
+                .catch(async (error) => {
+                    await main.log(`Error while fetching POW averages: ${error}`);
                     return undefined;
                 });
 
@@ -160,7 +160,7 @@ export const miningcalc = async (message: Discord.Message) => {
             const miningInfoData = await helper.rpc(`getmininginfo`, []);
             if (miningInfoData[0]) {
                 // If an error occurred while fetching the mining information, send the error message.
-                main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
+                await main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
                 helper.sendErrorMessage(
                     message,
                     `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
@@ -170,8 +170,8 @@ export const miningcalc = async (message: Discord.Message) => {
             }
 
             // Get the current price
-            const tickerData = await helper.getTicker(`usdt`).catch((error) => {
-                main.log(`Error while fetching price: ${error}`);
+            const tickerData = await helper.getTicker(`usdt`).catch(async (error) => {
+                await main.log(`Error while fetching price: ${error}`);
                 return undefined;
             });
             if (tickerData === undefined) {
@@ -348,7 +348,7 @@ export const blockchaininfo = async (message: Discord.Message) => {
 
     if (blockchainInfoData[0]) {
         // If an error occurred while fetching the blockchain information, send the error message.
-        main.log(`Error while fetching blockchain information: ${blockchainInfoData[0]}`);
+        await main.log(`Error while fetching blockchain information: ${blockchainInfoData[0]}`);
         helper.sendErrorMessage(
             message,
             `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :robot::tools:**`,

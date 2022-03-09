@@ -241,7 +241,7 @@ const uptime = async (message: Discord.Message) => {
             .then(helper.deleteAfterTimeout);
 
         // Log the error
-        main.log(`Error while fetching uptime: ${walletUptimeData[0]}`);
+        await main.log(`Error while fetching uptime: ${walletUptimeData[0]}`);
         return;
     } else {
         // Get the wallet uptime and bot uptime in days

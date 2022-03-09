@@ -17,14 +17,14 @@ import * as helper from "./helper.js";
 
 export const supply = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
-    const price = await helper.getTicker(`usdt`).catch((error) => {
-        main.log(`Error fetching price: ${error}`);
+    const price = await helper.getTicker(`usdt`).catch(async (error) => {
+        await main.log(`Error fetching price: ${error}`);
         return undefined;
     });
     const supplyData: any = await (await fetch(`${config.project.explorerurl}ext/getmoneysupply`))
         .text()
-        .catch((error) => {
-            main.log(`Error fetching the supply: ${error}`);
+        .catch(async (error) => {
+            await main.log(`Error fetching the supply: ${error}`);
             return undefined;
         });
 
@@ -75,8 +75,8 @@ export const wealth = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
     const wealthData: any = await (await fetch(`${config.project.explorerurl}ext/getdistribution`))
         .json()
-        .catch((error) => {
-            main.log(`Error fetching the supply: ${error}`);
+        .catch(async (error) => {
+            await main.log(`Error fetching the supply: ${error}`);
             return undefined;
         });
 

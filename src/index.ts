@@ -3,7 +3,7 @@ import { config } from "../config.js";
 
 // Import the required packages
 import Discord from "discord.js";
-import fetch from "node-fetch";
+import fs from "fs/promises";
 
 import dayjs from "dayjs";
 import dayjs_utc from "dayjs/plugin/utc.js";
@@ -56,10 +56,16 @@ bot.on(`ready`, async () => {
         }).`,
     );
 
+    // Create the logs folder if it doesn't exist yet
+    fs.mkdir(`./logs`).catch(() => {});
+
     // Set the bot presence
     setInterval(async () => {
-        const ticker = await helper.getTicker("usdt").catch((error) => {
-            console.error(`[${helper.getTime()}] Error while fetching Exbitron price: ${error}`);
+        const ticker = await helper.getTicker("usdt").catch(async (error) => {
+            await fs.appendFile(
+                `logs/exbitron.log`,
+                `[${helper.getTime()}] Error while fetching Exbitron price: ${error}\n`,
+            );
             logChannel.send(`[${helper.getTime()}] Error while fetching Exbitron price: ${error}`);
             return undefined;
         });
@@ -69,36 +75,46 @@ bot.on(`ready`, async () => {
     }, 60 * 1000); // Every minute
 });
 
-// Function to send messages to the log channel as well as the console
-export const log = (message: string) => {
-    console.error(`[${helper.getTime()}] ${message}`);
-    logChannel.send(`[${helper.getTime()}] ${message}`);
+// Function to send messages to the log channel and the log file
+export const log = async (
+    message: string,
+    options?: {
+        sendToLogChannel?: boolean;
+        logFile?: string;
+    },
+) => {
+    if (!options) options = { sendToLogChannel: true, logFile: `logs/main.log` };
+    if (options.sendToLogChannel === undefined || options.sendToLogChannel === null)
+        options.sendToLogChannel = true;
+    if (options.logFile === undefined || options.logFile === null)
+        options.logFile = `logs/main.log`;
+
+    fs.appendFile(options.logFile!, `[${helper.getTime()}] ${message}\n`);
+    options.sendToLogChannel ? logChannel.send(`[${helper.getTime()}] ${message}`) : null;
 };
 
 // General error handling
-process.on(`uncaughtException`, (error) => {
-    const message: string = `[${helper.getTime()}] uncaughtException: ${error}`;
-    console.error(message);
-    logChannel.send(message);
+process.on(`uncaughtException`, async (error) => {
+    await log(`uncaughtException: ${error}`);
     process.exit(1);
 });
 
-process.on(`unhandledRejection`, (error) => {
-    const message = `[${helper.getTime()}] unhandledRejection: ${error}`;
-    console.error(message);
-    logChannel.send(message);
+process.on(`unhandledRejection`, async (error) => {
+    await log(`unhandledRejection: ${error}`);
     process.exit(1);
 });
 
-bot.on(`disconnected`, () => {
-    const message = `[${helper.getTime()}] Disconnected.`;
-    console.error(message);
+bot.on(`disconnected`, async () => {
+    await log(`[${helper.getTime()}] Disconnected.`, {
+        sendToLogChannel: false,
+    });
     process.exit(1);
 });
 
-bot.on(`error`, (error) => {
-    const message = `[${helper.getTime()}] Discord bot error: ${error}`;
-    console.error(message);
+bot.on(`error`, async (error) => {
+    await log(`[${helper.getTime()}] Discord bot error: ${error}`, {
+        sendToLogChannel: false,
+    });
     process.exit(1);
 });
 

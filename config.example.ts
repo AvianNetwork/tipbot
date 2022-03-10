@@ -33,6 +33,7 @@ export const config = {
     moderation: {
         logchannel: ``,
         botspamchannel: ``,
+        pricechannel: ``,
     },
     wavn: {
         contractaddress: ``,

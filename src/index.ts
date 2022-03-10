@@ -18,6 +18,7 @@ import * as commands from "./commands.js";
 // We can only fetch channels within the bot.on(`ready`) function
 let logChannel: Discord.TextChannel;
 let spamChannel: Discord.TextChannel;
+let priceChannel: Discord.TextChannel;
 
 // Create the bot
 const bot = new Discord.Client({
@@ -38,12 +39,20 @@ bot.on(`ready`, async () => {
 
     const tempSpamChannel = await bot.channels.fetch(config.moderation.botspamchannel);
     if (!tempSpamChannel) {
-        console.error(`[${helper.getTime()}] Discord bot error: Log channel not found.`);
+        console.error(`[${helper.getTime()}] Discord bot error: Spam channel not found.`);
         process.exit(1);
     } else {
         spamChannel = <Discord.TextChannel>tempSpamChannel;
     }
 
+    const tempPriceChannel = await bot.channels.fetch(config.moderation.pricechannel);
+    if (!tempPriceChannel) {
+        console.error(`[${helper.getTime()}] Discord bot error: Price channel not found.`);
+        process.exit(1);
+    } else {
+        priceChannel = <Discord.TextChannel>tempPriceChannel;
+    }
+    
     // Send startup messages
     console.log(
         `[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${
@@ -59,7 +68,7 @@ bot.on(`ready`, async () => {
     // Create the logs folder if it doesn't exist yet
     fs.mkdir(`./logs`).catch(() => {});
 
-    // Set the bot presence
+    // Set the price in the bot presence and channel name 
     setInterval(async () => {
         const ticker = await helper.getTicker("usdt").catch(async (error) => {
             await fs.appendFile(
@@ -71,7 +80,8 @@ bot.on(`ready`, async () => {
         });
         if (ticker === undefined) return;
 
-        bot.user?.setActivity(`${ticker[`last`]} USDT`, { type: `WATCHING` });
+        bot.user?.setActivity(`💰 ${ticker[`last`]} USDT`);
+        priceChannel.setName(`💰 ${ticker[`last`]} USDT`);
     }, 60 * 1000); // Every minute
 });
 
@@ -154,7 +164,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.withdraw);
             break;
         case `tip`:
-            helper.spamOrDM(message, commands.tip);
+            commands.tip(message);
             break;
         // TODO: !avn tip <@user> <amount>
         case `walletversion`:
@@ -210,10 +220,8 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
         // Others
         case `uptime`:
-            helper.spamOrDM(message, commands.uptime);
-            break;
         case `help`:
-            helper.spamOrDM(message, commands.help);
+            helper.spamOrDM(message, commands[command]);
             break;
 
         // If the command doesn't exist, send the help message

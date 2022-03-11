@@ -201,7 +201,6 @@ export const miningcalc = async (message: Discord.Message) => {
             let hrssolo24: number;
             let unit: string;
             let nhunit: string;
-            let netdiff: number;
 
             if (algoToUse === `x16rt`) {
                 hashrate = hashrateToUse * 1000000; // Megahashes per second to hashes per second
@@ -221,7 +220,6 @@ export const miningcalc = async (message: Discord.Message) => {
                 hrssolo24 = Number((secssolo24 / 3600).toFixed(3));
                 unit = `MH/s`;
                 nhunit = `GH/s`;
-                netdiff = mininginfo.difficulty_x16rt;
             } else {
                 hashrate = hashrateToUse * 1000; // Kilohashes per second to hashes per second
                 hashavgraw12 = Number((hashavg12 * 1000000).toFixed(8));
@@ -240,7 +238,6 @@ export const miningcalc = async (message: Discord.Message) => {
                 hrssolo24 = Number((secssolo24 / 3600).toFixed(3));
                 unit = `KH/s`;
                 nhunit = `MH/s`;
-                netdiff = mininginfo.difficulty_minotaurx;
             }
 
             const profitpersec = 2500 / secssolo;

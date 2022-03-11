@@ -55,7 +55,7 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
 
 export const rpc = (method: string, params: any[]): Promise<[string | undefined, any]> => {
     // [error, result]
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         // Create the request
         const data: any = await (
             await fetch(`http://${config.coin.rpc.hostname}:${config.coin.rpc.port}`, {

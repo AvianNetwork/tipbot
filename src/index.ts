@@ -11,7 +11,6 @@ import * as commands from "./commands.js";
 
 // We can only fetch channels within the bot.on(`ready`) function
 let logChannel: Discord.TextChannel;
-let spamChannel: Discord.TextChannel;
 let priceChannel: Discord.TextChannel;
 
 // Create the bot
@@ -22,8 +21,13 @@ const bot = new Discord.Client({
 
 // When the bot logged in
 bot.on(`ready`, async () => {
-    // Create the logs folder if it does not exist yet
-    fs.mkdir(`./logs`).catch(() => {});
+    // Delete and create the logs folder if it does not exist yet
+    await fs.stat(`./logs`)
+        .then(async () => {
+            await fs.rm(`./logs`, { recursive: true }).catch(() => {});
+        })
+        .catch(() => {});
+    await fs.mkdir(`./logs`).catch(() => {});
 
     // Set the channels
     const tempLogChannel = await bot.channels.fetch(config.moderation.logchannel);
@@ -32,14 +36,6 @@ bot.on(`ready`, async () => {
         process.exit(1);
     } else {
         logChannel = <Discord.TextChannel>tempLogChannel;
-    }
-
-    const tempSpamChannel = await bot.channels.fetch(config.moderation.botchannel);
-    if (!tempSpamChannel) {
-        console.error(`[${helper.getTime()}] Discord bot error: Spam channel not found.`);
-        process.exit(1);
-    } else {
-        spamChannel = <Discord.TextChannel>tempSpamChannel;
     }
 
     const tempPriceChannel = await bot.channels.fetch(config.moderation.pricechannel);

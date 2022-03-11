@@ -156,7 +156,7 @@ export const deposit = async (message: Discord.Message) => {
                 );
             });
     } else {
-        // If the user doesn't have a deposit address, generate one and send it
+        // If the user does not have a deposit address, generate one and send it
         const newAddress = await helper.rpc(`getnewaddress`, [message.author.id]);
         if (newAddress[0]) {
             await main.log(
@@ -230,7 +230,7 @@ export const deposit = async (message: Discord.Message) => {
 export const donate = async (message: Discord.Message) => {
     // Check if the user wanted to donate
     const amount = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
-    if (!isNaN(parseFloat(amount)) && parseFloat(amount) > 0) {
+    if (!isNaN(Number(amount)) && isFinite(Number(amount)) && parseFloat(amount) > 0) {
         // If the user wants to donate
         // Get the balance of the user
         const balance = await helper.rpc(`getbalance`, [message.author.id]);
@@ -251,7 +251,7 @@ export const donate = async (message: Discord.Message) => {
             helper.sendErrorMessage(
                 message,
                 `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
-                `You don't have enough balance to donate. Take the fee (${config.coin.paytxfee}) into account as well.`,
+                `You do not have enough balance to donate. Take the fee (${config.coin.paytxfee}) into account as well.`,
             );
             return;
         }
@@ -366,7 +366,7 @@ export const donate = async (message: Discord.Message) => {
                     .then(helper.deleteAfterTimeout);
             });
     } else {
-        // If the user didn't want to donate, show the donate menu
+        // If the user did not want to donate, show the donate menu
         message
             .reply({
                 embeds: [
@@ -401,12 +401,12 @@ export const withdraw = async (message: Discord.Message) => {
     const address = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
     const amount = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
 
+    // Check if the address is valid
     if (address && config.coin.address.test(address)) {
-        // Check if the address is valid
-        if (!isNaN(parseFloat(amount)) && parseFloat(amount) > 0) {
-            // Check if it's an valid amount
+        // Check if it is an valid amount
+        if (!isNaN(Number(amount)) && isFinite(Number(amount)) && parseFloat(amount) > 0) {
             // Get the balance of the user
-            const balance = await helper.rpc("getbalance", [message.author.id]);
+            const balance = await helper.rpc(`getbalance`, [message.author.id]);
             if (balance[0]) {
                 await main.log(
                     `Error while getting balance of user ${message.author.id}: ${balance[0]}`,
@@ -419,12 +419,12 @@ export const withdraw = async (message: Discord.Message) => {
                 return;
             }
 
-            // Check if the user has enough balance to donate
+            // Check if the user has enough balance to withdraw
             if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.paytxfee) {
                 helper.sendErrorMessage(
                     message,
                     `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
-                    `You don't have enough balance to withdraw. Take the fee (${config.coin.paytxfee}) into account as well.`,
+                    `You do not have enough balance to withdraw. Take the fee (${config.coin.paytxfee}) into account as well.`,
                 );
                 return;
             }
@@ -519,7 +519,7 @@ export const withdraw = async (message: Discord.Message) => {
                                         },
                                         {
                                             name: `Uh oh!`,
-                                            value: `**Withdrawal receipt was not able to be sent via DM, do you have DM\'s disabled?**`,
+                                            value: `**Withdrawal receipt was not able to be sent via DM, do you have DM's disabled?**`,
                                             inline: false,
                                         },
                                         {
@@ -551,7 +551,177 @@ export const withdraw = async (message: Discord.Message) => {
     }
 };
 
-export const tip = (message: Discord.Message) => {};
+export const tip = async (message: Discord.Message) => {
+    // Parse the user ID and amount
+    const mentions = message.mentions.users.toJSON();
+    if (mentions.length !== 1) {
+        helper.sendErrorMessage(
+            message,
+            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `Please mention one user.`,
+        );
+        return;
+    }
+
+    // Make sure the to get tipped user isn't a bot nor the user itself
+    if (mentions[0].bot || mentions[0].id === message.author.id) {
+        helper.sendErrorMessage(
+            message,
+            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `You cannot tip yourself nor bots.`,
+        );
+        return;
+    }
+
+    const userID = mentions[0].id;
+    const amount = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
+
+    // Check if the amount is valid
+    if (isNaN(Number(amount)) || !isFinite(Number(amount)) || Number(amount) < 0) {
+        helper.sendErrorMessage(
+            message,
+            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `Please enter a valid amount.`,
+        );
+        return;
+    }
+
+    // Get the balance of the user
+    const balance = await helper.rpc(`getbalance`, [message.author.id]);
+    if (balance[0]) {
+        await main.log(`Error while getting balance of user ${message.author.id}: ${balance[0]}`);
+        helper.sendErrorMessage(
+            message,
+            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `An error occured while getting your balance.`,
+        );
+        return;
+    }
+
+    // Check if the user has enough balance to tip
+    if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.paytxfee) {
+        helper.sendErrorMessage(
+            message,
+            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `You do not have enough balance to tip. Take the fee (${config.coin.paytxfee}) into account as well.`,
+        );
+        return;
+    }
+
+    // Make the tip
+    const tipData = await helper.rpc(`move`, [message.author.id, userID, Number(amount)]);
+    if (tipData[0]) {
+        await main.log(`Error while donating to ${config.project.donationaddress}: ${tipData[0]}`);
+        helper.sendErrorMessage(
+            message,
+            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `An error occured while tipping.`,
+        );
+        return;
+    }
+
+    // Inform the user the tip was successful
+    if (message.channel.type !== "DM") {
+        message.channel
+            .send({
+                embeds: [
+                    {
+                        description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                        color: 1363892,
+                        fields: [
+                            {
+                                name: `Success!`,
+                                value: `:lock:  Tip receipt sent via your DM.`,
+                                inline: true,
+                            },
+                        ],
+                    },
+                ],
+            })
+            .then(helper.deleteAfterTimeout);
+    }
+
+    message.author
+        .send({
+            embeds: [
+                {
+                    description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                    color: 1363892,
+                    fields: [
+                        {
+                            name: `__Sender__`,
+                            value: `<@${message.author.id}>`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Receiver__`,
+                            value: `<@${userID}>`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Amount__`,
+                            value: `**${amount} ${config.coin.coinsymbol}**`,
+                            inline: true,
+                        },
+                    ],
+                },
+            ],
+        })
+        .catch(() => {
+            // If the user has DMs disabled, send a message in the public channel
+            message.channel
+                .send({
+                    embeds: [
+                        {
+                            description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                            color: 1363892,
+                            fields: [
+                                {
+                                    name: `__User__`,
+                                    value: `<@${message.author.id}>`,
+                                    inline: false,
+                                },
+                                {
+                                    name: `Uh oh!`,
+                                    value: `**:x:  The receipt was not able to be sent via DM, do you have DM's disabled?**`,
+                                    inline: false,
+                                },
+                                {
+                                    name: `__Tip status__`,
+                                    value: `**Sent!**`,
+                                    inline: false,
+                                },
+                            ],
+                        },
+                    ],
+                })
+                .then(helper.deleteAfterTimeout);
+        });
+
+    // DM the tip recipient
+    mentions[0]
+        .send({
+            embeds: [
+                {
+                    description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                    color: 1363892,
+                    fields: [
+                        {
+                            name: `__Sender__`,
+                            value: `<@${message.author.id}>`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Amount__`,
+                            value: `**${amount} ${config.coin.coinsymbol}**`,
+                            inline: true,
+                        },
+                    ],
+                },
+            ],
+        })
+        .catch(() => {});
+};
 
 export const walletversion = async (message: Discord.Message) => {
     const networkInfoData = await helper.rpc(`getnetworkinfo`, []);
@@ -599,7 +769,7 @@ export const walletversion = async (message: Discord.Message) => {
 };
 
 export const privatekey = async (message: Discord.Message) => {
-    // Get the user's address
+    // Get the address of the user
     const addressesByAccount = await helper.rpc(`getaddressesbyaccount`, [message.author.id]);
     if (addressesByAccount[0]) {
         await main.log(
@@ -683,7 +853,7 @@ export const privatekey = async (message: Discord.Message) => {
                 );
             });
     } else {
-        // If the user doesn't have an address, generate one and send the private key of it
+        // If the user does not have an address, generate one and send the private key of it
         const newAddress = await helper.rpc(`getnewaddress`, [message.author.id]);
         if (newAddress[0]) {
             await main.log(

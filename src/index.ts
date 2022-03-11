@@ -22,7 +22,8 @@ const bot = new Discord.Client({
 // When the bot logged in
 bot.on(`ready`, async () => {
     // Delete and create the logs folder if it does not exist yet
-    await fs.stat(`./logs`)
+    await fs
+        .stat(`./logs`)
         .then(async () => {
             await fs.rm(`./logs`, { recursive: true }).catch(() => {});
         })

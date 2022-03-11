@@ -7,7 +7,8 @@
     "scripts": {
         "start": "node .",
         "build": "tsc",
-        "format": "prettier -w src/**/*"
+        "format": "prettier -w src/**/*",
+        "dev": "nodemon --watch src -e ts -x \"npm run build; npm start\""
     },
     "repository": {
         "type": "git",
@@ -31,6 +32,7 @@
         "typescript": "^4.6.2"
     },
     "devDependencies": {
+        "nodemon": "^2.0.15",
         "prettier": "^2.5.1"
     }
 }

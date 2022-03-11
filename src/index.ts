@@ -22,6 +22,9 @@ const bot = new Discord.Client({
 
 // When the bot logged in
 bot.on(`ready`, async () => {
+    // Create the logs folder if it doesn't exist yet
+    fs.mkdir(`./logs`).catch(() => {});
+
     // Set the channels
     const tempLogChannel = await bot.channels.fetch(config.moderation.logchannel);
     if (!tempLogChannel) {
@@ -31,7 +34,7 @@ bot.on(`ready`, async () => {
         logChannel = <Discord.TextChannel>tempLogChannel;
     }
 
-    const tempSpamChannel = await bot.channels.fetch(config.moderation.botspamchannel);
+    const tempSpamChannel = await bot.channels.fetch(config.moderation.botchannel);
     if (!tempSpamChannel) {
         console.error(`[${helper.getTime()}] Discord bot error: Spam channel not found.`);
         process.exit(1);
@@ -46,7 +49,7 @@ bot.on(`ready`, async () => {
     } else {
         priceChannel = <Discord.TextChannel>tempPriceChannel;
     }
-    
+
     // Send startup messages
     console.log(
         `[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${
@@ -58,11 +61,14 @@ bot.on(`ready`, async () => {
             bot.user?.id
         }).`,
     );
+    await fs.appendFile(
+        `logs/main.log`,
+        `[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${
+            bot.user?.id
+        }).`,
+    );
 
-    // Create the logs folder if it doesn't exist yet
-    fs.mkdir(`./logs`).catch(() => {});
-
-    // Set the price in the bot presence and channel name 
+    // Set the price in the bot presence and channel name
     setInterval(async () => {
         const ticker = await helper.getTicker("usdt").catch(async (error) => {
             await fs.appendFile(
@@ -74,7 +80,7 @@ bot.on(`ready`, async () => {
         });
         if (ticker === undefined) return;
 
-        bot.user?.setActivity(`💰 ${ticker[`last`]} USDT`);
+        bot.user?.setActivity(`💰 ${ticker[`last`]} USDT`, { type: `WATCHING` });
         priceChannel.setName(`💰 ${ticker[`last`]} USDT`);
     }, 60 * 1000); // Every minute
 });
@@ -87,14 +93,13 @@ export const log = async (
         logFile?: string;
     },
 ) => {
-    if (!options) options = { sendToLogChannel: true, logFile: `logs/main.log` };
+    if (!options) options = { sendToLogChannel: true, logFile: `main.log` };
     if (options.sendToLogChannel === undefined || options.sendToLogChannel === null)
         options.sendToLogChannel = true;
-    if (options.logFile === undefined || options.logFile === null)
-        options.logFile = `logs/main.log`;
+    if (options.logFile === undefined || options.logFile === null) options.logFile = `main.log`;
 
-    fs.appendFile(options.logFile!, `[${helper.getTime()}] ${message}\n`);
-    options.sendToLogChannel ? logChannel.send(`[${helper.getTime()}] ${message}`) : null;
+    await fs.appendFile(`logs/${options.logFile}`, `[${helper.getTime()}] ${message}\n`);
+    options.sendToLogChannel ? await logChannel.send(`[${helper.getTime()}] ${message}`) : null;
 };
 
 // General error handling

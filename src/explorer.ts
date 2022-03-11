@@ -10,9 +10,10 @@ import * as main from "./index.js";
 import * as helper from "./helper.js";
 
 export const supply = async (message: Discord.Message) => {
-    const date = new Date().toUTCString().replace(`,`, ` `);
     const price = await helper.getTicker(`usdt`).catch(async (error) => {
-        await main.log(`Error fetching price: ${error}`);
+        await main.log(`Error fetching price: ${error}`, {
+            logFile: `exbitron.log`,
+        });
         return undefined;
     });
     const supplyData: any = await (await fetch(`${config.project.explorerurl}ext/getmoneysupply`))

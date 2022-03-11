@@ -109,7 +109,9 @@ export const miningcalc = async (message: Discord.Message) => {
         const hashrateToUse = Number(parseFloat(hashrate).toFixed(3));
 
         const currentPriceTicker = await helper.getTicker(`usdt`).catch(async (error) => {
-            await main.log(`Error while fetching price: ${error}`);
+            await main.log(`Error while fetching price: ${error}`, {
+                logFile: `exbitron.log`,
+            });
             return undefined;
         });
 
@@ -165,7 +167,9 @@ export const miningcalc = async (message: Discord.Message) => {
 
             // Get the current price
             const tickerData = await helper.getTicker(`usdt`).catch(async (error) => {
-                await main.log(`Error while fetching price: ${error}`);
+                await main.log(`Error while fetching price: ${error}`, {
+                    logFile: `exbitron.log`,
+                });
                 return undefined;
             });
             if (tickerData === undefined) {

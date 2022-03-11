@@ -5,12 +5,6 @@ import { config } from "../config.js";
 import Discord from "discord.js";
 import fetch from "node-fetch";
 
-import dayjs from "dayjs";
-import dayjs_utc from "dayjs/plugin/utc.js";
-import dayjs_timezone from "dayjs/plugin/timezone.js";
-dayjs.extend(dayjs_utc);
-dayjs.extend(dayjs_timezone);
-
 // Import helper functions
 import * as main from "./index.js";
 import * as helper from "./helper.js";

@@ -19,7 +19,7 @@ export const getTime = () => {
 // Mainly used for commands handling
 export const spamOrDM = async (message: Discord.Message, callback: Function) => {
     // Check if the message is in a DM or in the spam channel
-    if (message.channel.type === `DM` || message.channel.id === config.moderation.botspamchannel) {
+    if (message.channel.type === `DM` || message.channel.id === config.moderation.botchannel) {
         // If the it is, call the callback function (which usually executes the repsonse to a command)
         callback(message);
     } else {
@@ -37,7 +37,7 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
                         fields: [
                             {
                                 name: `Hello!`,
-                                value: `Please use <#${config.moderation.botspamchannel}> or DM\'s to talk to bots`,
+                                value: `Please use <#${config.moderation.botchannel}> or DM's to talk to bots`,
                                 inline: true,
                             },
                         ],

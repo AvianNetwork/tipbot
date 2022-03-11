@@ -31,7 +31,7 @@ bot.on(`ready`, async () => {
     await fs.mkdir(`./logs`).catch(() => {});
 
     // Set the channels
-    const tempLogChannel = await bot.channels.fetch(config.moderation.logchannel);
+    const tempLogChannel = await bot.channels.fetch(config.channels.logging);
     if (!tempLogChannel) {
         console.error(`[${helper.getTime()}] Discord bot error: Log channel not found.`);
         process.exit(1);
@@ -39,7 +39,7 @@ bot.on(`ready`, async () => {
         logChannel = <Discord.TextChannel>tempLogChannel;
     }
 
-    const tempPriceChannel = await bot.channels.fetch(config.moderation.pricechannel);
+    const tempPriceChannel = await bot.channels.fetch(config.channels.price);
     if (!tempPriceChannel) {
         console.error(`[${helper.getTime()}] Discord bot error: Price channel not found.`);
         process.exit(1);
@@ -162,7 +162,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `tip`:
             commands.tip(message);
             break;
-        // TODO: !avn tip <@user> <amount>
         case `walletversion`:
             helper.spamOrDM(message, commands.walletversion);
             break;

@@ -128,7 +128,7 @@ export const deposit = async (message: Discord.Message) => {
                         description: `**:bank::card_index::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Your deposit address!:moneybag::card_index::bank:**`,
                         color: 1363892,
                         thumbnail: {
-                            url: `${config.project.explorerurl}qr/${JSON.stringify(
+                            url: `${config.project.explorer}qr/${JSON.stringify(
                                 addressesByAccount[1][0],
                             )}`,
                         },
@@ -313,12 +313,12 @@ export const donate = async (message: Discord.Message) => {
                             },
                             {
                                 name: `__Receiver__`,
-                                value: `**${config.project.donationaddress}**\n${config.project.explorerurl}address/${config.project.donationaddress}`,
+                                value: `**${config.project.donationaddress}**\n${config.project.explorer}address/${config.project.donationaddress}`,
                                 inline: true,
                             },
                             {
                                 name: `__txid__`,
-                                value: `**${txidData[1]}**\n${config.project.explorerurl}tx/${txidData[1]}`,
+                                value: `**${txidData[1]}**\n${config.project.explorer}tx/${txidData[1]}`,
                                 inline: false,
                             },
                             {
@@ -356,7 +356,7 @@ export const donate = async (message: Discord.Message) => {
                                     },
                                     {
                                         name: `Your donation was sent successfully and your txid is:`,
-                                        value: `**${txidData[1]}**\n${config.project.explorerurl}tx/${txidData[1]}`,
+                                        value: `**${txidData[1]}**\n${config.project.explorer}tx/${txidData[1]}`,
                                         inline: false,
                                     },
                                 ],
@@ -481,12 +481,12 @@ export const withdraw = async (message: Discord.Message) => {
                                 },
                                 {
                                     name: `__Receiver__`,
-                                    value: `**${config.project.donationaddress}**\n${config.project.explorerurl}address/${config.project.donationaddress}`,
+                                    value: `**${config.project.donationaddress}**\n${config.project.explorer}address/${config.project.donationaddress}`,
                                     inline: true,
                                 },
                                 {
                                     name: `__txid__`,
-                                    value: `**${txidData[1]}**\n${config.project.explorerurl}tx/${txidData[1]}`,
+                                    value: `**${txidData[1]}**\n${config.project.explorer}tx/${txidData[1]}`,
                                     inline: false,
                                 },
                                 {
@@ -524,7 +524,7 @@ export const withdraw = async (message: Discord.Message) => {
                                         },
                                         {
                                             name: `Your withdrawal was sent successfully and your txid is:`,
-                                            value: `**${txidData[1]}**\n${config.project.explorerurl}tx/${txidData[1]}`,
+                                            value: `**${txidData[1]}**\n${config.project.explorer}tx/${txidData[1]}`,
                                             inline: false,
                                         },
                                     ],

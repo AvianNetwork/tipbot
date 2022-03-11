@@ -20,57 +20,57 @@ const links = (message: Discord.Message) => {
                     fields: [
                         {
                             name: `__Project Website__`,
-                            value: `*${config.project.siteurl}*`,
+                            value: `*${config.project.site}*`,
                             inline: false,
                         },
                         {
                             name: `__Project GitHub__`,
-                            value: `*${config.project.githuburl}*`,
+                            value: `*${config.project.github}*`,
                             inline: false,
                         },
                         {
                             name: `__Project Explorer__`,
-                            value: `*${config.project.explorerurl}*`,
+                            value: `*${config.project.explorer}*`,
                             inline: false,
                         },
                         {
                             name: `__Project Bitcointalk__`,
-                            value: `*${config.project.bitcointalkurl}*`,
+                            value: `*${config.project.bitcointalk}*`,
                             inline: true,
                         },
                         {
                             name: `__Project Twitter__`,
-                            value: `*${config.project.twitterurl}*`,
+                            value: `*${config.project.twitter}*`,
                             inline: false,
                         },
                         {
                             name: `__Reddit__`,
-                            value: `*${config.project.redditurl}*`,
+                            value: `*${config.project.reddit}*`,
                             inline: false,
                         },
                         {
                             name: `__Discord__`,
-                            value: `*${config.project.discordurl}*`,
+                            value: `*${config.project.discord}*`,
                             inline: false,
                         },
                         {
                             name: `__Telegram__`,
-                            value: `*${config.project.telegramurl}*`,
+                            value: `*${config.project.telegram}*`,
                             inline: false,
                         },
                         {
                             name: `__Telegram Announcements__`,
-                            value: `*${config.project.telegramannurl}*`,
+                            value: `*${config.project.telegramann}*`,
                             inline: false,
                         },
                         {
                             name: `__Coin Wrapping__`,
-                            value: `*${config.wavn.coinwrapurl}*`,
+                            value: `*${config.wavn.url}*`,
                             inline: false,
                         },
                         {
                             name: `__Web Wallet__`,
-                            value: `*${config.project.webwalleturl}*\n\u200b`,
+                            value: `*${config.project.webwallet}*\n\u200b`,
                             inline: false,
                         },
                         {
@@ -212,7 +212,7 @@ const uptime = async (message: Discord.Message) => {
                         description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
                         color: 1363892,
                         thumbnail: {
-                            url: `${config.project.explorerurl}images/avian_256x256x32.png`,
+                            url: `${config.project.explorer}images/avian_256x256x32.png`,
                         },
                         fields: [
                             {
@@ -253,7 +253,7 @@ const uptime = async (message: Discord.Message) => {
                         description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
                         color: 1363892,
                         thumbnail: {
-                            url: `${config.project.explorerurl}images/avian_256x256x32.png`,
+                            url: `${config.project.explorer}images/avian_256x256x32.png`,
                         },
                         fields: [
                             {

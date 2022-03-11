@@ -177,7 +177,9 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         // TODO: !avn <usdt|btc|ltc|rvn|doge>
         // TODO: !avn <usdt|btc|ltc|rvn|doge> <number of coins>
         // TODO: !avn cap <usdt|btc|ltc|rvn|doge>
-        // TODO: !avn wavn
+        case `wavn`:
+            helper.spamOrDM(message, commands.wavn);
+            break;
         // TODO: !avn sushi
         // TODO: !avn nomics <avn|wavn>
 

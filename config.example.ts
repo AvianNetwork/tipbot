@@ -36,8 +36,7 @@ export const config = {
         price: ``,
     },
     wavn: {
-        contractaddress: ``,
-        polygonapikey: ``,
+        contractaddress: `0x752dc265eaf6da2db0f8e4a32d5596d3f18e8701`,
         url: `https://wavn.avn.network/`,
     },
     nomics: {

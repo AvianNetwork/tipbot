@@ -85,43 +85,6 @@ const links = (message: Discord.Message) => {
         .then(helper.deleteAfterTimeout);
 };
 
-const exchanges = (message: Discord.Message) => {
-    const date = new Date().toUTCString().replace(`,`, ` `);
-
-    message
-        .reply({
-            embeds: [
-                {
-                    description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Exchange listings  :chart_with_upwards_trend:\n\u200b**`,
-                    color: 1363892,
-                    fields: [
-                        {
-                            name: `:chart_with_upwards_trend:  Exbitron Exchange  :chart_with_upwards_trend:`,
-                            value:
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}btc\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}usdt\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}ltc\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}rvn\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}doge\n\u200b`,
-                            inline: false,
-                        },
-                        {
-                            name: `:chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:`,
-                            value: `https://tradeogre.com/exchange/BTC-${config.coin.coinsymbol.toUpperCase()}\n\u200b`,
-                            inline: false,
-                        },
-                        {
-                            name: `:clock: Time`,
-                            value: date,
-                            inline: false,
-                        },
-                    ],
-                },
-            ],
-        })
-        .then(helper.deleteAfterTimeout);
-};
-
 const help = (message: Discord.Message) => {
     message
         .reply({
@@ -280,7 +243,7 @@ const uptime = async (message: Discord.Message) => {
 };
 
 // Export functions.
-export { uptime, help, links, exchanges };
+export { uptime, help, links };
 
 import { supply, wealth, qr } from "./explorer.js";
 export { supply, wealth, qr };
@@ -290,3 +253,6 @@ export { mininginfo, miningcalc, blockchaininfo, miners, validate };
 
 import { balance, deposit, donate, withdraw, tip, walletversion, privatekey } from "./wallet.js";
 export { balance, deposit, donate, withdraw, tip, walletversion, privatekey };
+
+import { exchanges, wavn } from "./market.js";
+export { exchanges, wavn };

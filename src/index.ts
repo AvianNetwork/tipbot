@@ -22,7 +22,7 @@ const bot = new Discord.Client({
 
 // When the bot logged in
 bot.on(`ready`, async () => {
-    // Create the logs folder if it doesn't exist yet
+    // Create the logs folder if it does not exist yet
     fs.mkdir(`./logs`).catch(() => {});
 
     // Set the channels
@@ -65,12 +65,12 @@ bot.on(`ready`, async () => {
         `logs/main.log`,
         `[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${
             bot.user?.id
-        }).`,
+        }).\n`,
     );
 
     // Set the price in the bot presence and channel name
     setInterval(async () => {
-        const ticker = await helper.getTicker("usdt").catch(async (error) => {
+        const ticker = await helper.getTicker(`usdt`).catch(async (error) => {
             await fs.appendFile(
                 `logs/exbitron.log`,
                 `[${helper.getTime()}] Error while fetching Exbitron price: ${error}\n`,
@@ -223,7 +223,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands[command]);
             break;
 
-        // If the command doesn't exist, send the help message
+        // If the command does not exist, send the help message
         default:
             helper.spamOrDM(message, commands.help);
             break;

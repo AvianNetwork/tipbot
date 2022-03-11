@@ -149,7 +149,7 @@ const help = (message: Discord.Message) => {
                                 `**${config.bot.prefix} donate <amount>:** Donate to the Avian Foundation.\n` +
                                 `**${config.bot.prefix} withdraw <address> <amount>:** Withdraw ${config.coin.coinname} to specified address.\n` +
                                 `**${config.bot.prefix} tip <@user> <amount>:** Mention an user with @ and the amount to tip them.\n` +
-                                `**${config.bot.prefix} walletversion:** Display the bots' wallet version.\n` +
+                                `**${config.bot.prefix} walletversion:** Display the wallet version of the bot.\n` +
                                 `**${config.bot.prefix} privatekey:** Send the private key for your wallet to your DM.\n\u200b`,
                             inline: false,
                         },
@@ -187,9 +187,7 @@ const help = (message: Discord.Message) => {
                             name: `:tools:  Bot Wallet Utilities  :tools:`,
                             value:
                                 `**${config.bot.prefix} uptime:** Display current bot and wallet uptime.\n` +
-                                `Replace ` +
-                                "`<>`" +
-                                ` with the appropriate value.`,
+                                `Replace \`<>\` with the appropriate value.`,
                             inline: false,
                         },
                     ],

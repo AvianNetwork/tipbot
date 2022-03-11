@@ -296,7 +296,7 @@ export const qr = async (message: Discord.Message) => {
             `*Please specify an address.*`,
         );
     } else if (!config.coin.address.test(address)) {
-        // Make sure it's an valid address.
+        // Make sure it is a valid address.
         helper.sendErrorMessage(
             message,
             `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,

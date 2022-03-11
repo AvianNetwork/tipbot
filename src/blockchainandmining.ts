@@ -272,7 +272,7 @@ export const miningcalc = async (message: Discord.Message) => {
                             description: `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                             color: 1363892,
                             footer: {
-                                text: `now = momentary, 12hr = nethash avg over last 12hr, 24hr = nethash avg over last 24hr',`,
+                                text: `now = momentary, 12hr = average network hashrate over the last 12 hours, 24hr = average network hashrate over the last 24 hours,`,
                             },
                             fields: [
                                 {

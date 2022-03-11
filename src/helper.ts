@@ -11,7 +11,7 @@ import dayjs_timezone from "dayjs/plugin/timezone.js";
 dayjs.extend(dayjs_utc);
 dayjs.extend(dayjs_timezone);
 
-// Function to get the time and use the timezone and format from the config file so we don't have to write long lines with repetitive code
+// Function to get the time and use the timezone and format from the config file so we do not have to write long lines with repetitive code
 export const getTime = () => {
     return dayjs().tz(config.bot.timezone[0]).format(config.bot.timezone[1]);
 };
@@ -23,7 +23,7 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
         // If the it is, call the callback function (which usually executes the repsonse to a command)
         callback(message);
     } else {
-        // If it isn't, send a message indicating the user should use the bot in the spam channel or DM
+        // If it is not, send a message indicating the user should use the bot in the spam channel or DM
         message
             .reply({
                 embeds: [
@@ -122,7 +122,7 @@ export const getTicker = async (
 
 export const deleteAfterTimeout = (sentMessage: Discord.Message) => {
     // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-    // If it was sent in a DM, don't delete it.
+    // If it was sent in a DM, do not delete it.
     if (sentMessage.channel.type === `DM`) {
         return;
     } else {

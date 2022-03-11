@@ -70,7 +70,9 @@ export const wavn = async (message: Discord.Message) => {
     }
 
     const date = new Date().toUTCString().replace(`,`, ` `);
-    const supply = parseFloat((tokenSupplyData[`result`] / 1000000000000000000).toFixed(18)).toString();
+    const supply = parseFloat(
+        (tokenSupplyData[`result`] / 1000000000000000000).toFixed(18),
+    ).toString();
 
     message.channel
         .send({

@@ -167,15 +167,13 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
         // Market data
         case `exchanges`:
-            helper.spamOrDM(message, commands.exchanges);
+        case `wavn`:
+        case `sushi`:
+            helper.spamOrDM(message, commands[command]);
             break;
         // TODO: !avn <usdt|btc|ltc|rvn|doge>
         // TODO: !avn <usdt|btc|ltc|rvn|doge> <number of coins>
         // TODO: !avn cap <usdt|btc|ltc|rvn|doge>
-        case `wavn`:
-            helper.spamOrDM(message, commands.wavn);
-            break;
-        // TODO: !avn sushi
         // TODO: !avn nomics <avn|wavn>
 
         // Explorer functions

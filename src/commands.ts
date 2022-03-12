@@ -254,5 +254,5 @@ export { mininginfo, miningcalc, blockchaininfo, miners, validate };
 import { balance, deposit, donate, withdraw, tip, walletversion, privatekey } from "./wallet.js";
 export { balance, deposit, donate, withdraw, tip, walletversion, privatekey };
 
-import { exchanges, wavn } from "./market.js";
-export { exchanges, wavn };
+import { exchanges, wavn, sushi } from "./market.js";
+export { exchanges, wavn, sushi };

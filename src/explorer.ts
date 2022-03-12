@@ -26,7 +26,7 @@ export const supply = async (message: Discord.Message) => {
     if (!supplyData || !price) {
         helper.sendErrorMessage(
             message,
-            `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) coin supply  :bar_chart:**`,
+            `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) coin supply  :bar_chart:**`,
             `*Error fetching the supply or price.*`,
         );
     } else {
@@ -42,7 +42,7 @@ export const supply = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) coin supply  :bar_chart:**`,
+                        description: `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) coin supply  :bar_chart:**`,
                         color: 1363892,
                         thumbnail: {
                             url: `${config.project.explorer}images/avian_256x256x32.png`,
@@ -78,7 +78,7 @@ export const wealth = async (message: Discord.Message) => {
     if (!wealthData) {
         helper.sendErrorMessage(
             message,
-            `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) wealth distribution information  :bar_chart:**`,
+            `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) wealth distribution information  :bar_chart:**`,
             `*Error fetching the wealth distribution.*`,
         );
     } else {
@@ -154,11 +154,11 @@ export const wealth = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:bar_chart:  ${config.coin.coinname} (${config.coin.coinsymbol}) Wealth Distribution Information  :bar_chart:**`,
+                        description: `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) Wealth Distribution Information  :bar_chart:**`,
                         color: 1363892,
                         fields: [
                             {
-                                name: `__:mag:  ${config.coin.coinname} (${config.coin.coinsymbol}) Explorer  :mag:__`,
+                                name: `__:mag:  ${config.coin.name} (${config.coin.symbol}) Explorer  :mag:__`,
                                 value: `*${config.project.explorer}richlist*`,
                                 inline: false,
                             },
@@ -292,14 +292,14 @@ export const qr = async (message: Discord.Message) => {
         // Make sure the user specified an address.
         helper.sendErrorMessage(
             message,
-            `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
+            `**  ${config.coin.name} (${config.coin.symbol}) QR Code  **`,
             `*Please specify an address.*`,
         );
     } else if (!config.coin.address.test(address)) {
         // Make sure it is a valid address.
         helper.sendErrorMessage(
             message,
-            `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
+            `**  ${config.coin.name} (${config.coin.symbol}) QR Code  **`,
             `*Please specify a valid address.*`,
         );
     } else {
@@ -307,7 +307,7 @@ export const qr = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**  ${config.coin.coinname} (${config.coin.coinsymbol}) QR Code  **`,
+                        description: `**  ${config.coin.name} (${config.coin.symbol}) QR Code  **`,
                         color: 1363892,
                         thumbnail: {
                             url: `${config.project.explorer}images/avian_256x256x32.png`,

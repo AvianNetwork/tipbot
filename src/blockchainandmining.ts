@@ -20,7 +20,7 @@ export const mininginfo = async (message: Discord.Message) => {
         await main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
         helper.sendErrorMessage(
             message,
-            `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) mining information  :robot::tools:**`,
+            `**:tools::robot:  ${config.coin.name} (${config.coin.symbol}) mining information  :robot::tools:**`,
             `*Error fetching mining information.*`,
         );
     } else {
@@ -28,7 +28,7 @@ export const mininginfo = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:pick: ${config.coin.coinname} (${config.coin.coinsymbol}) network mining info :pick:**`,
+                        description: `**:pick: ${config.coin.name} (${config.coin.symbol}) network mining info :pick:**`,
                         color: 1363892,
                         fields: [
                             {
@@ -87,21 +87,21 @@ export const miningcalc = async (message: Discord.Message) => {
         // Make sure the user specified both an algorithm and their hashrate.
         helper.sendErrorMessage(
             message,
-            `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator :abacus:**`,
+            `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator :abacus:**`,
             `*Please specify both an algorithm and hashrate.*`,
         );
     } else if (algorithm.toLowerCase() !== `x16rt` && algorithm.toLowerCase() !== `minotaurx`) {
         // Make sure the user specified a valid algorithm.
         helper.sendErrorMessage(
             message,
-            `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator  :abacus:**`,
+            `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator  :abacus:**`,
             `*Please specify a valid algorithm (x16rt or minotaurx).*`,
         );
     } else if (isNaN(parseFloat(hashrate)) || parseFloat(hashrate) < 0) {
         // Make sure the user specified a valid hashrate.
         helper.sendErrorMessage(
             message,
-            `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator  :abacus:**`,
+            `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator  :abacus:**`,
             `*Please specify a valid hashrate.*`,
         );
     } else {
@@ -118,7 +118,7 @@ export const miningcalc = async (message: Discord.Message) => {
         if (!currentPriceTicker) {
             helper.sendErrorMessage(
                 message,
-                `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                 `*An error occured while retrieving the price.*`,
             );
         } else {
@@ -143,7 +143,7 @@ export const miningcalc = async (message: Discord.Message) => {
             if (!data_720 || !data_1440) {
                 helper.sendErrorMessage(
                     message,
-                    `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                    `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                     `*An error occured while fetching the POW averages.*`,
                 );
                 return;
@@ -159,7 +159,7 @@ export const miningcalc = async (message: Discord.Message) => {
                 await main.log(`Error while fetching mining information: ${miningInfoData[0]}`);
                 helper.sendErrorMessage(
                     message,
-                    `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                    `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                     `*Error fetching mining information.*`,
                 );
                 return;
@@ -175,7 +175,7 @@ export const miningcalc = async (message: Discord.Message) => {
             if (tickerData === undefined) {
                 helper.sendErrorMessage(
                     message,
-                    `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                    `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                     `*An error occured while retrieving the price.*`,
                 );
                 return;
@@ -266,7 +266,7 @@ export const miningcalc = async (message: Discord.Message) => {
                 .reply({
                     embeds: [
                         {
-                            description: `**:abacus:  ${config.coin.coinname} (${config.coin.coinsymbol}) Mining Calculator (${algoToUse})  :abacus:**`,
+                            description: `**:abacus:  ${config.coin.name} (${config.coin.symbol}) Mining Calculator (${algoToUse})  :abacus:**`,
                             color: 1363892,
                             footer: {
                                 text: `now = momentary, 12hr = average network hashrate over the last 12 hours, 24hr = average network hashrate over the last 24 hours,`,
@@ -292,17 +292,17 @@ export const miningcalc = async (message: Discord.Message) => {
                                     inline: true,
                                 },
                                 {
-                                    name: `${config.coin.coinname} per minute`,
+                                    name: `${config.coin.name} per minute`,
                                     value: `**now:** ${profitpermin}\n**12hr:** ${profitpermin12}\n**24hr:** ${profitpermin24}`,
                                     inline: true,
                                 },
                                 {
-                                    name: `${config.coin.coinname} per hour`,
+                                    name: `${config.coin.name} per hour`,
                                     value: `**now:** ${profitperhr}\n**12hr:** ${profitperhr12}\n**24hr:** ${profitperhr24}`,
                                     inline: true,
                                 },
                                 {
-                                    name: `${config.coin.coinname} per day`,
+                                    name: `${config.coin.name} per day`,
                                     value: `**now:** ${profitperday}\n**12hr:** ${profitperday12}\n**24hr:** ${profitperday24}`,
                                     inline: true,
                                 },
@@ -346,7 +346,7 @@ export const blockchaininfo = async (message: Discord.Message) => {
         await main.log(`Error while fetching blockchain information: ${blockchainInfoData[0]}`);
         helper.sendErrorMessage(
             message,
-            `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :robot::tools:**`,
+            `**:tools::robot:  ${config.coin.name} (${config.coin.symbol}) blockchain information  :robot::tools:**`,
             `*Error fetching blockchain information.*`,
         );
     } else {
@@ -354,7 +354,7 @@ export const blockchaininfo = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:chains:  ${config.coin.coinname} (${config.coin.coinsymbol}) blockchain information  :chains:**`,
+                        description: `**:chains:  ${config.coin.name} (${config.coin.symbol}) blockchain information  :chains:**`,
                         color: 1363892,
                         fields: [
                             {
@@ -414,7 +414,7 @@ export const miners = (message: Discord.Message) => {
         .reply({
             embeds: [
                 {
-                    description: `**:pick:  ${config.coin.coinname} (${config.coin.coinsymbol}) Compatible Mining Software  :pick:**\n\u200b`,
+                    description: `**:pick:  ${config.coin.name} (${config.coin.symbol}) Compatible Mining Software  :pick:**\n\u200b`,
                     color: 1363892,
                     fields: [
                         {
@@ -454,19 +454,19 @@ export const validate = async (message: Discord.Message) => {
     if (!address) {
         helper.sendErrorMessage(
             message,
-            `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
+            `**:house:  ${config.coin.name} (${config.coin.symbol}) address validator  :house:**`,
             `*Please specify an address.*`,
         );
     } else {
         const validity = config.coin.address.test(address)
-            ? `:white_check_mark: Valid ${config.coin.coinname} address.`
-            : `:x: Invalid ${config.coin.coinname} address.`;
+            ? `:white_check_mark: Valid ${config.coin.name} address.`
+            : `:x: Invalid ${config.coin.name} address.`;
 
         message
             .reply({
                 embeds: [
                     {
-                        description: `**:house:  ${config.coin.coinname} (${config.coin.coinsymbol}) address validator  :house:**`,
+                        description: `**:house:  ${config.coin.name} (${config.coin.symbol}) address validator  :house:**`,
                         color: 1363892,
                         fields: [
                             {

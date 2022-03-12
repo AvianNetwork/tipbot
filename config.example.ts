@@ -2,7 +2,7 @@ export const config = {
     bot: {
         token: ``,
         prefix: `!avn`,
-        msgtimeout: 120000, // 2 minutes
+        deletetimeout: 120000, // 2 minutes
         timezone: [`Europe/Amsterdam`, `HH:mm:ss DD/MM/YYYY`],
     },
     project: {
@@ -19,9 +19,9 @@ export const config = {
         donationaddress: `RDs4A4sDHp4otDHQQuFSaPDYEg2xx3hbdN`,
     },
     coin: {
-        coinname: `Avian`,
-        coinsymbol: `avn`,
-        paytxfee: 0.01,
+        name: `Avian`,
+        symbol: `avn`,
+        txfee: 0.01,
         address: /^[R][a-zA-Z0-9]{33}$/,
         rpc: {
             hostname: `localhost`,

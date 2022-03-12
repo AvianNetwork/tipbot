@@ -141,11 +141,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     const command = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[0];
 
     switch (command) {
-        // Project info
-        case `links`:
-            helper.spamOrDM(message, commands.links);
-            break;
-
         // Wallet commands
         case `balance`:
             commands.balance(message);
@@ -185,13 +180,9 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 
         // Explorer functions
         case `supply`:
-            helper.spamOrDM(message, commands.supply);
-            break;
         case `wealth`:
-            helper.spamOrDM(message, commands.wealth);
-            break;
         case `qr`:
-            helper.spamOrDM(message, commands.qr);
+            helper.spamOrDM(message, commands[command]);
             break;
 
         // Blockchain and mining
@@ -216,14 +207,19 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             break;
 
         // Others
+        case `links`:
         case `uptime`:
         case `help`:
             helper.spamOrDM(message, commands[command]);
             break;
 
-        // If the command does not exist, send the help message
-        default:
+        // If no command was specified, send the help message
+        case ``:
             helper.spamOrDM(message, commands.help);
+            break;
+
+        // If the command does not exist, don't do anything
+        default:
             break;
     }
 });

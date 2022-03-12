@@ -16,7 +16,7 @@ export const balance = async (message: Discord.Message) => {
         );
         helper.sendErrorMessage(
             message,
-            `**:bank::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) balance :moneybag::money_with_wings::bank:**`,
+            `**:bank::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) balance :moneybag::money_with_wings::bank:**`,
             `An errror occured while fetching your balance.`,
         );
         return;
@@ -26,7 +26,7 @@ export const balance = async (message: Discord.Message) => {
                 .reply({
                     embeds: [
                         {
-                            description: `**:bank::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Balance sent!:moneybag::money_with_wings::bank:**`,
+                            description: `**:bank::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Balance sent!:moneybag::money_with_wings::bank:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -51,7 +51,7 @@ export const balance = async (message: Discord.Message) => {
             .send({
                 embeds: [
                     {
-                        description: `**:bank::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Your balance!:moneybag::money_with_wings::bank:**`,
+                        description: `**:bank::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Your balance!:moneybag::money_with_wings::bank:**`,
                         color: 1363892,
                         fields: [
                             {
@@ -72,7 +72,7 @@ export const balance = async (message: Discord.Message) => {
                 // If the user has their DMs disabled, send an error message
                 helper.sendErrorMessage(
                     message,
-                    `**:bank::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) balance :moneybag::money_with_wings::bank:**`,
+                    `**:bank::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) balance :moneybag::money_with_wings::bank:**`,
                     `**Balance was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });
@@ -88,7 +88,7 @@ export const deposit = async (message: Discord.Message) => {
         );
         helper.sendErrorMessage(
             message,
-            `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
+            `**:moneybag::card_index::bank: ${config.coin.name} (${config.coin.symbol}) deposit address :moneybag::card_index::bank:**`,
             `An error occured while generating a new deposit address.`,
         );
         return;
@@ -101,7 +101,7 @@ export const deposit = async (message: Discord.Message) => {
                 .reply({
                     embeds: [
                         {
-                            description: `**:bank::card_index::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Deposit address sent!:moneybag::card_index::bank:**`,
+                            description: `**:bank::card_index::moneybag: ${config.coin.name} (${config.coin.symbol}) Deposit address sent!:moneybag::card_index::bank:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -125,7 +125,7 @@ export const deposit = async (message: Discord.Message) => {
             .send({
                 embeds: [
                     {
-                        description: `**:bank::card_index::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Your deposit address!:moneybag::card_index::bank:**`,
+                        description: `**:bank::card_index::moneybag: ${config.coin.name} (${config.coin.symbol}) Your deposit address!:moneybag::card_index::bank:**`,
                         color: 1363892,
                         thumbnail: {
                             url: `${config.project.explorer}qr/${JSON.stringify(
@@ -151,7 +151,7 @@ export const deposit = async (message: Discord.Message) => {
                 // If the user has their DMs disabled, send an error message
                 helper.sendErrorMessage(
                     message,
-                    `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
+                    `**:moneybag::card_index::bank: ${config.coin.name} (${config.coin.symbol}) deposit address :moneybag::card_index::bank:**`,
                     `**Deposit address was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });
@@ -164,7 +164,7 @@ export const deposit = async (message: Discord.Message) => {
             );
             helper.sendErrorMessage(
                 message,
-                `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
+                `**:moneybag::card_index::bank: ${config.coin.name} (${config.coin.symbol}) deposit address :moneybag::card_index::bank:**`,
                 `An error occured while generating a new deposit address.`,
             );
             return;
@@ -175,7 +175,7 @@ export const deposit = async (message: Discord.Message) => {
                 .reply({
                     embeds: [
                         {
-                            description: `**:bank::card_index::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Deposit address sent!:moneybag::card_index::bank:**`,
+                            description: `**:bank::card_index::moneybag: ${config.coin.name} (${config.coin.symbol}) Deposit address sent!:moneybag::card_index::bank:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -199,7 +199,7 @@ export const deposit = async (message: Discord.Message) => {
             .send({
                 embeds: [
                     {
-                        description: `**:bank::card_index::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Your deposit address!:moneybag::card_index::bank:**`,
+                        description: `**:bank::card_index::moneybag: ${config.coin.name} (${config.coin.symbol}) Your deposit address!:moneybag::card_index::bank:**`,
                         color: 1363892,
                         fields: [
                             {
@@ -220,7 +220,7 @@ export const deposit = async (message: Discord.Message) => {
                 // If the user has their DMs disabled, send an error message
                 helper.sendErrorMessage(
                     message,
-                    `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
+                    `**:moneybag::card_index::bank: ${config.coin.name} (${config.coin.symbol}) deposit address :moneybag::card_index::bank:**`,
                     `**Deposit address was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });
@@ -240,18 +240,18 @@ export const donate = async (message: Discord.Message) => {
             );
             helper.sendErrorMessage(
                 message,
-                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
+                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
                 `An error occured while getting your balance.`,
             );
             return;
         }
 
         // Check if the user has enough balance to donate
-        if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.paytxfee) {
+        if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.txfee) {
             helper.sendErrorMessage(
                 message,
-                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
-                `You do not have enough balance to donate. Take the fee (${config.coin.paytxfee}) into account as well.`,
+                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
+                `You do not have enough balance to donate. Take the fee (${config.coin.txfee}) into account as well.`,
             );
             return;
         }
@@ -268,7 +268,7 @@ export const donate = async (message: Discord.Message) => {
             );
             helper.sendErrorMessage(
                 message,
-                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
+                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
                 `An error occured while donating.`,
             );
             return;
@@ -280,7 +280,7 @@ export const donate = async (message: Discord.Message) => {
                 .reply({
                     embeds: [
                         {
-                            description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Donation Sent!  :moneybag::money_with_wings::outbox_tray:**`,
+                            description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Donation Sent!  :moneybag::money_with_wings::outbox_tray:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -299,7 +299,7 @@ export const donate = async (message: Discord.Message) => {
             .send({
                 embeds: [
                     {
-                        description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Donation Sent!  :moneybag::money_with_wings::outbox_tray:**`,
+                        description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Donation Sent!  :moneybag::money_with_wings::outbox_tray:**`,
                         color: 1363892,
                         footer: {
                             text: `Thank you for donating to the Avian Foundation!`,
@@ -328,7 +328,7 @@ export const donate = async (message: Discord.Message) => {
                             },
                             {
                                 name: `__Fee__`,
-                                value: `**${config.coin.paytxfee.toString()}**\n\u200b`,
+                                value: `**${config.coin.txfee.toString()}**\n\u200b`,
                                 inline: true,
                             },
                         ],
@@ -341,7 +341,7 @@ export const donate = async (message: Discord.Message) => {
                     .reply({
                         embeds: [
                             {
-                                description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Donation Sent!  :moneybag::money_with_wings::outbox_tray:**`,
+                                description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Donation Sent!  :moneybag::money_with_wings::outbox_tray:**`,
                                 color: 1363892,
                                 fields: [
                                     {
@@ -371,7 +371,7 @@ export const donate = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:outbox_tray::money_with_wings::moneybag:  ${config.coin.coinname} (${config.coin.coinsymbol}) Donation Address  :moneybag::money_with_wings::outbox_tray:**\n\u200b`,
+                        description: `**:outbox_tray::money_with_wings::moneybag:  ${config.coin.name} (${config.coin.symbol}) Donation Address  :moneybag::money_with_wings::outbox_tray:**\n\u200b`,
                         color: 1363892,
                         footer: {
                             text: `Thank you for donating to the Avian Foundation!`,
@@ -380,7 +380,7 @@ export const donate = async (message: Discord.Message) => {
                         fields: [
                             {
                                 name: `__Avian Foundation donation adress__`,
-                                value: `${config.project.donationaddress}\n*(Send ${config.coin.coinname} only)*`,
+                                value: `${config.project.donationaddress}\n*(Send ${config.coin.name} only)*`,
                                 inline: false,
                             },
                             {
@@ -413,18 +413,18 @@ export const withdraw = async (message: Discord.Message) => {
                 );
                 helper.sendErrorMessage(
                     message,
-                    `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
+                    `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
                     `An error occured while getting your balance.`,
                 );
                 return;
             }
 
             // Check if the user has enough balance to withdraw
-            if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.paytxfee) {
+            if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.txfee) {
                 helper.sendErrorMessage(
                     message,
-                    `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
-                    `You do not have enough balance to withdraw. Take the fee (${config.coin.paytxfee}) into account as well.`,
+                    `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
+                    `You do not have enough balance to withdraw. Take the fee (${config.coin.txfee}) into account as well.`,
                 );
                 return;
             }
@@ -441,7 +441,7 @@ export const withdraw = async (message: Discord.Message) => {
                 );
                 helper.sendErrorMessage(
                     message,
-                    `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
+                    `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
                     `An error occured while withdrawing.`,
                 );
                 return;
@@ -453,7 +453,7 @@ export const withdraw = async (message: Discord.Message) => {
                     .reply({
                         embeds: [
                             {
-                                description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Transaction completed! :outbox_tray::money_with_wings::moneybag:**`,
+                                description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Transaction completed! :outbox_tray::money_with_wings::moneybag:**`,
                                 color: 1363892,
                                 fields: [
                                     {
@@ -471,7 +471,7 @@ export const withdraw = async (message: Discord.Message) => {
                 .send({
                     embeds: [
                         {
-                            description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdrawal sent!  :moneybag::money_with_wings::outbox_tray:**`,
+                            description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdrawal sent!  :moneybag::money_with_wings::outbox_tray:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -496,7 +496,7 @@ export const withdraw = async (message: Discord.Message) => {
                                 },
                                 {
                                     name: `__Fee__`,
-                                    value: `**${config.coin.paytxfee.toString()}**\n\u200b`,
+                                    value: `**${config.coin.txfee.toString()}**\n\u200b`,
                                     inline: true,
                                 },
                             ],
@@ -509,7 +509,7 @@ export const withdraw = async (message: Discord.Message) => {
                         .reply({
                             embeds: [
                                 {
-                                    description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdrawal sent!  :moneybag::money_with_wings::outbox_tray:**`,
+                                    description: `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdrawal sent!  :moneybag::money_with_wings::outbox_tray:**`,
                                     color: 1363892,
                                     fields: [
                                         {
@@ -536,7 +536,7 @@ export const withdraw = async (message: Discord.Message) => {
         } else {
             helper.sendErrorMessage(
                 message,
-                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
+                `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
                 `Please enter a valid amount.`,
             );
             return;
@@ -544,7 +544,7 @@ export const withdraw = async (message: Discord.Message) => {
     } else {
         helper.sendErrorMessage(
             message,
-            `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
+            `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
             `Invalid address.`,
         );
         return;
@@ -557,7 +557,7 @@ export const tip = async (message: Discord.Message) => {
     if (mentions.length !== 1) {
         helper.sendErrorMessage(
             message,
-            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
             `Please mention one user.`,
         );
         return;
@@ -567,7 +567,7 @@ export const tip = async (message: Discord.Message) => {
     if (mentions[0].bot || mentions[0].id === message.author.id) {
         helper.sendErrorMessage(
             message,
-            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
             `You cannot tip yourself nor bots.`,
         );
         return;
@@ -580,7 +580,7 @@ export const tip = async (message: Discord.Message) => {
     if (isNaN(Number(amount)) || !isFinite(Number(amount)) || Number(amount) < 0) {
         helper.sendErrorMessage(
             message,
-            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
             `Please enter a valid amount.`,
         );
         return;
@@ -592,18 +592,18 @@ export const tip = async (message: Discord.Message) => {
         await main.log(`Error while getting balance of user ${message.author.id}: ${balance[0]}`);
         helper.sendErrorMessage(
             message,
-            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
             `An error occured while getting your balance.`,
         );
         return;
     }
 
     // Check if the user has enough balance to tip
-    if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.paytxfee) {
+    if (parseFloat(balance[1]) < parseFloat(amount) + config.coin.txfee) {
         helper.sendErrorMessage(
             message,
-            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
-            `You do not have enough balance to tip. Take the fee (${config.coin.paytxfee}) into account as well.`,
+            `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
+            `You do not have enough balance to tip. Take the fee (${config.coin.txfee}) into account as well.`,
         );
         return;
     }
@@ -614,7 +614,7 @@ export const tip = async (message: Discord.Message) => {
         await main.log(`Error while donating to ${config.project.donationaddress}: ${tipData[0]}`);
         helper.sendErrorMessage(
             message,
-            `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+            `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
             `An error occured while tipping.`,
         );
         return;
@@ -626,7 +626,7 @@ export const tip = async (message: Discord.Message) => {
             .send({
                 embeds: [
                     {
-                        description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                        description: `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
                         color: 1363892,
                         fields: [
                             {
@@ -645,7 +645,7 @@ export const tip = async (message: Discord.Message) => {
         .send({
             embeds: [
                 {
-                    description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                    description: `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
                     color: 1363892,
                     fields: [
                         {
@@ -660,7 +660,7 @@ export const tip = async (message: Discord.Message) => {
                         },
                         {
                             name: `__Amount__`,
-                            value: `**${amount} ${config.coin.coinsymbol}**`,
+                            value: `**${amount} ${config.coin.symbol}**`,
                             inline: true,
                         },
                     ],
@@ -673,7 +673,7 @@ export const tip = async (message: Discord.Message) => {
                 .send({
                     embeds: [
                         {
-                            description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                            description: `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -703,7 +703,7 @@ export const tip = async (message: Discord.Message) => {
         .send({
             embeds: [
                 {
-                    description: `**:money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Tip :moneybag::money_with_wings:**`,
+                    description: `**:money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Tip :moneybag::money_with_wings:**`,
                     color: 1363892,
                     fields: [
                         {
@@ -713,7 +713,7 @@ export const tip = async (message: Discord.Message) => {
                         },
                         {
                             name: `__Amount__`,
-                            value: `**${amount} ${config.coin.coinsymbol}**`,
+                            value: `**${amount} ${config.coin.symbol}**`,
                             inline: true,
                         },
                     ],
@@ -728,7 +728,7 @@ export const walletversion = async (message: Discord.Message) => {
     if (networkInfoData[0]) {
         helper.sendErrorMessage(
             message,
-            `**:outbox_tray::money_with_wings::moneybag: ${config.coin.coinname} (${config.coin.coinsymbol}) Wallet Version :outbox_tray::money_with_wings::moneybag:**`,
+            `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Wallet Version :outbox_tray::money_with_wings::moneybag:**`,
             `An error occured while getting the wallet version.`,
         );
         return;
@@ -739,7 +739,7 @@ export const walletversion = async (message: Discord.Message) => {
         .send({
             embeds: [
                 {
-                    description: `**:robot: ${config.coin.coinname} (${config.coin.coinsymbol}) Bot wallet version information :robot:**`,
+                    description: `**:robot: ${config.coin.name} (${config.coin.symbol}) Bot wallet version information :robot:**`,
                     color: 1363892,
                     footer: {
                         text: `Avian Network`,
@@ -777,7 +777,7 @@ export const privatekey = async (message: Discord.Message) => {
         );
         helper.sendErrorMessage(
             message,
-            `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+            `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
             `An error occured while getting your address.`,
         );
         return;
@@ -792,7 +792,7 @@ export const privatekey = async (message: Discord.Message) => {
             );
             helper.sendErrorMessage(
                 message,
-                `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
                 `An error occured while dumping your private key.`,
             );
             return;
@@ -803,7 +803,7 @@ export const privatekey = async (message: Discord.Message) => {
                 .reply({
                     embeds: [
                         {
-                            description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key sent:moneybag::money_with_wings::closed_lock_with_key:**`,
+                            description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key sent:moneybag::money_with_wings::closed_lock_with_key:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -827,7 +827,7 @@ export const privatekey = async (message: Discord.Message) => {
             .send({
                 embeds: [
                     {
-                        description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) your private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                        description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) your private key:moneybag::money_with_wings::closed_lock_with_key:**`,
                         color: 1363892,
                         fields: [
                             {
@@ -848,7 +848,7 @@ export const privatekey = async (message: Discord.Message) => {
                 // If the user has their DMs disabled, send an error message
                 helper.sendErrorMessage(
                     message,
-                    `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                    `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
                     `**Your private key was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });
@@ -861,7 +861,7 @@ export const privatekey = async (message: Discord.Message) => {
             );
             helper.sendErrorMessage(
                 message,
-                `**:moneybag::card_index::bank: ${config.coin.coinname} (${config.coin.coinsymbol}) deposit address :moneybag::card_index::bank:**`,
+                `**:moneybag::card_index::bank: ${config.coin.name} (${config.coin.symbol}) deposit address :moneybag::card_index::bank:**`,
                 `An error occured while generating a new deposit address.`,
             );
             return;
@@ -874,7 +874,7 @@ export const privatekey = async (message: Discord.Message) => {
             );
             helper.sendErrorMessage(
                 message,
-                `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
                 `An error occured while dumping your private key.`,
             );
             return;
@@ -885,7 +885,7 @@ export const privatekey = async (message: Discord.Message) => {
                 .reply({
                     embeds: [
                         {
-                            description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key sent:moneybag::money_with_wings::closed_lock_with_key:**`,
+                            description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key sent:moneybag::money_with_wings::closed_lock_with_key:**`,
                             color: 1363892,
                             fields: [
                                 {
@@ -909,7 +909,7 @@ export const privatekey = async (message: Discord.Message) => {
             .send({
                 embeds: [
                     {
-                        description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) your private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                        description: `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) your private key:moneybag::money_with_wings::closed_lock_with_key:**`,
                         color: 1363892,
                         fields: [
                             {
@@ -930,7 +930,7 @@ export const privatekey = async (message: Discord.Message) => {
                 // If the user has their DMs disabled, send an error message
                 helper.sendErrorMessage(
                     message,
-                    `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.coinname} (${config.coin.coinsymbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
+                    `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
                     `**Your private key was not able to be sent via DM, do you have DM's disabled?**`,
                 );
             });

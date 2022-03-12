@@ -16,22 +16,22 @@ export const exchanges = (message: Discord.Message) => {
         .reply({
             embeds: [
                 {
-                    description: `**:chart_with_upwards_trend:  ${config.coin.coinname} (${config.coin.coinsymbol}) Exchange listings  :chart_with_upwards_trend:\n\u200b**`,
+                    description: `**:chart_with_upwards_trend:  ${config.coin.name} (${config.coin.symbol}) Exchange listings  :chart_with_upwards_trend:\n\u200b**`,
                     color: 1363892,
                     fields: [
                         {
                             name: `:chart_with_upwards_trend:  Exbitron Exchange  :chart_with_upwards_trend:`,
                             value:
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}btc\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}usdt\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}ltc\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}rvn\n` +
-                                `https://www.exbitron.com/trading/${config.coin.coinsymbol.toLowerCase()}doge\n\u200b`,
+                                `https://www.exbitron.com/trading/${config.coin.symbol.toLowerCase()}btc\n` +
+                                `https://www.exbitron.com/trading/${config.coin.symbol.toLowerCase()}usdt\n` +
+                                `https://www.exbitron.com/trading/${config.coin.symbol.toLowerCase()}ltc\n` +
+                                `https://www.exbitron.com/trading/${config.coin.symbol.toLowerCase()}rvn\n` +
+                                `https://www.exbitron.com/trading/${config.coin.symbol.toLowerCase()}doge\n\u200b`,
                             inline: false,
                         },
                         {
                             name: `:chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:`,
-                            value: `https://tradeogre.com/exchange/BTC-${config.coin.coinsymbol.toUpperCase()}\n\u200b`,
+                            value: `https://tradeogre.com/exchange/BTC-${config.coin.symbol.toUpperCase()}\n\u200b`,
                             inline: false,
                         },
                         {
@@ -63,26 +63,24 @@ export const wavn = async (message: Discord.Message) => {
     if (!tokenSupplyData || tokenSupplyData[`status`] !== `1`) {
         helper.sendErrorMessage(
             message,
-            `**:gift: w${config.coin.coinsymbol} Token information :gift:**`,
+            `**:gift: w${config.coin.symbol} Token information :gift:**`,
             `*Error fetching the wAVN supply.*`,
         );
         return;
     }
 
     const date = new Date().toUTCString().replace(`,`, ` `);
-    const supply = parseFloat(
-        (tokenSupplyData[`result`] / 1000000000000000000).toFixed(18),
-    ).toString();
+    const supply = (tokenSupplyData[`result`] / 1000000000000000000).toString();
 
     message.channel
         .send({
             embeds: [
                 {
-                    description: `**:gift: w${config.coin.coinsymbol} Token information :gift:**`,
+                    description: `**:gift: w${config.coin.symbol} Token information :gift:**`,
                     color: 1363892,
                     fields: [
                         {
-                            name: `:envelope_with_arrow:  Wrap your ${config.coin.coinsymbol}!  :envelope_with_arrow:`,
+                            name: `:envelope_with_arrow:  Wrap your ${config.coin.symbol}!  :envelope_with_arrow:`,
                             value: config.wavn.url,
                             inline: false,
                         },
@@ -92,7 +90,7 @@ export const wavn = async (message: Discord.Message) => {
                             inline: false,
                         },
                         {
-                            name: `:coin:  w${config.coin.coinsymbol} Token Supply  :coin:`,
+                            name: `:coin:  w${config.coin.symbol} Token Supply  :coin:`,
                             value: supply,
                             inline: true,
                         },

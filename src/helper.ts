@@ -28,7 +28,7 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
             .reply({
                 embeds: [
                     {
-                        description: `**:robot: ${config.coin.coinname} (${config.coin.coinsymbol}) bot :robot:**`,
+                        description: `**:robot: ${config.coin.name} (${config.coin.symbol}) bot :robot:**`,
                         color: 1363892,
                         footer: {
                             text: `Avian Network`,
@@ -48,7 +48,7 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
                 // Delete the message after the the message timeout defined in the config file has expired
                 setTimeout(() => {
                     sentMessage.delete();
-                }, config.bot.msgtimeout);
+                }, config.bot.deletetimeout);
             });
     }
 };
@@ -128,7 +128,7 @@ export const deleteAfterTimeout = (sentMessage: Discord.Message) => {
     } else {
         setTimeout(() => {
             sentMessage.delete();
-        }, config.bot.msgtimeout);
+        }, config.bot.deletetimeout);
     }
 };
 

@@ -15,7 +15,7 @@ const links = (message: Discord.Message) => {
         .reply({
             embeds: [
                 {
-                    description: `**:globe_with_meridians:  ${config.coin.coinname} (${config.coin.coinsymbol}) Official Links  :globe_with_meridians:\n\u200b**`,
+                    description: `**:globe_with_meridians:  ${config.coin.name} (${config.coin.symbol}) Official Links  :globe_with_meridians:\n\u200b**`,
                     color: 1363892,
                     fields: [
                         {
@@ -90,12 +90,12 @@ const help = (message: Discord.Message) => {
         .reply({
             embeds: [
                 {
-                    description: `__**${config.coin.coinname} (${config.coin.coinsymbol}) Tipper**__`,
+                    description: `__**${config.coin.name} (${config.coin.symbol}) Tipper**__`,
                     color: 1363892,
                     fields: [
                         {
                             name: `:left_right_arrow:  Transaction fee for withdrawals  :left_right_arrow:`,
-                            value: `${config.coin.paytxfee} ${config.coin.coinsymbol}\n(no fees on tips)\n\u200b`,
+                            value: `${config.coin.txfee} ${config.coin.symbol}\n(no fees on tips)\n\u200b`,
                             inline: false,
                         },
                         {
@@ -110,7 +110,7 @@ const help = (message: Discord.Message) => {
                                 `**${config.bot.prefix} deposit:** Get your deposit address.\n` +
                                 `**${config.bot.prefix} donate:** Display the Avian Foundation donation address.\n` +
                                 `**${config.bot.prefix} donate <amount>:** Donate to the Avian Foundation.\n` +
-                                `**${config.bot.prefix} withdraw <address> <amount>:** Withdraw ${config.coin.coinname} to specified address.\n` +
+                                `**${config.bot.prefix} withdraw <address> <amount>:** Withdraw ${config.coin.name} to specified address.\n` +
                                 `**${config.bot.prefix} tip <@user> <amount>:** Mention an user with @ and the amount to tip them.\n` +
                                 `**${config.bot.prefix} walletversion:** Display the wallet version of the bot.\n` +
                                 `**${config.bot.prefix} privatekey:** Send the private key for your wallet to your DM.\n\u200b`,
@@ -119,21 +119,21 @@ const help = (message: Discord.Message) => {
                         {
                             name: `:chart_with_upwards_trend:  Market Data  :chart_with_upwards_trend:`,
                             value:
-                                `**${config.bot.prefix} exchanges:** Display ${config.coin.coinname} exchange listings.\n` +
-                                `**${config.bot.prefix} <usdt|btc|ltc|rvn|doge>:** Display ${config.coin.coinname} market data.\n` +
-                                `**${config.bot.prefix} <usdt|btc|ltc|rvn|doge> <number of coins>:** Calculate market value of ${config.coin.coinname} coins in the selected currency.\n` +
-                                `**${config.bot.prefix} cap <usdt|btc|ltc|rvn|doge>:** Display the ${config.coin.coinname} marketcap data in the selected currency.\n` +
-                                `**${config.bot.prefix} wavn:** Display w${config.coin.coinsymbol} information.\n` +
-                                `**${config.bot.prefix} sushi:** Display w${config.coin.coinsymbol} SushiSwap information.\n` +
-                                `**${config.bot.prefix} nomics <avn|wavn>:** Display ${config.coin.coinsymbol} or w${config.coin.coinsymbol} market information.\n\u200b`,
+                                `**${config.bot.prefix} exchanges:** Display ${config.coin.name} exchange listings.\n` +
+                                `**${config.bot.prefix} <usdt|btc|ltc|rvn|doge>:** Display ${config.coin.name} market data.\n` +
+                                `**${config.bot.prefix} <usdt|btc|ltc|rvn|doge> <number of coins>:** Calculate market value of ${config.coin.name} coins in the selected currency.\n` +
+                                `**${config.bot.prefix} cap <usdt|btc|ltc|rvn|doge>:** Display the ${config.coin.name} marketcap data in the selected currency.\n` +
+                                `**${config.bot.prefix} wavn:** Display w${config.coin.symbol} information.\n` +
+                                `**${config.bot.prefix} sushi:** Display w${config.coin.symbol} SushiSwap information.\n` +
+                                `**${config.bot.prefix} nomics <avn|wavn>:** Display ${config.coin.symbol} or w${config.coin.symbol} market information.\n\u200b`,
                             inline: false,
                         },
                         {
                             name: `:mag:  Explorer Functions  :mag:`,
                             value:
-                                `**${config.bot.prefix} wealth:** Display the ${config.coin.coinname} wealth distribution\n` +
-                                `**${config.bot.prefix} supply:** Display the current ${config.coin.coinname} coin supply and market capacity.\n` +
-                                `**${config.bot.prefix} qr <address>:** Display QR Code for an ${config.coin.coinname} address.\n\u200b`,
+                                `**${config.bot.prefix} wealth:** Display the ${config.coin.name} wealth distribution\n` +
+                                `**${config.bot.prefix} supply:** Display the current ${config.coin.name} coin supply and market capacity.\n` +
+                                `**${config.bot.prefix} qr <address>:** Display QR Code for an ${config.coin.name} address.\n\u200b`,
                             inline: false,
                         },
                         {
@@ -143,7 +143,7 @@ const help = (message: Discord.Message) => {
                                 `**${config.bot.prefix} miningcalc <MinotaurX|X16RT> <KH/s|MH/s>:** Calculate mining returns for MinotaurX or X16RT (Supply hashrate in KH/s for MinotaurX and MH/s for X16RT).\n` +
                                 `**${config.bot.prefix} blockchaininfo:** Display blockchain information.\n` +
                                 `**${config.bot.prefix} miners:** Display compatible mining software.\n` +
-                                `**${config.bot.prefix} validate <address>:** Validate an ${config.coin.coinname} address.\n\u200b`,
+                                `**${config.bot.prefix} validate <address>:** Validate an ${config.coin.name} address.\n\u200b`,
                             inline: false,
                         },
                         {
@@ -172,7 +172,7 @@ const uptime = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
+                        description: `**:tools::robot:  ${config.coin.name} (${config.coin.symbol}) bot and wallet uptime  :robot::tools:**`,
                         color: 1363892,
                         thumbnail: {
                             url: `${config.project.explorer}images/avian_256x256x32.png`,
@@ -213,7 +213,7 @@ const uptime = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:tools::robot:  ${config.coin.coinname} (${config.coin.coinsymbol}) bot and wallet uptime  :robot::tools:**`,
+                        description: `**:tools::robot:  ${config.coin.name} (${config.coin.symbol}) bot and wallet uptime  :robot::tools:**`,
                         color: 1363892,
                         thumbnail: {
                             url: `${config.project.explorer}images/avian_256x256x32.png`,

@@ -10,7 +10,7 @@ import * as main from "./index.js";
 import * as helper from "./helper.js";
 
 export const supply = async (message: Discord.Message) => {
-    const price = await helper.getTicker(`usdt`).catch(async (error) => {
+    const price = await helper.getTickerExbitron(`usdt`).catch(async (error) => {
         await main.log(`Error fetching price: ${error}`, {
             logFile: `exbitron.log`,
         });

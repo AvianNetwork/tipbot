@@ -11,7 +11,7 @@ import * as commands from "./commands.js";
 
 // We can only fetch channels within the bot.on(`ready`) function
 let logChannel: Discord.TextChannel;
-let priceChannel: Discord.TextChannel;
+let priceChannel: Discord.VoiceChannel;
 
 // Create the bot
 const bot = new Discord.Client({
@@ -44,7 +44,7 @@ bot.on(`ready`, async () => {
         console.error(`[${helper.getTime()}] Discord bot error: Price channel not found.`);
         process.exit(1);
     } else {
-        priceChannel = <Discord.TextChannel>tempPriceChannel;
+        priceChannel = <Discord.VoiceChannel>tempPriceChannel;
     }
 
     // Send startup messages
@@ -67,7 +67,7 @@ bot.on(`ready`, async () => {
 
     // Set the price in the bot presence and channel name
     setInterval(async () => {
-        const ticker = await helper.getTicker(`usdt`).catch(async (error) => {
+        const ticker = await helper.getTickerExbitron(`usdt`).catch(async (error) => {
             await fs.appendFile(
                 `logs/exbitron.log`,
                 `[${helper.getTime()}] Error while fetching Exbitron price: ${error}\n`,
@@ -169,7 +169,15 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `exchanges`:
         case `wavn`:
         case `sushi`:
+        case `price`:
             helper.spamOrDM(message, commands[command]);
+            break;
+        case `usdt`:
+        case `btc`:
+        case `ltc`:
+        case `rvn`:
+        case `doge`:
+            helper.spamOrDM(message, commands.priceDeprecated);
             break;
         // TODO: !avn <usdt|btc|ltc|rvn|doge>
         // TODO: !avn <usdt|btc|ltc|rvn|doge> <number of coins>

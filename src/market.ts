@@ -30,7 +30,7 @@ export const exchanges = (message: Discord.Message) => {
                             inline: false,
                         },
                         {
-                            name: `:chart_with_upwards_trend:  Trade Ogre Exchange  :chart_with_upwards_trend:`,
+                            name: `:chart_with_upwards_trend:  TradeOgre Exchange  :chart_with_upwards_trend:`,
                             value: `https://tradeogre.com/exchange/BTC-${config.coin.symbol.toUpperCase()}\n\u200b`,
                             inline: false,
                         },
@@ -246,4 +246,210 @@ export const sushi = async (message: Discord.Message) => {
             })
             .then(helper.deleteAfterTimeout);
     }
+};
+
+export const price = async (message: Discord.Message) => {
+    const date = new Date().toUTCString().replace(`,`, ` `);
+
+    // Parse the currency and check if it is valid
+    const currency = message.content
+        .slice(config.bot.prefix.length)
+        .trim()
+        .split(/ +/g)[1]
+        .toLowerCase();
+    if (!currency) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a currency*`,
+        );
+        return;
+    }
+
+    // Make sure the user provided a valid currency
+    if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`]*`,
+        );
+        return;
+    }
+
+    // Get the price data from exbitron
+    const ExbitronData = await helper.getTickerExbitron(currency).catch(async (error) => {
+        await main.log(`Error fetching data from Exbitron: ${error}`, {
+            logFile: `exbitron.log`,
+        });
+        return undefined;
+    });
+
+    if (!ExbitronData) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Error fetching price data*`,
+        );
+        return;
+    }
+
+    // Get the price data from TradeOgre
+    let TradeOgreData:
+        | {
+              success: boolean;
+              initialprice: string;
+              price: string;
+              high: string;
+              low: string;
+              volume: string;
+              bid: string;
+              ask: string;
+          }
+        | undefined;
+    if ([`btc`, `ltc`].includes(currency) === true) {
+        TradeOgreData = await helper.getTickerTradeOgre(currency).catch(async (error) => {
+            await main.log(`Error fetching data from TradeOgre: ${error}`, {
+                logFile: `tradeogre.log`,
+            });
+            return undefined;
+        });
+
+        if (!TradeOgreData) {
+            helper.sendErrorMessage(
+                message,
+                `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+                `*Error fetching price data 1*`,
+            );
+            return;
+        }
+    }
+
+    // Create the TradeOgre embed
+    const TradeOgreEmbed: Discord.EmbedFieldData[] | undefined = TradeOgreData
+        ? [
+              {
+                  name: `\u200b`,
+                  value: `\u200b`,
+                  inline: false,
+              },
+              {
+                  name: `TradeOgre (${config.coin.symbol.toUpperCase()}/${currency.toUpperCase()})`,
+                  value: `https://tradeogre.com/exchange/${currency.toUpperCase()}-${config.coin.symbol.toUpperCase()}`,
+                  inline: false,
+              },
+              {
+                  name: `:record_button: Last`,
+                  value: Number(TradeOgreData[`price`]).toFixed(8),
+                  inline: true,
+              },
+              {
+                  name: `:arrow_down: Low`,
+                  value: Number(TradeOgreData[`low`]).toFixed(8),
+                  inline: true,
+              },
+              {
+                  name: `:arrow_up: High`,
+                  value: Number(TradeOgreData[`high`]).toFixed(8),
+                  inline: true,
+              },
+              {
+                  name: `Open`,
+                  value: Number(TradeOgreData[`initialprice`]).toFixed(8),
+                  inline: true,
+              },
+              {
+                  name: `Volume(${currency.toUpperCase()})`,
+                  value: `${Number(TradeOgreData[`volume`]).toFixed(8)} ${currency.toUpperCase()}`,
+                  inline: true,
+              },
+              {
+                  name: `\u200b`,
+                  value: `\u200b`,
+                  inline: true,
+              },
+              {
+                  name: `Bid`,
+                  value: `${Number(TradeOgreData[`bid`]).toFixed(8)} ${currency.toUpperCase()}`,
+                  inline: true,
+              },
+              {
+                  name: `Ask`,
+                  value: `${Number(TradeOgreData[`ask`]).toFixed(8)} ${currency.toUpperCase()}`,
+                  inline: true,
+              },
+              {
+                  name: `\u200b`,
+                  value: `\u200b`,
+                  inline: true,
+              },
+          ]
+        : undefined;
+
+    // Init the embed and fill it with the Exbitron data
+    let finalEmbed: Discord.EmbedFieldData[] = [
+        {
+            name: `Exbitron (${config.coin.symbol.toUpperCase()}/${currency.toUpperCase()})`,
+            value: `https://www.exbitron.com/trading/${config.coin.symbol.toLowerCase()}${currency}`,
+            inline: false,
+        },
+        {
+            name: `:record_button: Last`,
+            value: Number(ExbitronData[`last`]).toFixed(8),
+            inline: true,
+        },
+        {
+            name: `:arrow_down: Low`,
+            value: Number(ExbitronData[`low`]).toFixed(8),
+            inline: true,
+        },
+        {
+            name: `:arrow_up: High`,
+            value: Number(ExbitronData[`high`]).toFixed(8),
+            inline: true,
+        },
+        {
+            name: `Open`,
+            value: Number(ExbitronData[`open`]).toFixed(8),
+            inline: true,
+        },
+        {
+            name: `Volume (${currency.toUpperCase()})`,
+            value: `${Number(ExbitronData[`volume`]).toFixed(8)} ${currency.toUpperCase()}`,
+            inline: true,
+        },
+        {
+            name: `Volume (${config.coin.symbol})`,
+            value: `${Number(ExbitronData[`amount`]).toFixed(2)} ${config.coin.symbol}`,
+            inline: true,
+        },
+        {
+            name: `Change`,
+            value: ExbitronData[`price_change_percent`],
+            inline: true,
+        },
+    ];
+
+    // Add the TradeOgre data if it exists
+    if (TradeOgreEmbed) {
+        finalEmbed = finalEmbed.concat(TradeOgreEmbed);
+    }
+
+    // Add the date
+    finalEmbed.push({
+        name: `:clock: Time`,
+        value: date,
+        inline: false,
+    });
+
+    message.channel
+        .send({
+            embeds: [
+                {
+                    description: `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+                    color: 1363892,
+                    fields: finalEmbed,
+                },
+            ],
+        })
+        .then(helper.deleteAfterTimeout);
 };

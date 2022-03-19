@@ -8,7 +8,7 @@
         "start": "node .",
         "build": "tsc",
         "format": "prettier -w src/**/*",
-        "dev": "nodemon --watch src -e ts -x \"npm run build; npm start\""
+        "dev": "nodemon -w src -e ts -x \"npm run build; npm start\""
     },
     "repository": {
         "type": "git",

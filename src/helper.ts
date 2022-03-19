@@ -16,6 +16,17 @@ export const getTime = () => {
     return dayjs().tz(config.bot.timezone[0]).format(config.bot.timezone[1]);
 };
 
+// Deletes a message after the defined timeout specified in config.ts, except if the message was sent in a DM
+export const deleteAfterTimeout = (sentMessage: Discord.Message) => {
+    if (sentMessage.channel.type === `DM`) {
+        return;
+    } else {
+        setTimeout(() => {
+            sentMessage.delete();
+        }, config.bot.deletetimeout);
+    }
+};
+
 // Mainly used for commands handling
 export const spamOrDM = async (message: Discord.Message, callback: Function) => {
     // Check if the message is in a DM or in the spam channel
@@ -44,15 +55,11 @@ export const spamOrDM = async (message: Discord.Message, callback: Function) => 
                     },
                 ],
             })
-            .then((sentMessage) => {
-                // Delete the message after the the message timeout defined in the config file has expired
-                setTimeout(() => {
-                    sentMessage.delete();
-                }, config.bot.deletetimeout);
-            });
+            .then(deleteAfterTimeout);
     }
 };
 
+// Connects to the Avian RPC, sends the data specified in the arguments and returns the response
 export const rpc = (method: string, params: any[]): Promise<[string | undefined, any]> => {
     // [error, result]
     return new Promise(async (resolve) => {
@@ -87,8 +94,9 @@ export const rpc = (method: string, params: any[]): Promise<[string | undefined,
     });
 };
 
-export const getTicker = async (
-    asset: string = "usdt",
+// Fetches the price data from Exbitron and returns it
+export const getTickerExbitron = async (
+    asset: string = `usdt`,
 ): Promise<{
     // Set this big object so we can have type checking when using the function
     low: string;
@@ -120,18 +128,39 @@ export const getTicker = async (
     });
 };
 
-export const deleteAfterTimeout = (sentMessage: Discord.Message) => {
-    // If the message was sent in the spam channel, delete it after the timeout specified in the config file.
-    // If it was sent in a DM, do not delete it.
-    if (sentMessage.channel.type === `DM`) {
+// Fetches the price data from TradeOgre and returns it
+export const getTickerTradeOgre = async (
+    asset: string = `BTC`,
+): Promise<{
+    // Set this big object so we can have type checking when using the function
+    success: boolean;
+    initialprice: string;
+    price: string;
+    high: string;
+    low: string;
+    volume: string;
+    bid: string;
+    ask: string;
+}> => {
+    return new Promise(async (resolve, reject) => {
+        // Fetch the API data
+        const data: any = await (
+            await fetch(`https://tradeogre.com/api/v1/ticker/${asset}-AVN`)
+        ).json();
+
+        // If an error has occurred, reject the promise
+        if (data[`success`] !== true) {
+            reject(data[`error`]);
+            return;
+        }
+
+        // If no error has occurred, resolve the promise
+        resolve(data);
         return;
-    } else {
-        setTimeout(() => {
-            sentMessage.delete();
-        }, config.bot.deletetimeout);
-    }
+    });
 };
 
+// Sends an error message containing the error message specified in the arguments
 export const sendErrorMessage = (message: Discord.Message, description: string, error: string) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
     message

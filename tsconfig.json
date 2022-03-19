@@ -4,7 +4,6 @@
         "module": "ESNEXT",
         "strict": true,
         "outDir": "build",
-        "sourceMap": true,
         "noImplicitAny": true,
         "removeComments": true,
         "allowSyntheticDefaultImports": true,

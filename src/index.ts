@@ -102,23 +102,21 @@ export const log = async (
 // General error handling
 process.on(`uncaughtException`, async (error) => {
     await log(`uncaughtException: ${error}`);
-    process.exit(1);
 });
 
 process.on(`unhandledRejection`, async (error) => {
     await log(`unhandledRejection: ${error}`);
-    process.exit(1);
 });
 
 bot.on(`disconnected`, async () => {
-    await log(`[${helper.getTime()}] Disconnected.`, {
+    await log(`Disconnected.`, {
         sendToLogChannel: false,
     });
     process.exit(1);
 });
 
 bot.on(`error`, async (error) => {
-    await log(`[${helper.getTime()}] Discord bot error: ${error}`, {
+    await log(`Discord bot error: ${error}`, {
         sendToLogChannel: false,
     });
     process.exit(1);
@@ -170,6 +168,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `wavn`:
         case `sushi`:
         case `price`:
+        case `convert`:
             helper.spamOrDM(message, commands[command]);
             break;
         case `usdt`:
@@ -179,7 +178,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `doge`:
             helper.spamOrDM(message, commands.priceDeprecated);
             break;
-        // TODO: !avn <usdt|btc|ltc|rvn|doge>
         // TODO: !avn <usdt|btc|ltc|rvn|doge> <number of coins>
         // TODO: !avn cap <usdt|btc|ltc|rvn|doge>
         // TODO: !avn nomics <avn|wavn>
@@ -213,6 +211,9 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             break;
 
         // Others
+        case `dm`:
+            commands.dmDeprecated(message);
+            break;
         case `links`:
         case `uptime`:
         case `help`:

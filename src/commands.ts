@@ -8,12 +8,6 @@ import Discord from "discord.js";
 import * as main from "./index.js";
 import * as helper from "./helper.js";
 
-const priceDeprecated = (message: Discord.Message) => {
-    message.reply(
-        `Please use \`${config.bot.prefix} price <currency>\` or \`${config.bot.prefix} convert <currency>\` instead.`
-    ).then(helper.deleteAfterTimeout);
-};
-
 const links = (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
 
@@ -248,8 +242,22 @@ const uptime = async (message: Discord.Message) => {
     }
 };
 
+const priceDeprecated = (message: Discord.Message) => {
+    message
+        .reply(
+            `Please use \`${config.bot.prefix} price <currency>\` or \`${config.bot.prefix} convert <currency>\` instead.`,
+        )
+        .then(helper.deleteAfterTimeout);
+};
+
+const dmDeprecated = (message: Discord.Message) => {
+    message
+        .reply(`!avn dm has been deprecated. Please just dm me instead.`)
+        .then(helper.deleteAfterTimeout);
+};
+
 // Export functions.
-export { uptime, help, links, priceDeprecated };
+export { links, help, uptime, priceDeprecated, dmDeprecated };
 
 import { supply, wealth, qr } from "./explorer.js";
 export { supply, wealth, qr };
@@ -260,5 +268,5 @@ export { mininginfo, miningcalc, blockchaininfo, miners, validate };
 import { balance, deposit, donate, withdraw, tip, walletversion, privatekey } from "./wallet.js";
 export { balance, deposit, donate, withdraw, tip, walletversion, privatekey };
 
-import { exchanges, wavn, sushi, price } from "./market.js";
-export { exchanges, wavn, sushi, price };
+import { exchanges, wavn, sushi, price, convert } from "./market.js";
+export { exchanges, wavn, sushi, price, convert };

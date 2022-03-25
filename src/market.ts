@@ -72,8 +72,8 @@ export const wavn = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
     const supply = (tokenSupplyData[`result`] / 1000000000000000000).toString();
 
-    message.channel
-        .send({
+    message
+        .reply({
             embeds: [
                 {
                     description: `**:gift: w${config.coin.symbol} Token information :gift:**`,
@@ -252,12 +252,8 @@ export const price = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
 
     // Parse the currency and check if it is valid
-    const currency = message.content
-        .slice(config.bot.prefix.length)
-        .trim()
-        .split(/ +/g)[1]
-        .toLowerCase();
-    if (!currency) {
+    const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
+    if (!currencyTemp) {
         helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
@@ -265,6 +261,8 @@ export const price = async (message: Discord.Message) => {
         );
         return;
     }
+
+    const currency = currencyTemp.toLowerCase();
 
     // Make sure the user provided a valid currency
     if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
@@ -441,13 +439,88 @@ export const price = async (message: Discord.Message) => {
         inline: false,
     });
 
-    message.channel
-        .send({
+    message
+        .reply({
             embeds: [
                 {
                     description: `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
                     color: 1363892,
                     fields: finalEmbed,
+                },
+            ],
+        })
+        .then(helper.deleteAfterTimeout);
+};
+
+export const convert = async (message: Discord.Message) => {
+    // Parse the amount and check if it is valid
+    const amount = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
+    if (!amount) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify an amount*`,
+        );
+        return;
+    }
+    if (isNaN(Number(amount))) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a valid amount*`,
+        );
+        return;
+    }
+    
+    // Parse the currency and check if it is valid
+    const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
+    if (!currencyTemp) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a currency*`,
+        );
+        return;
+    }
+
+    const currency = currencyTemp.toLowerCase();
+    if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currencyTemp.toLowerCase()) === false) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`]*`,
+        );
+        return;
+    }
+
+    // Get the price data from exbitron
+    const ExbitronData = await helper.getTickerExbitron(currency).catch(async (error) => {
+        await main.log(`Error fetching data from Exbitron: ${error}`, {
+            logFile: `exbitron.log`,
+        });
+        return undefined;
+    });
+
+    if (!ExbitronData) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Error fetching price data*`,
+        );
+        return;
+    }
+
+    message
+        .reply({
+            embeds: [
+                {
+                    description: `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+                    color: 1363892,
+                    fields: [{
+                        name: `Market value of ${amount} ${config.coin.symbol}`,
+                        value: `${Number((Number(ExbitronData[`last`]) * Number(amount)).toFixed(8))} ${currency.toUpperCase()}`,
+						inline: true
+                    }],
                 },
             ],
         })

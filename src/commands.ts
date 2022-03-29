@@ -121,7 +121,7 @@ const help = (message: Discord.Message) => {
                             value:
                                 `**${config.bot.prefix} exchanges:** Display ${config.coin.name} exchange listings.\n` +
                                 `**${config.bot.prefix} price <usdt|btc|ltc|rvn|doge>:** Display ${config.coin.name} market data.\n` +
-                                `**${config.bot.prefix} convert <number of coins> <usdt|btc|ltc|rvn|doge>:** Calculate market value of ${config.coin.name} coins in the selected currency.\n` +
+                                `**${config.bot.prefix} convert <usdt|btc|ltc|rvn|doge> <number of coins>:** Calculate market value of ${config.coin.name} coins in the selected currency.\n` +
                                 `**${config.bot.prefix} cap <usdt|btc|ltc|rvn|doge>:** Display the ${config.coin.name} marketcap data in the selected currency.\n` +
                                 `**${config.bot.prefix} wavn:** Display w${config.coin.symbol} information.\n` +
                                 `**${config.bot.prefix} sushi:** Display w${config.coin.symbol} SushiSwap information.\n` +
@@ -268,5 +268,5 @@ export { mininginfo, miningcalc, blockchaininfo, miners, validate };
 import { balance, deposit, donate, withdraw, tip, walletversion, privatekey } from "./wallet.js";
 export { balance, deposit, donate, withdraw, tip, walletversion, privatekey };
 
-import { exchanges, wavn, sushi, price, convert } from "./market.js";
-export { exchanges, wavn, sushi, price, convert };
+import { exchanges, wavn, sushi, price, convert, cap } from "./market.js";
+export { exchanges, wavn, sushi, price, convert, cap };

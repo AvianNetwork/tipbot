@@ -10,12 +10,15 @@ import * as main from "./index.js";
 import * as helper from "./helper.js";
 
 export const supply = async (message: Discord.Message) => {
+    // Get the price
     const price = await helper.getTickerExbitron(`usdt`).catch(async (error) => {
         await main.log(`Error fetching price: ${error}`, {
             logFile: `exbitron.log`,
         });
         return undefined;
     });
+
+    // Get the supply
     const supplyData: any = await (await fetch(`${config.project.explorer}ext/getmoneysupply`))
         .text()
         .catch(async (error) => {
@@ -23,6 +26,7 @@ export const supply = async (message: Discord.Message) => {
             return undefined;
         });
 
+    // Check if the data is valid
     if (!supplyData || !price) {
         helper.sendErrorMessage(
             message,
@@ -30,13 +34,8 @@ export const supply = async (message: Discord.Message) => {
             `*Error fetching the supply or price.*`,
         );
     } else {
-        const marketCapacity = Number(
-            parseFloat(price[`last`]) * Number(supplyData),
-        ).toLocaleString(`en-US`, { minimumFractionDigits: 8, maximumFractionDigits: 8 });
-        const supply = Number(supplyData).toLocaleString(`en-US`, {
-            minimumFractionDigits: 8,
-            maximumFractionDigits: 8,
-        });
+        const marketCapacity = Number((parseFloat(price[`last`]) * Number(supplyData)).toFixed(8));
+        const supply = Number(parseFloat(supplyData).toFixed(8)).toString();
 
         message
             .reply({

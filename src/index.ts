@@ -143,24 +143,18 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `balance`:
             commands.balance(message);
             break;
-        case `deposit`:
-            helper.spamOrDM(message, commands.deposit);
-            break;
-        case `donate`:
-            helper.spamOrDM(message, commands.donate);
-            break;
-        case `withdraw`:
-            helper.spamOrDM(message, commands.withdraw);
-            break;
         case `tip`:
             commands.tip(message);
-            break;
-        case `walletversion`:
-            helper.spamOrDM(message, commands.walletversion);
             break;
         case `privkey`:
         case `privatekey`:
             helper.spamOrDM(message, commands.privatekey);
+            break;
+        case `deposit`:
+        case `donate`:
+        case `withdraw`:
+        case `walletversion`:
+            helper.spamOrDM(message, commands[command]);
             break;
 
         // Market data
@@ -169,6 +163,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `sushi`:
         case `price`:
         case `convert`:
+        case `cap`:
             helper.spamOrDM(message, commands[command]);
             break;
         case `usdt`:
@@ -178,7 +173,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `doge`:
             helper.spamOrDM(message, commands.priceDeprecated);
             break;
-        // TODO: !avn <usdt|btc|ltc|rvn|doge> <number of coins>
         // TODO: !avn cap <usdt|btc|ltc|rvn|doge>
         // TODO: !avn nomics <avn|wavn>
 
@@ -196,14 +190,12 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.mininginfo);
             break;
         case `miningcalc`:
-            helper.spamOrDM(message, commands.miningcalc);
+        case `miners`:
+            helper.spamOrDM(message, commands[command]);
             break;
         case `chaininfo`:
         case `blockchaininfo`:
             helper.spamOrDM(message, commands.blockchaininfo);
-            break;
-        case `miners`:
-            helper.spamOrDM(message, commands.miners);
             break;
         case `validateaddress`:
         case `validate`:
@@ -225,7 +217,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
             helper.spamOrDM(message, commands.help);
             break;
 
-        // If the command does not exist, don't do anything
+        // If the command does not exist, do not do anything
         default:
             break;
     }

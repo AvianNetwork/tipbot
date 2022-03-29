@@ -269,7 +269,7 @@ export const price = async (message: Discord.Message) => {
         helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
-            `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`]*`,
+            `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
         );
         return;
     }
@@ -454,7 +454,7 @@ export const price = async (message: Discord.Message) => {
 
 export const convert = async (message: Discord.Message) => {
     // Parse the amount and check if it is valid
-    const amount = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
+    const amount = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
     if (!amount) {
         helper.sendErrorMessage(
             message,
@@ -471,9 +471,9 @@ export const convert = async (message: Discord.Message) => {
         );
         return;
     }
-    
+
     // Parse the currency and check if it is valid
-    const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
+    const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
     if (!currencyTemp) {
         helper.sendErrorMessage(
             message,
@@ -488,7 +488,7 @@ export const convert = async (message: Discord.Message) => {
         helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
-            `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`]*`,
+            `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
         );
         return;
     }
@@ -516,13 +516,99 @@ export const convert = async (message: Discord.Message) => {
                 {
                     description: `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
                     color: 1363892,
-                    fields: [{
-                        name: `Market value of ${amount} ${config.coin.symbol}`,
-                        value: `${Number((Number(ExbitronData[`last`]) * Number(amount)).toFixed(8))} ${currency.toUpperCase()}`,
-						inline: true
-                    }],
+                    fields: [
+                        {
+                            name: `Market value of ${amount} ${config.coin.symbol}`,
+                            value: `${Number(
+                                (Number(ExbitronData[`last`]) * Number(amount)).toFixed(8),
+                            )} ${currency.toUpperCase()}`,
+                            inline: true,
+                        },
+                    ],
                 },
             ],
         })
         .then(helper.deleteAfterTimeout);
+};
+
+export const cap = async (message: Discord.Message) => {
+    // Parse the currency and check if it is valid
+    const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
+    if (!currencyTemp) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
+        );
+        return;
+    }
+
+    const currency = currencyTemp.toLowerCase();
+    if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currencyTemp.toLowerCase()) === false) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
+        );
+        return;
+    }
+
+    // Get the price
+    const price = await helper.getTickerExbitron(currency).catch(async (error) => {
+        await main.log(`Error fetching price: ${error}`, {
+            logFile: `exbitron.log`,
+        });
+        return undefined;
+    });
+
+    // Get the supply
+    const supplyData: any = await (await fetch(`${config.project.explorer}ext/getmoneysupply`))
+        .text()
+        .catch(async (error) => {
+            await main.log(`Error fetching the supply: ${error}`);
+            return undefined;
+        });
+
+    // Make sure the data is valid
+    if (!supplyData || !price) {
+        helper.sendErrorMessage(
+            message,
+            `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) coin supply  :bar_chart:**`,
+            `*Error fetching the supply or price.*`,
+        );
+    } else {
+        const marketCapacity = Number((parseFloat(price[`last`]) * Number(supplyData)).toFixed(8));
+        const supply = Number(parseFloat(supplyData).toFixed(8)).toString();
+
+        message
+            .reply({
+                embeds: [
+                    {
+                        description: `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) coin supply  :bar_chart:**`,
+                        color: 1363892,
+                        thumbnail: {
+                            url: `${config.project.explorer}images/avian_256x256x32.png`,
+                        },
+                        fields: [
+                            {
+                                name: `__Total coin supply__`,
+                                value: supply,
+                                inline: false,
+                            },
+                            {
+                                name: `__${config.coin.symbol} current price__`,
+                                value: `${price[`last`]} ${currency.toUpperCase()}`,
+                                inline: false,
+                            },
+                            {
+                                name: `__Current Market Capacity__`,
+                                value: `${marketCapacity} ${currency.toUpperCase()}`,
+                                inline: false,
+                            },
+                        ],
+                    },
+                ],
+            })
+            .then(helper.deleteAfterTimeout);
+    }
 };

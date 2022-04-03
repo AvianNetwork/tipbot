@@ -263,8 +263,6 @@ export const price = async (message: Discord.Message) => {
     }
 
     const currency = currencyTemp.toLowerCase();
-
-    // Make sure the user provided a valid currency
     if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
         helper.sendErrorMessage(
             message,
@@ -484,7 +482,7 @@ export const convert = async (message: Discord.Message) => {
     }
 
     const currency = currencyTemp.toLowerCase();
-    if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currencyTemp.toLowerCase()) === false) {
+    if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
         helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
@@ -544,7 +542,7 @@ export const cap = async (message: Discord.Message) => {
     }
 
     const currency = currencyTemp.toLowerCase();
-    if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currencyTemp.toLowerCase()) === false) {
+    if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
         helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,

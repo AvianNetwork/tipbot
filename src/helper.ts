@@ -144,9 +144,7 @@ export const getTickerTradeOgre = async (
 }> => {
     return new Promise(async (resolve, reject) => {
         // Fetch the API data
-        const data: any = await (
-            await fetch(`https://tradeogre.com/api/v1/ticker/${asset}-AVN`)
-        ).json();
+        const data: any = await (await fetch(`https://tradeogre.com/api/v1/ticker/${asset}-AVN`)).json();
 
         // If an error has occurred, reject the promise
         if (data[`success`] !== true) {

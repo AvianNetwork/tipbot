@@ -11,9 +11,7 @@ import * as helper from "./helper.js";
 export const balance = async (message: Discord.Message) => {
     const balanceData = await helper.rpc(`getbalance`, [message.author.id, 1]);
     if (balanceData[0]) {
-        await main.log(
-            `Error while fetching balance for user ${message.author.id}: ${balanceData[0]}`,
-        );
+        await main.log(`Error while fetching balance for user ${message.author.id}: ${balanceData[0]}`);
         helper.sendErrorMessage(
             message,
             `**:bank::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) balance :moneybag::money_with_wings::bank:**`,
@@ -128,9 +126,7 @@ export const deposit = async (message: Discord.Message) => {
                         description: `**:bank::card_index::moneybag: ${config.coin.name} (${config.coin.symbol}) Your deposit address!:moneybag::card_index::bank:**`,
                         color: 1363892,
                         thumbnail: {
-                            url: `${config.project.explorer}qr/${JSON.stringify(
-                                addressesByAccount[1][0],
-                            )}`,
+                            url: `${config.project.explorer}qr/${JSON.stringify(addressesByAccount[1][0])}`,
                         },
                         fields: [
                             {
@@ -235,9 +231,7 @@ export const donate = async (message: Discord.Message) => {
         // Get the balance of the user
         const balance = await helper.rpc(`getbalance`, [message.author.id]);
         if (balance[0]) {
-            await main.log(
-                `Error while getting balance of user ${message.author.id}: ${balance[0]}`,
-            );
+            await main.log(`Error while getting balance of user ${message.author.id}: ${balance[0]}`);
             helper.sendErrorMessage(
                 message,
                 `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
@@ -263,9 +257,7 @@ export const donate = async (message: Discord.Message) => {
             amount,
         ]);
         if (txidData[0]) {
-            await main.log(
-                `Error while donating to ${config.project.donationaddress}: ${txidData[0]}`,
-            );
+            await main.log(`Error while donating to ${config.project.donationaddress}: ${txidData[0]}`);
             helper.sendErrorMessage(
                 message,
                 `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) donating :outbox_tray::money_with_wings::moneybag:**`,
@@ -408,9 +400,7 @@ export const withdraw = async (message: Discord.Message) => {
             // Get the balance of the user
             const balance = await helper.rpc(`getbalance`, [message.author.id]);
             if (balance[0]) {
-                await main.log(
-                    `Error while getting balance of user ${message.author.id}: ${balance[0]}`,
-                );
+                await main.log(`Error while getting balance of user ${message.author.id}: ${balance[0]}`);
                 helper.sendErrorMessage(
                     message,
                     `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
@@ -430,15 +420,9 @@ export const withdraw = async (message: Discord.Message) => {
             }
 
             // Make the transaction
-            const txidData = await helper.rpc(`sendfrom`, [
-                message.author.id,
-                address,
-                Number(amount),
-            ]);
+            const txidData = await helper.rpc(`sendfrom`, [message.author.id, address, Number(amount)]);
             if (txidData[0]) {
-                await main.log(
-                    `Error while donating to ${config.project.donationaddress}: ${txidData[0]}`,
-                );
+                await main.log(`Error while donating to ${config.project.donationaddress}: ${txidData[0]}`);
                 helper.sendErrorMessage(
                     message,
                     `**:outbox_tray::money_with_wings::moneybag: ${config.coin.name} (${config.coin.symbol}) Withdraw :outbox_tray::money_with_wings::moneybag:**`,
@@ -787,9 +771,7 @@ export const privatekey = async (message: Discord.Message) => {
         // If the user already has an address, send the private key of it
         const privateKey = await helper.rpc(`dumpprivkey`, [addressesByAccount[1][0]]);
         if (privateKey[0]) {
-            await main.log(
-                `Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`,
-            );
+            await main.log(`Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`);
             helper.sendErrorMessage(
                 message,
                 `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,
@@ -869,9 +851,7 @@ export const privatekey = async (message: Discord.Message) => {
 
         const privateKey = await helper.rpc(`dumpprivkey`, [newAddress[1]]);
         if (privateKey[0]) {
-            await main.log(
-                `Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`,
-            );
+            await main.log(`Error while dumping private key for user ${message.author.id}: ${privateKey[0]}`);
             helper.sendErrorMessage(
                 message,
                 `**:closed_lock_with_key::money_with_wings::moneybag:${config.coin.name} (${config.coin.symbol}) private key:moneybag::money_with_wings::closed_lock_with_key:**`,

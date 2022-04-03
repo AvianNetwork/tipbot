@@ -251,9 +251,7 @@ const priceDeprecated = (message: Discord.Message) => {
 };
 
 const dmDeprecated = (message: Discord.Message) => {
-    message
-        .reply(`!avn dm has been deprecated. Please just dm me instead.`)
-        .then(helper.deleteAfterTimeout);
+    message.reply(`!avn dm has been deprecated. Please just dm me instead.`).then(helper.deleteAfterTimeout);
 };
 
 // Export functions.
@@ -268,5 +266,5 @@ export { mininginfo, miningcalc, blockchaininfo, miners, validate };
 import { balance, deposit, donate, withdraw, tip, walletversion, privatekey } from "./wallet.js";
 export { balance, deposit, donate, withdraw, tip, walletversion, privatekey };
 
-import { exchanges, wavn, sushi, price, convert, cap } from "./market.js";
-export { exchanges, wavn, sushi, price, convert, cap };
+import { exchanges, wavn, sushi, price, convert, cap, nomics } from "./market.js";
+export { exchanges, wavn, sushi, price, convert, cap, nomics };

@@ -33,9 +33,9 @@ export const mininginfo = async (message: Discord.Message) => {
                         fields: [
                             {
                                 name: `Network hashrate (X16RT)`,
-                                value: `${Number(
-                                    miningInfoData[1].networkhashps_x16rt / 1000000000,
-                                ).toFixed(3)} GH/s`,
+                                value: `${Number(miningInfoData[1].networkhashps_x16rt / 1000000000).toFixed(
+                                    3,
+                                )} GH/s`,
                                 inline: true,
                             },
                             {
@@ -50,9 +50,9 @@ export const mininginfo = async (message: Discord.Message) => {
                             },
                             {
                                 name: `Network hashrate (MinotaurX)`,
-                                value: `${(
-                                    miningInfoData[1].networkhashps_minotaurx / 1000000
-                                ).toFixed(3)} MH/s`,
+                                value: `${(miningInfoData[1].networkhashps_minotaurx / 1000000).toFixed(
+                                    3,
+                                )} MH/s`,
                                 inline: true,
                             },
                             {
@@ -274,9 +274,7 @@ export const miningcalc = async (message: Discord.Message) => {
                             fields: [
                                 {
                                     name: `Miner Hashrate`,
-                                    value: `**now:** ${
-                                        hashrateToUse + unit
-                                    } (${pcnt}%)\n**12hr:** ${
+                                    value: `**now:** ${hashrateToUse + unit} (${pcnt}%)\n**12hr:** ${
                                         hashrateToUse + unit
                                     } (${pcnt12}%)\n**24hr:** ${hashrateToUse + unit} (${pcnt24}%)`,
                                     inline: true,
@@ -384,11 +382,11 @@ export const blockchaininfo = async (message: Discord.Message) => {
                             },
                             {
                                 name: `Size on disk`,
-                                value: `${Number(
-                                    blockchainInfoData[1].size_on_disk / 1000000,
-                                ).toFixed(2)} MB (${Number(
-                                    blockchainInfoData[1].size_on_disk / 1000000000,
-                                ).toFixed(2)} GB)`,
+                                value: `${Number(blockchainInfoData[1].size_on_disk / 1000000).toFixed(
+                                    2,
+                                )} MB (${Number(blockchainInfoData[1].size_on_disk / 1000000000).toFixed(
+                                    2,
+                                )} GB)`,
                                 inline: true,
                             },
                             {

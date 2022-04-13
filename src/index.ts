@@ -77,8 +77,8 @@ bot.on(`ready`, async () => {
         });
         if (ticker === undefined) return;
 
-        bot.user?.setActivity(`💰 ${ticker[`last`]} USDT`, { type: `WATCHING` });
-        priceChannel.setName(`💰 ${ticker[`last`]} USDT`);
+        bot.user?.setActivity(`${ticker[`last`]} USDT`, { type: `WATCHING` });
+        priceChannel.setName(`${ticker[`last`]} USDT`);
     }, 60 * 1000); // Every minute
 });
 
@@ -164,6 +164,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `price`:
         case `convert`:
         case `cap`:
+        case `nomics`:
             helper.spamOrDM(message, commands[command]);
             break;
         case `usdt`:
@@ -173,8 +174,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
         case `doge`:
             helper.spamOrDM(message, commands.priceDeprecated);
             break;
-        // TODO: !avn cap <usdt|btc|ltc|rvn|doge>
-        // TODO: !avn nomics <avn|wavn>
 
         // Explorer functions
         case `supply`:

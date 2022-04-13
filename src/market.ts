@@ -610,3 +610,219 @@ export const cap = async (message: Discord.Message) => {
             .then(helper.deleteAfterTimeout);
     }
 };
+
+export const nomics = async (message: Discord.Message) => {
+    // Parse the currency and check if it is valid
+    const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
+    if (!currencyTemp) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a currency (\`avn\`, \`wavn\`)*`,
+        );
+        return;
+    }
+    const currency = currencyTemp.toLowerCase();
+    if ([`avn`, `wavn`].includes(currency) === false) {
+        helper.sendErrorMessage(
+            message,
+            `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+            `*Please specify a valid currency (\`avn\`, \`wavn\`)*`,
+        );
+        return;
+    }
+
+    if (currency === `avn`) {
+        const nomicsData: any = await (
+            await fetch(
+                `https://api.nomics.com/v1/currencies/ticker?key=${
+                    config.nomics.apikey
+                }&ids=${config.coin.symbol.toUpperCase()}3&interval=1d&convert=USD&per-page=100&page=1`,
+            )
+        )
+            .json()
+            .catch(async (error) => {
+                await main.log(`Error fetching data from Nomics: ${error}`, {
+                    logFile: `nomics.log`,
+                });
+                return undefined;
+            });
+
+        if (!nomicsData) {
+            helper.sendErrorMessage(
+                message,
+                `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Market Information :chart_with_upwards_trend:**`,
+                `*Error fetching data from Nomics.*`,
+            );
+        }
+
+        const date = new Date().toUTCString().replace(`,`, ` `);
+        message.reply({
+            embeds: [
+                {
+                    description: `**:chart_with_upwards_trend: ${nomicsData[0].name} (${nomicsData[0].symbol}) Market Information :chart_with_upwards_trend:b**`,
+                    color: 1363892,
+                    fields: [
+                        {
+                            name: `__Exchanges__`,
+                            value: nomicsData[0].num_exchanges,
+                            inline: true,
+                        },
+                        {
+                            name: `__Current price__`,
+                            value: `$${nomicsData[0].price}`,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Change (1d)__`,
+                            value: `${nomicsData[0][`1d`][`price_change`]} (${
+                                nomicsData[0][`1d`][`price_change_pct`]
+                            }%)`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Volume (1d)__`,
+                            value: `$${nomicsData[0][`1d`][`volume`]}`,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Rank (change)__`,
+                            value: `${nomicsData[0].rank} (${nomicsData[0].rank_delta})`,
+                            inline: true,
+                        },
+                        {
+                            name: `__All time high__`,
+                            value: `$${nomicsData[0].high}`,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `Data provided by Nomics`,
+                            value: `*https://nomics.com/assets/avn3-avian*`,
+                            inline: true,
+                        },
+                        {
+                            name: `:clock: Time`,
+                            value: date,
+                            inline: false,
+                        },
+                    ],
+                },
+            ],
+        });
+    } else if (currency === `wavn`) {
+        const nomicsData: any = await (
+            await fetch(
+                `https://api.nomics.com/v1/currencies/ticker?key=${
+                    config.nomics.apikey
+                }&ids=W${config.coin.symbol.toUpperCase()}&interval=1d&convert=USD&per-page=100&page=1`,
+            )
+        )
+            .json()
+            .catch(async (error) => {
+                await main.log(`Error fetching data from Nomics: ${error}`, {
+                    logFile: `nomics.log`,
+                });
+                return undefined;
+            });
+
+        if (!nomicsData) {
+            helper.sendErrorMessage(
+                message,
+                `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Market Information :chart_with_upwards_trend:**`,
+                `*Error fetching data from Nomics.*`,
+            );
+        }
+
+        const date = new Date().toUTCString().replace(`,`, ` `);
+        message.reply({
+            embeds: [
+                {
+                    description: `**:chart_with_upwards_trend: ${nomicsData[0].name} (${nomicsData[0].symbol}) Market Information :chart_with_upwards_trend:b**`,
+                    color: 1363892,
+                    fields: [
+                        {
+                            name: `__Platform__`,
+                            value: nomicsData[0].platform_currency,
+                            inline: true,
+                        },
+                        {
+                            name: `__Exchanges__`,
+                            value: nomicsData[0].num_exchanges,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Current price__`,
+                            value: `$${nomicsData[0].price}`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Change (1d)__`,
+                            value: `${nomicsData[0].price_change || `0.00`} (${
+                                nomicsData[0].price_change_pct || `0.00`
+                            }%)`,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Volume (1d)__`,
+                            value: `$${nomicsData[0].volume || `$0.00`}`,
+                            inline: true,
+                        },
+                        {
+                            name: `__Rank (change)__`,
+                            value: `${nomicsData[0].rank || `Unknown`} (${
+                                nomicsData[0].rank_delta || `Unknown`
+                            })`,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `__All time high__`,
+                            value: `$${nomicsData[0].high}`,
+                            inline: true,
+                        },
+                        {
+                            name: `Data provided by Nomics`,
+                            value: `*https://nomics.com/assets/wavn-wrapped-avian*`,
+                            inline: false,
+                        },
+                        {
+                            name: `:clock: Time`,
+                            value: date,
+                            inline: false,
+                        },
+                    ],
+                },
+            ],
+        });
+        // TODO: send wavn embed
+    }
+};

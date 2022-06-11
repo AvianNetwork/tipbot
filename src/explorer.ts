@@ -67,17 +67,32 @@ export const supply = async (message: Discord.Message) => {
 
 export const wealth = async (message: Discord.Message) => {
     const date = new Date().toUTCString().replace(`,`, ` `);
-    const wealthData: any = await (await fetch(`${config.project.explorer}ext/getdistribution`))
-        .json()
-        .catch(async (error) => {
-            await main.log(`Error fetching the supply: ${error}`);
+
+    // Fetch wealth data from the explorer
+    const wealthRequest = await fetch(`${config.project.explorer}ext/getdistribution`).catch(
+        async (error) => {
+            await main.log(`Error fetching the wealth distribution: ${error}`);
             return undefined;
-        });
+        },
+    );
+    if (!wealthRequest) {
+        helper.sendErrorMessage(
+            message,
+            `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) Wealth Distribution  :bar_chart:**`,
+            `*Error fetching the wealth distribution.*`,
+        );
+        return;
+    }
+
+    const wealthData: any = await wealthRequest.json().catch(async (error) => {
+        await main.log(`Error fetching the wealth distribution: ${error}`);
+        return undefined;
+    });
 
     if (!wealthData) {
         helper.sendErrorMessage(
             message,
-            `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) wealth distribution information  :bar_chart:**`,
+            `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) Wealth Distribution  :bar_chart:**`,
             `*Error fetching the wealth distribution.*`,
         );
     } else {
@@ -153,7 +168,7 @@ export const wealth = async (message: Discord.Message) => {
             .reply({
                 embeds: [
                     {
-                        description: `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) Wealth Distribution Information  :bar_chart:**`,
+                        description: `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) Wealth Distribution  :bar_chart:**`,
                         color: 1363892,
                         fields: [
                             {

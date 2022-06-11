@@ -109,18 +109,30 @@ export const wavn = async (message: Discord.Message) => {
 };
 
 export const sushi = async (message: Discord.Message) => {
-    const sushiData: any = await (
-        await fetch(
-            `https://api2.sushipro.io/?chainID=137&action=get_pairs_by_token&token=${config.wavn.contractaddress}`,
-        )
-    )
-        .json()
-        .catch(async (error) => {
-            await main.log(`Error fetching data from sushiswap: ${error}`, {
-                logFile: `sushi.log`,
-            });
-            return undefined;
+    // Fetch the data from the Sushi api
+    const sushiRequest = await fetch(
+        `https://api2.sushipro.iosfd/?chainID=137&action=get_pairs_by_token&token=${config.wavn.contractaddress}`,
+    ).catch(async (error) => {
+        await main.log(`Error fetching the Sushi data: ${error}`, {
+            logFile: `sushi.log`,
         });
+        return undefined;
+    });
+    if (!sushiRequest) {
+        helper.sendErrorMessage(
+            message,
+            `**:sushi: w${config.coin.symbol} Sushi Swap Information :sushi:**`,
+            `*Error fetching data from sushiswap*`,
+        );
+        return;
+    }
+
+    const sushiData: any = await sushiRequest.json().catch(async (error) => {
+        await main.log(`Error fetching data from sushiswap: ${error}`, {
+            logFile: `sushi.log`,
+        });
+        return undefined;
+    });
 
     if (!sushiData) {
         helper.sendErrorMessage(

@@ -112,9 +112,15 @@ export const getTickerExbitron = async (
 }> => {
     return new Promise(async (resolve, reject) => {
         // Fetch the API data
-        const data: any = await (
-            await fetch(`https://www.exbitron.com/api/v2/peatio/public/markets/avn${asset}/tickers`)
-        ).json();
+        const request = await fetch(
+            `https://www.exbitron.com/api/v2/peatio/public/markets/avn${asset}/tickers`,
+        ).catch(() => undefined);
+        if (!request) {
+            reject(`Error fetching data from Exbitron`);
+            return;
+        }
+
+        const data: any = await request.json().catch(() => undefined);
 
         // If an error has occurred, reject the promise
         if (!data || data[`error`]) {
@@ -144,7 +150,15 @@ export const getTickerTradeOgre = async (
 }> => {
     return new Promise(async (resolve, reject) => {
         // Fetch the API data
-        const data: any = await (await fetch(`https://tradeogre.com/api/v1/ticker/${asset}-AVN`)).json();
+        const request: any = await fetch(`https://tradeogre.com/api/v1/ticker/${asset}-AVN`).catch(
+            () => undefined,
+        );
+        if (!request) {
+            reject(`Error fetching data from TradeOgre`);
+            return;
+        }
+
+        const data: any = await request.json().catch(() => undefined);
 
         // If an error has occurred, reject the promise
         if (data[`success`] !== true) {

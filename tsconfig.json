@@ -1,27 +1,24 @@
 {
     "compilerOptions": {
+        // Basic options
+        "outDir": "build",
         "target": "ESNEXT",
         "module": "ESNEXT",
+        // Fix errors
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        // Stricter transpilation
         "strict": true,
-        "outDir": "build",
         "noImplicitAny": true,
         "removeComments": true,
-        "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "strictNullChecks": true,
-        "strictFunctionTypes": true,
+        "strictFunctionTypes": true
     },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["src/**/*.ts"]
 }

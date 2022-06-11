@@ -314,7 +314,7 @@ export const price = async (message: Discord.Message) => {
             helper.sendErrorMessage(
                 message,
                 `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
-                `*Error fetching price data 1*`,
+                `*Error fetching price data*`,
             );
             return;
         }
@@ -633,20 +633,26 @@ export const nomics = async (message: Discord.Message) => {
     }
 
     if (currency === `avn`) {
-        const nomicsData: any = await (
-            await fetch(
-                `https://api.nomics.com/v1/currencies/ticker?key=${
-                    config.nomics.apikey
-                }&ids=${config.coin.symbol.toUpperCase()}3&interval=1d&convert=USD&per-page=100&page=1`,
-            )
-        )
-            .json()
-            .catch(async (error) => {
-                await main.log(`Error fetching data from Nomics: ${error}`, {
-                    logFile: `nomics.log`,
-                });
-                return undefined;
+        const nomicsRequest = await fetch(
+            `https://api.nomics.com/v1/currencies/ticker?key=${
+                config.nomics.apikey
+            }&ids=${config.coin.symbol.toUpperCase()}3&interval=1d&convert=USD&per-page=100&page=1`,
+        ).catch(() => undefined);
+        if (!nomicsRequest) {
+            helper.sendErrorMessage(
+                message,
+                `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
+                `*Error fetching the price.*`,
+            );
+            return;
+        }
+
+        const nomicsData: any = await nomicsRequest.json().catch(async (error) => {
+            await main.log(`Error fetching data from Nomics: ${error}`, {
+                logFile: `nomics.log`,
             });
+            return undefined;
+        });
 
         if (!nomicsData) {
             helper.sendErrorMessage(
@@ -823,6 +829,5 @@ export const nomics = async (message: Discord.Message) => {
                 },
             ],
         });
-        // TODO: send wavn embed
     }
 };

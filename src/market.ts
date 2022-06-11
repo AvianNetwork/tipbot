@@ -111,7 +111,7 @@ export const wavn = async (message: Discord.Message) => {
 export const sushi = async (message: Discord.Message) => {
     // Fetch the data from the Sushi api
     const sushiRequest = await fetch(
-        `https://api2.sushipro.iosfd/?chainID=137&action=get_pairs_by_token&token=${config.wavn.contractaddress}`,
+        `https://api2.sushipro.io/?chainID=137&action=get_pairs_by_token&token=${config.wavn.contractaddress}`,
     ).catch(async (error) => {
         await main.log(`Error fetching the Sushi data: ${error}`, {
             logFile: `sushi.log`,

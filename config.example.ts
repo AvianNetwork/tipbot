@@ -1,6 +1,17 @@
 export const config = {
     bot: {
-        token: ``,
+        tokens: {
+            main: ``,
+            info: {
+                price: ``,
+                marketcap: ``,
+                supply: ``,
+                X16RT_hashrate: ``,
+                MinotaurX_hashrate: ``,
+                wavn_price: ``,
+            },
+        },
+        guild: ``,
         prefix: `!avn`,
         deletetimeout: 120000, // 2 minutes
         timezone: [`Europe/Amsterdam`, `HH:mm:ss DD/MM/YYYY`],

@@ -13,11 +13,49 @@ import * as commands from "./commands.js";
 let logChannel: Discord.TextChannel;
 let priceChannel: Discord.VoiceChannel;
 
-// Create the bot
+// Create the bots
 const bot = new Discord.Client({
     intents: [`GUILDS`, `GUILD_MESSAGES`, `DIRECT_MESSAGES`, `GUILD_PRESENCES`],
     partials: [`CHANNEL`],
 });
+const infoBots = [
+    {
+        function: `price`,
+        bot: new Discord.Client({
+            intents: [`GUILDS`],
+        }),
+    },
+    {
+        function: `marketcap`,
+        bot: new Discord.Client({
+            intents: [`GUILDS`],
+        }),
+    },
+    {
+        function: `supply`,
+        bot: new Discord.Client({
+            intents: [`GUILDS`],
+        }),
+    },
+    {
+        function: `X16RT_hashrate`,
+        bot: new Discord.Client({
+            intents: [`GUILDS`],
+        }),
+    },
+    {
+        function: `MinotaurX_hashrate`,
+        bot: new Discord.Client({
+            intents: [`GUILDS`],
+        }),
+    },
+    {
+        function: `wavn_price`,
+        bot: new Discord.Client({
+            intents: [`GUILDS`],
+        }),
+    },
+];
 
 // When the bot logged in
 bot.on(`ready`, async () => {
@@ -65,7 +103,7 @@ bot.on(`ready`, async () => {
         }).\n`,
     );
 
-    // Set the price in the bot presence and channel name
+    // Set the price in the bot presence and channel name, and change the nicknames of info bots
     setInterval(async () => {
         const ticker = await helper.getTickerExbitron(`usdt`).catch(async (error) => {
             await fs.appendFile(
@@ -79,6 +117,115 @@ bot.on(`ready`, async () => {
 
         bot.user?.setActivity(`${ticker[`last`]} USDT`, { type: `WATCHING` });
         priceChannel.setName(`${ticker[`last`]} USDT`);
+
+        // Set nicknames and activity for info bots
+        infoBots.forEach(async (bot) => {
+            // Get the supply
+            const supplyData: any = await (await fetch(`${config.project.explorer}ext/getmoneysupply`))
+                .text()
+                .catch(async (error) => {
+                    await log(`Error fetching the supply: ${error}`);
+                    return undefined;
+                });
+
+            // Make sure the data is valid
+            if (!supplyData) {
+                return;
+            }
+
+            // Get the blockchain inforamation
+            const miningInfoData = await helper.rpc(`getmininginfo`, []);
+            if (!miningInfoData || !miningInfoData[1]) {
+                await log(
+                    `Error fetching the mining info: ${
+                        miningInfoData[0] || miningInfoData || `Unknown error`
+                    }`,
+                );
+                return;
+            }
+
+            // To set a nickname
+            const guild = bot.bot.guilds.cache.get(config.bot.guild);
+            if (!guild) {
+                return;
+            }
+
+            switch (bot.function) {
+                case `price`:
+                    await guild.me?.setNickname(`${ticker[`last`]} USDT`).catch(log);
+                    bot.bot.user?.setActivity(`the AVN price (${ticker[`price_change_percent`]})`, {
+                        type: `WATCHING`,
+                    });
+                    break;
+                case `marketcap`:
+                    await guild.me
+                        ?.setNickname(
+                            `${Number((parseFloat(ticker[`last`]) * Number(supplyData)).toFixed(2))} USDT`,
+                        )
+                        .catch(log);
+                    bot.bot.user?.setActivity(`the AVN market cap (${ticker[`price_change_percent`]})`, {
+                        type: `WATCHING`,
+                    });
+                    break;
+
+                case `supply`:
+                    await guild.me?.setNickname(`${helper.formatSupply(Number(supplyData))} AVN`).catch(log);
+                    bot.bot.user?.setActivity(`the AVN supply`, {
+                        type: `WATCHING`,
+                    });
+                    break;
+
+                case `X16RT_hashrate`:
+                    const hashrate_X6RT = Number(
+                        miningInfoData[1][`networkhashps_x16rt`] / 1000000000,
+                    ).toFixed(3);
+                    await guild.me?.setNickname(`${hashrate_X6RT} GH/s`).catch(log);
+                    bot.bot.user?.setActivity(`the X16RT hashrate`, {
+                        type: `WATCHING`,
+                    });
+                    break;
+
+                case `MinotaurX_hashrate`:
+                    const hashrate_MinotaurX = Number(
+                        miningInfoData[1][`networkhashps_minotaurx`] / 1000000,
+                    ).toFixed(3);
+                    await guild.me?.setNickname(`${hashrate_MinotaurX} MH/s`).catch(log);
+                    bot.bot.user?.setActivity(`the MinotaurX hashrate`, {
+                        type: `WATCHING`,
+                    });
+                    break;
+
+                case `wavn_price`:
+                    // Fetch Nomics data
+                    const nomicsRequest = await fetch(
+                        `https://api.nomics.com/v1/currencies/ticker?key=${
+                            config.nomics.apikey
+                        }&ids=W${config.coin.symbol.toUpperCase()}&interval=1d&convert=USD&per-page=100&page=1`,
+                    ).catch(() => undefined);
+                    if (!nomicsRequest) {
+                        return;
+                    }
+
+                    const nomicsData: any = await nomicsRequest.json().catch(async (error) => {
+                        await log(`Error fetching data from Nomics: ${error}`, {
+                            logFile: `nomics.log`,
+                        });
+                        return undefined;
+                    });
+
+                    if (!nomicsData) {
+                        return;
+                    }
+
+                    // Set the nickname and activity
+                    const wavnPrice = Number(nomicsData[0][`price`]);
+                    await guild.me?.setNickname(`${wavnPrice} USDT`).catch(log);
+                    bot.bot.user?.setActivity(`the WAVN price`, {
+                        type: `WATCHING`,
+                    });
+                    break;
+            }
+        });
     }, 60 * 1000); // Every minute
 });
 

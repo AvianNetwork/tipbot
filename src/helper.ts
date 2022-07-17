@@ -27,6 +27,21 @@ export const deleteAfterTimeout = (sentMessage: Discord.Message) => {
     }
 };
 
+// Formats the supply of the coin to a compact format
+export const formatSupply = (supply: number) => {
+    if (supply >= 1000 && supply < 1000000) {
+        return `${(supply / 1000).toFixed(2)}k`;
+    } else if (supply >= 1000000 && supply < 1000000000) {
+        return `${(supply / 1000000).toFixed(2)}m`;
+    } else if (supply >= 1000000000 && supply < 1000000000000) {
+        return `${(supply / 1000000000).toFixed(2)}b`;
+    } else if (supply >= 1000000000000) {
+        return `${(supply / 1000000000000).toFixed(2)}t`;
+    } else {
+        return supply;
+    }
+}
+
 // Mainly used for commands handling
 export const spamOrDM = async (message: Discord.Message, callback: Function) => {
     // Check if the message is in a DM or in the spam channel

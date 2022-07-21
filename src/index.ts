@@ -68,22 +68,25 @@ bot.on(`ready`, async () => {
         .catch(() => {});
     await fs.mkdir(`./logs`).catch(() => {});
 
-    // Set the channels
+    // Fetch the log channel
     const tempLogChannel = await bot.channels.fetch(config.channels.logging);
     if (!tempLogChannel) {
         console.error(`[${helper.getTime()}] Discord bot error: Log channel not found.`);
         process.exit(1);
-    } else {
-        logChannel = <Discord.TextChannel>tempLogChannel;
     }
 
+    // Set the log channel
+    logChannel = tempLogChannel as Discord.TextChannel;
+
+    // Fetch the price channel
     const tempPriceChannel = await bot.channels.fetch(config.channels.price);
     if (!tempPriceChannel) {
         console.error(`[${helper.getTime()}] Discord bot error: Price channel not found.`);
         process.exit(1);
-    } else {
-        priceChannel = <Discord.VoiceChannel>tempPriceChannel;
     }
+
+    // Set the price channel
+    priceChannel = tempPriceChannel as Discord.VoiceChannel;
 
     // Send startup messages
     console.log(
@@ -115,6 +118,7 @@ bot.on(`ready`, async () => {
         });
         if (ticker === undefined) return;
 
+        // Set the price in the bot presence and channel name
         bot.user?.setActivity(`${ticker[`last`]} USDT`, { type: `WATCHING` });
         priceChannel.setName(`${ticker[`last`]} USDT`);
 
@@ -247,13 +251,9 @@ export const log = async (
 };
 
 // General error handling
-process.on(`uncaughtException`, async (error) => {
-    await log(`uncaughtException: ${error}`);
-});
+process.on(`uncaughtException`, async (error) => await log(`uncaughtException: ${error}`));
 
-process.on(`unhandledRejection`, async (error) => {
-    await log(`unhandledRejection: ${error}`);
-});
+process.on(`unhandledRejection`, async (error) => await log(`unhandledRejection: ${error}`));
 
 bot.on(`disconnected`, async () => {
     await log(`Disconnected.`, {
@@ -275,9 +275,7 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     if (message.author.id === bot.user?.id) return;
 
     // Reply to pings
-    if (message.content.includes(`<@!${bot.user?.id}>`)) {
-        message.reply(`yes?`);
-    }
+    if (message.content.includes(`<@!${bot.user?.id}>`)) message.reply(`yes?`);
 
     // Make sure the message starts with the prefix
     if (!message.content.startsWith(config.bot.prefix)) return;
@@ -369,5 +367,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
     }
 });
 
-// Start the bot
-bot.login(config.bot.token);
+// Start the bots
+bot.login(config.bot.tokens.main);
+Object.values(config.bot.tokens.info).forEach((token, i) => infoBots[i].bot.login(token));

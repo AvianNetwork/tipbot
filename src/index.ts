@@ -106,6 +106,9 @@ bot.on(`ready`, async () => {
         }).\n`,
     );
 
+	// Set the bot's presence
+	bot.user?.setActivity(`!avn help | Watching the Avian Network server`);
+
     // Set the price in the bot presence and channel name, and change the nicknames of info bots
     setInterval(async () => {
         const ticker = await helper.getTickerExbitron(`usdt`).catch(async (error) => {
@@ -118,8 +121,7 @@ bot.on(`ready`, async () => {
         });
         if (ticker === undefined) return;
 
-        // Set the price in the bot presence and channel name
-        bot.user?.setActivity(`${ticker[`last`]} USDT`, { type: `WATCHING` });
+        // Set the price channels name
         priceChannel.setName(`${ticker[`last`]} USDT`);
 
         // Set nicknames and activity for info bots

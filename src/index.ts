@@ -15,44 +15,44 @@ let priceChannel: Discord.VoiceChannel;
 
 // Create the bots
 const bot = new Discord.Client({
-	intents: [`GUILDS`, `GUILD_MESSAGES`, `DIRECT_MESSAGES`, `GUILD_PRESENCES`],
-	partials: [`CHANNEL`],
+	intents: [`Guilds`, `GuildMessages`, `DirectMessages`, `GuildPresences`],
+	partials: [Discord.Partials.Channel],
 });
 const infoBots = [
 	{
 		function: `price`,
 		bot: new Discord.Client({
-			intents: [`GUILDS`],
+			intents: [`Guilds`],
 		}),
 	},
 	{
 		function: `marketcap`,
 		bot: new Discord.Client({
-			intents: [`GUILDS`],
+			intents: [`Guilds`],
 		}),
 	},
 	{
 		function: `supply`,
 		bot: new Discord.Client({
-			intents: [`GUILDS`],
+			intents: [`Guilds`],
 		}),
 	},
 	{
 		function: `X16RT_hashrate`,
 		bot: new Discord.Client({
-			intents: [`GUILDS`],
+			intents: [`Guilds`],
 		}),
 	},
 	{
 		function: `MinotaurX_hashrate`,
 		bot: new Discord.Client({
-			intents: [`GUILDS`],
+			intents: [`Guilds`],
 		}),
 	},
 	{
 		function: `wavn_price`,
 		bot: new Discord.Client({
-			intents: [`GUILDS`],
+			intents: [`Guilds`],
 		}),
 	},
 ];
@@ -145,7 +145,7 @@ bot.on(`ready`, async () => {
 			}
 
 			// To set a nickname
-			const guild = bot.bot.guilds.cache.get(config.bot.guild);
+			const guild = bot.bot.guilds.cache.get(config.bot.guild)?.members;
 			if (!guild) {
 				return;
 			}
@@ -154,7 +154,7 @@ bot.on(`ready`, async () => {
 				case `price`:
 					await guild.me?.setNickname(`${ticker[`last`]} USDT`).catch(log);
 					bot.bot.user?.setActivity(`the AVN price (${ticker[`price_change_percent`]})`, {
-						type: `WATCHING`,
+						type: Discord.ActivityType.Watching,
 					});
 					break;
 				case `marketcap`:
@@ -162,14 +162,14 @@ bot.on(`ready`, async () => {
 						?.setNickname(`${Number((parseFloat(ticker[`last`]) * Number(supplyData)).toFixed(2))} USDT`)
 						.catch(log);
 					bot.bot.user?.setActivity(`the AVN market cap (${ticker[`price_change_percent`]})`, {
-						type: `WATCHING`,
+						type: Discord.ActivityType.Watching,
 					});
 					break;
 
 				case `supply`:
 					await guild.me?.setNickname(`${helper.formatSupply(Number(supplyData))} AVN`).catch(log);
 					bot.bot.user?.setActivity(`the AVN supply`, {
-						type: `WATCHING`,
+						type: Discord.ActivityType.Watching,
 					});
 					break;
 
@@ -177,7 +177,7 @@ bot.on(`ready`, async () => {
 					const hashrate_X6RT = Number(miningInfoData[1][`networkhashps_x16rt`] / 1000000000).toFixed(3);
 					await guild.me?.setNickname(`${hashrate_X6RT} GH/s`).catch(log);
 					bot.bot.user?.setActivity(`the X16RT hashrate`, {
-						type: `WATCHING`,
+						type: Discord.ActivityType.Watching,
 					});
 					break;
 
@@ -187,7 +187,7 @@ bot.on(`ready`, async () => {
 					);
 					await guild.me?.setNickname(`${hashrate_MinotaurX} MH/s`).catch(log);
 					bot.bot.user?.setActivity(`the MinotaurX hashrate`, {
-						type: `WATCHING`,
+						type: Discord.ActivityType.Watching,
 					});
 					break;
 
@@ -217,7 +217,7 @@ bot.on(`ready`, async () => {
 					const wavnPrice = Number(nomicsData[0][`price`]);
 					await guild.me?.setNickname(`${wavnPrice} USDT`).catch(log);
 					bot.bot.user?.setActivity(`the WAVN price`, {
-						type: `WATCHING`,
+						type: Discord.ActivityType.Watching,
 					});
 					break;
 			}

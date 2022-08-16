@@ -24,7 +24,7 @@ export const getTime = (): string => {
  * @param sentMessage The message to delete
  */
 export const deleteAfterTimeout = (sentMessage: Discord.Message) => {
-	if (sentMessage.channel.type === `DM`) return;
+	if (sentMessage.channel.type === Discord.ChannelType.DM) return;
 
 	setTimeout(sentMessage.delete, config.bot.deletetimeout);
 };
@@ -49,7 +49,7 @@ export const formatSupply = (supply: number) => {
  */
 export const spamOrDM = async (message: Discord.Message, callback: Function) => {
 	// Check if the message is in a DM or in the spam channel
-	if (message.channel.type === `DM` || message.channel.id === config.channels.bots) {
+	if (message.channel.type === Discord.ChannelType.DM || message.channel.id === config.channels.bots) {
 		// If the it is, call the callback function
 		return callback(message);
 	}

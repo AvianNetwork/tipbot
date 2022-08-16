@@ -52,7 +52,7 @@ export const balance = async (message: Discord.Message) => {
 		});
 
 	// Notify the user that the balance was sent via DM
-	if (message.channel.type !== `DM`) {
+	if (message.channel.type !== Discord.ChannelType.DM) {
 		message
 			.reply({
 				embeds: [
@@ -94,7 +94,7 @@ export const deposit = async (message: Discord.Message) => {
 
 	// If the user already has a deposit address, send it
 	if (addressesByAccount[1].length > 0) {
-		if (message.channel.type !== `DM`) {
+		if (message.channel.type !== Discord.ChannelType.DM) {
 			message
 				.reply({
 					embeds: [
@@ -164,7 +164,7 @@ export const deposit = async (message: Discord.Message) => {
 		);
 	}
 
-	if (message.channel.type !== `DM`) {
+	if (message.channel.type !== Discord.ChannelType.DM) {
 		message
 			.reply({
 				embeds: [
@@ -244,7 +244,7 @@ export const donate = async (message: Discord.Message) => {
 							},
 							{
 								name: `__To donate from your bot wallet__`,
-								value: "`!avn donate <amount>`",
+								value: `\`!avn donate <amount>\``,
 								inline: false,
 							},
 						],
@@ -286,7 +286,7 @@ export const donate = async (message: Discord.Message) => {
 	}
 
 	// Send the message
-	if (message.channel.type !== `DM`) {
+	if (message.channel.type !== Discord.ChannelType.DM) {
 		message
 			.reply({
 				embeds: [
@@ -433,7 +433,7 @@ export const withdraw = async (message: Discord.Message) => {
 	}
 
 	// Send the message
-	if (message.channel.type !== `DM`) {
+	if (message.channel.type !== Discord.ChannelType.DM) {
 		message
 			.reply({
 				embeds: [
@@ -584,7 +584,7 @@ export const tip = async (message: Discord.Message) => {
 	}
 
 	// Inform the user the tip was successful
-	if (message.channel.type !== "DM") {
+	if (message.channel.type !== Discord.ChannelType.DM) {
 		message.channel
 			.send({
 				embeds: [
@@ -711,17 +711,17 @@ export const walletversion = async (message: Discord.Message) => {
 					fields: [
 						{
 							name: `__Wallet Version__`,
-							value: `**${networkInfoData[1]["version"]}**`,
+							value: `**${networkInfoData[1].version}**`,
 							inline: true,
 						},
 						{
 							name: `__Sub version__`,
-							value: `**${networkInfoData[1]["subversion"]}**`,
+							value: `**${networkInfoData[1].subversion}**`,
 							inline: true,
 						},
 						{
 							name: `__Protocol version__`,
-							value: `**${networkInfoData[1]["protocolversion"]}**`,
+							value: `**${networkInfoData[1].protocolversion}**`,
 							inline: true,
 						},
 					],
@@ -755,7 +755,7 @@ export const privatekey = async (message: Discord.Message) => {
 			);
 		}
 
-		if (message.channel.type !== `DM`) {
+		if (message.channel.type !== Discord.ChannelType.DM) {
 			message
 				.reply({
 					embeds: [
@@ -832,7 +832,7 @@ export const privatekey = async (message: Discord.Message) => {
 		);
 	}
 
-	if (message.channel.type !== `DM`) {
+	if (message.channel.type !== Discord.ChannelType.DM) {
 		message
 			.reply({
 				embeds: [

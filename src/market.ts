@@ -325,7 +325,13 @@ export const price = async (message: Discord.Message) => {
 	}
 
 	// Create the TradeOgre embed
-	const TradeOgreEmbed: Discord.EmbedFieldData[] | undefined = TradeOgreData
+	const TradeOgreEmbed: // See https://discord.com/developers/docs/resources/channel#embed-object-embed-field-structure
+	| {
+				name: string;
+				value: string;
+				inline?: boolean;
+		  }[]
+		| undefined = TradeOgreData
 		? [
 				{
 					name: `\u200b`,
@@ -386,7 +392,12 @@ export const price = async (message: Discord.Message) => {
 		: undefined;
 
 	// Init the embed and fill it with the Exbitron data
-	let finalEmbed: Discord.EmbedFieldData[] = [
+	let finalEmbed: {
+		// See https://discord.com/developers/docs/resources/channel#embed-object-embed-field-structure
+		name: string;
+		value: string;
+		inline?: boolean;
+	}[] = [
 		{
 			name: `Exbitron (${config.coin.symbol.toUpperCase()}/${currency.toUpperCase()})`,
 			value: `https://www.exbitron.com/trading/${config.coin.symbol.toLowerCase()}${currency}`,

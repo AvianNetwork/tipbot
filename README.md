@@ -15,10 +15,10 @@ If you liked this repository, feel free to leave a star ⭐ to help promote Avia
 
 **10+** commands, you can try it at our [server](https://discord.gg/xZd8xwVhVS) using `!avn help` for see the list of commands
 
-*   :dollar:  **Wallet**: `balance`, `deposit`, `withdraw`, `privkey` and more! 
-*   :chart:  **Market Data**: `exchanges`, `wavn`, `sushi` and more!
-*   :pick:  **Blockchain and Mining**: `mininginfo`, `miningcalc`, `blockchaininfo` and `validate ` 
-*   ❔  **Help**: `help`
+- :dollar: **Wallet**: `balance`, `deposit`, `withdraw`, `privkey` and more!
+- :chart: **Market Data**: `exchanges`, `wavn`, `sushi` and more!
+- :pick: **Blockchain and Mining**: `mininginfo`, `miningcalc`, `blockchaininfo` and `validate `
+- ❔ **Help**: `help`
 
 Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/contributors) that have helped to develop the Avian Network Tipbot.
 

@@ -47,6 +47,7 @@ export const exchanges = (message: Discord.Message) => {
 };
 
 export const wavn = async (message: Discord.Message) => {
+    // Fetch the data from Psolygonscan
     const tokenSupplyData: any = await (
         await fetch(
             `https://api.polygonscan.com/api?module=stats&action=tokensupply&contractaddress=${config.wavn.contractaddress}`,
@@ -59,18 +60,16 @@ export const wavn = async (message: Discord.Message) => {
             });
             return undefined;
         });
-
     if (!tokenSupplyData || tokenSupplyData[`status`] !== `1`) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:gift: w${config.coin.symbol} Token information :gift:**`,
             `*Error fetching the wAVN supply.*`,
         );
-        return;
     }
 
     const date = new Date().toUTCString().replace(`,`, ` `);
-    const supply = (tokenSupplyData[`result`] / 1000000000000000000).toString();
+    const supply = (tokenSupplyData[`result`] / 1000000000000000000n).toString();
 
     message
         .reply({
@@ -104,8 +103,6 @@ export const wavn = async (message: Discord.Message) => {
             ],
         })
         .then(helper.deleteAfterTimeout);
-
-    return;
 };
 
 export const sushi = async (message: Discord.Message) => {
@@ -119,12 +116,11 @@ export const sushi = async (message: Discord.Message) => {
         return undefined;
     });
     if (!sushiRequest) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:sushi: w${config.coin.symbol} Sushi Swap Information :sushi:**`,
             `*Error fetching data from sushiswap*`,
         );
-        return;
     }
 
     const sushiData: any = await sushiRequest.json().catch(async (error) => {
@@ -135,19 +131,18 @@ export const sushi = async (message: Discord.Message) => {
     });
 
     if (!sushiData) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:sushi: w${config.coin.symbol} Sushi Swap Information :sushi:**`,
             `*Error fetching data from sushiswap*`,
         );
-        return;
     }
 
     const date = new Date().toUTCString().replace(`,`, ` `);
     const numberOfResults = sushiData[0][`number_of_results`];
 
     if (numberOfResults < 1) {
-        message
+        return message
             .reply({
                 embeds: [
                     {
@@ -174,90 +169,91 @@ export const sushi = async (message: Discord.Message) => {
                 ],
             })
             .then(helper.deleteAfterTimeout);
-    } else {
-        const chain: string = sushiData[0].chain;
-        const token: string = sushiData[0].token;
-        const pairID: string = sushiData[1][0].Pair_ID;
-        const Token_1_symbol: string = sushiData[1][0].Token_1_symbol;
-        const Token_1_reserve: number = sushiData[1][0].Token_1_reserve.toFixed(8);
-        const Token_1_price: number = sushiData[1][0].Token_1_price.toFixed(8);
-        const Token_2_symbol: string = sushiData[1][0].Token_2_symbol;
-        const Token_2_reserve: number = sushiData[1][0].Token_2_reserve.toFixed(8);
-        const Token_2_price: number = sushiData[1][0].Token_2_price.toFixed(8);
-
-        message
-            .reply({
-                embeds: [
-                    {
-                        description: `**:sushi: w${config.coin.symbol} Sushi Swap Information :sushi:**`,
-                        color: 1363892,
-                        fields: [
-                            {
-                                name: `\u200b\n**Sushi Swap Analytics**`,
-                                value: `*https://analytics-polygon.sushi.com/pairs/${pairID}*`,
-                                inline: false,
-                            },
-                            {
-                                name: `**PooCoin Charts**`,
-                                value: `*https://polygon.poocoin.app/tokens/${token}*\n\u200b`,
-                                inline: false,
-                            },
-                            {
-                                name: `:chains:  Chain  :chains:`,
-                                value: chain,
-                                inline: true,
-                            },
-                            {
-                                name: `:coin:  ${Token_2_symbol} Token ID  :coin:`,
-                                value: token,
-                                inline: true,
-                            },
-                            {
-                                name: `:scales:  Pair ID  :scales:`,
-                                value: pairID,
-                                inline: true,
-                            },
-                            {
-                                name: `:chart_with_upwards_trend:  ${Token_2_symbol} Price  :chart_with_upwards_trend:`,
-                                value: `${Token_1_price} ${Token_1_symbol}`,
-                                inline: true,
-                            },
-                            {
-                                name: `\u200b`,
-                                value: `\u200b`,
-                                inline: true,
-                            },
-                            {
-                                name: `:bank:  ${Token_2_symbol} Reserve  :bank:`,
-                                value: `${Token_2_reserve} ${Token_2_symbol}`,
-                                inline: true,
-                            },
-                            {
-                                name: `:chart_with_upwards_trend:  ${Token_1_symbol} Price  :chart_with_upwards_trend:`,
-                                value: `${Token_2_price} ${Token_2_symbol}`,
-                                inline: true,
-                            },
-                            {
-                                name: `\u200b`,
-                                value: `\u200b`,
-                                inline: true,
-                            },
-                            {
-                                name: `:bank:  ${Token_1_symbol} Reserve  :bank:`,
-                                value: `${Token_1_reserve} ${Token_1_symbol}`,
-                                inline: true,
-                            },
-                            {
-                                name: `:clock: Time`,
-                                value: date,
-                                inline: false,
-                            },
-                        ],
-                    },
-                ],
-            })
-            .then(helper.deleteAfterTimeout);
     }
+
+    // Parse the data and send the message
+    const chain = sushiData[0].chain as string;
+    const token = sushiData[0].token as string;
+    const pairID = sushiData[1][0].Pair_ID as string;
+    const Token_1_symbol = sushiData[1][0].Token_1_symbol as string;
+    const Token_1_reserve = sushiData[1][0].Token_1_reserve.toFixed(8) as number;
+    const Token_1_price = sushiData[1][0].Token_1_price.toFixed(8) as number;
+    const Token_2_symbol = sushiData[1][0].Token_2_symbol as string;
+    const Token_2_reserve = sushiData[1][0].Token_2_reserve.toFixed(8) as number;
+    const Token_2_price = sushiData[1][0].Token_2_price.toFixed(8) as number;
+
+    message
+        .reply({
+            embeds: [
+                {
+                    description: `**:sushi: w${config.coin.symbol} Sushi Swap Information :sushi:**`,
+                    color: 1363892,
+                    fields: [
+                        {
+                            name: `\u200b\n**Sushi Swap Analytics**`,
+                            value: `*https://analytics-polygon.sushi.com/pairs/${pairID}*`,
+                            inline: false,
+                        },
+                        {
+                            name: `**PooCoin Charts**`,
+                            value: `*https://polygon.poocoin.app/tokens/${token}*\n\u200b`,
+                            inline: false,
+                        },
+                        {
+                            name: `:chains:  Chain  :chains:`,
+                            value: chain,
+                            inline: true,
+                        },
+                        {
+                            name: `:coin:  ${Token_2_symbol} Token ID  :coin:`,
+                            value: token,
+                            inline: true,
+                        },
+                        {
+                            name: `:scales:  Pair ID  :scales:`,
+                            value: pairID,
+                            inline: true,
+                        },
+                        {
+                            name: `:chart_with_upwards_trend:  ${Token_2_symbol} Price  :chart_with_upwards_trend:`,
+                            value: `${Token_1_price} ${Token_1_symbol}`,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `:bank:  ${Token_2_symbol} Reserve  :bank:`,
+                            value: `${Token_2_reserve} ${Token_2_symbol}`,
+                            inline: true,
+                        },
+                        {
+                            name: `:chart_with_upwards_trend:  ${Token_1_symbol} Price  :chart_with_upwards_trend:`,
+                            value: `${Token_2_price} ${Token_2_symbol}`,
+                            inline: true,
+                        },
+                        {
+                            name: `\u200b`,
+                            value: `\u200b`,
+                            inline: true,
+                        },
+                        {
+                            name: `:bank:  ${Token_1_symbol} Reserve  :bank:`,
+                            value: `${Token_1_reserve} ${Token_1_symbol}`,
+                            inline: true,
+                        },
+                        {
+                            name: `:clock: Time`,
+                            value: date,
+                            inline: false,
+                        },
+                    ],
+                },
+            ],
+        })
+        .then(helper.deleteAfterTimeout);
 };
 
 export const price = async (message: Discord.Message) => {
@@ -266,22 +262,20 @@ export const price = async (message: Discord.Message) => {
     // Parse the currency and check if it is valid
     const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
     if (!currencyTemp) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a currency*`,
         );
-        return;
     }
 
     const currency = currencyTemp.toLowerCase();
     if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
         );
-        return;
     }
 
     // Get the price data from exbitron
@@ -293,12 +287,11 @@ export const price = async (message: Discord.Message) => {
     });
 
     if (!ExbitronData) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Error fetching price data*`,
         );
-        return;
     }
 
     // Get the price data from TradeOgre
@@ -323,12 +316,11 @@ export const price = async (message: Discord.Message) => {
         });
 
         if (!TradeOgreData) {
-            helper.sendErrorMessage(
+            return helper.sendErrorMessage(
                 message,
                 `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
                 `*Error fetching price data*`,
             );
-            return;
         }
     }
 
@@ -438,9 +430,7 @@ export const price = async (message: Discord.Message) => {
     ];
 
     // Add the TradeOgre data if it exists
-    if (TradeOgreEmbed) {
-        finalEmbed = finalEmbed.concat(TradeOgreEmbed);
-    }
+    if (TradeOgreEmbed) finalEmbed = finalEmbed.concat(TradeOgreEmbed);
 
     // Add the date
     finalEmbed.push({
@@ -466,41 +456,37 @@ export const convert = async (message: Discord.Message) => {
     // Parse the amount and check if it is valid
     const amount = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[2];
     if (!amount) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify an amount*`,
         );
-        return;
     }
     if (isNaN(Number(amount))) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a valid amount*`,
         );
-        return;
     }
 
     // Parse the currency and check if it is valid
     const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
     if (!currencyTemp) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a currency*`,
         );
-        return;
     }
 
     const currency = currencyTemp.toLowerCase();
     if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
         );
-        return;
     }
 
     // Get the price data from exbitron
@@ -512,12 +498,11 @@ export const convert = async (message: Discord.Message) => {
     });
 
     if (!ExbitronData) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Error fetching price data*`,
         );
-        return;
     }
 
     message
@@ -545,22 +530,20 @@ export const cap = async (message: Discord.Message) => {
     // Parse the currency and check if it is valid
     const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
     if (!currencyTemp) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
         );
-        return;
     }
 
     const currency = currencyTemp.toLowerCase();
     if ([`usdt`, `btc`, `ltc`, `rvn`, `doge`].includes(currency) === false) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a valid currency (\`usdt\`, \`btc\`, \`ltc\`, \`rvn\`, \`doge\`)*`,
         );
-        return;
     }
 
     // Get the price
@@ -581,67 +564,66 @@ export const cap = async (message: Discord.Message) => {
 
     // Make sure the data is valid
     if (!supplyData || !price) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) coin supply  :bar_chart:**`,
             `*Error fetching the supply or price.*`,
         );
-    } else {
-        const marketCapacity = Number((parseFloat(price[`last`]) * Number(supplyData)).toFixed(8));
-        const supply = Number(parseFloat(supplyData).toFixed(8)).toString();
-
-        message
-            .reply({
-                embeds: [
-                    {
-                        description: `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) coin supply  :bar_chart:**`,
-                        color: 1363892,
-                        thumbnail: {
-                            url: `${config.project.explorer}images/avian_256x256x32.png`,
-                        },
-                        fields: [
-                            {
-                                name: `__Total coin supply__`,
-                                value: supply,
-                                inline: false,
-                            },
-                            {
-                                name: `__${config.coin.symbol} current price__`,
-                                value: `${price[`last`]} ${currency.toUpperCase()}`,
-                                inline: false,
-                            },
-                            {
-                                name: `__Current Market Capacity__`,
-                                value: `${marketCapacity} ${currency.toUpperCase()}`,
-                                inline: false,
-                            },
-                        ],
-                    },
-                ],
-            })
-            .then(helper.deleteAfterTimeout);
     }
+
+    // Parse the data and send the message
+    const marketCapacity = Number((parseFloat(price[`last`]) * Number(supplyData)).toFixed(8));
+    const supply = Number(parseFloat(supplyData).toFixed(8)).toString();
+
+    message
+        .reply({
+            embeds: [
+                {
+                    description: `**:bar_chart:  ${config.coin.name} (${config.coin.symbol}) coin supply  :bar_chart:**`,
+                    color: 1363892,
+                    thumbnail: {
+                        url: `${config.project.explorer}images/avian_256x256x32.png`,
+                    },
+                    fields: [
+                        {
+                            name: `__Total coin supply__`,
+                            value: supply,
+                            inline: false,
+                        },
+                        {
+                            name: `__${config.coin.symbol} current price__`,
+                            value: `${price[`last`]} ${currency.toUpperCase()}`,
+                            inline: false,
+                        },
+                        {
+                            name: `__Current Market Capacity__`,
+                            value: `${marketCapacity} ${currency.toUpperCase()}`,
+                            inline: false,
+                        },
+                    ],
+                },
+            ],
+        })
+        .then(helper.deleteAfterTimeout);
 };
 
 export const nomics = async (message: Discord.Message) => {
     // Parse the currency and check if it is valid
     const currencyTemp = message.content.slice(config.bot.prefix.length).trim().split(/ +/g)[1];
     if (!currencyTemp) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a currency (\`avn\`, \`wavn\`)*`,
         );
-        return;
     }
     const currency = currencyTemp.toLowerCase();
     if ([`avn`, `wavn`].includes(currency) === false) {
-        helper.sendErrorMessage(
+        return helper.sendErrorMessage(
             message,
             `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
             `*Please specify a valid currency (\`avn\`, \`wavn\`)*`,
         );
-        return;
     }
 
     if (currency === `avn`) {
@@ -651,12 +633,11 @@ export const nomics = async (message: Discord.Message) => {
             }&ids=${config.coin.symbol.toUpperCase()}3&interval=1d&convert=USD&per-page=100&page=1`,
         ).catch(() => undefined);
         if (!nomicsRequest) {
-            helper.sendErrorMessage(
+            return helper.sendErrorMessage(
                 message,
                 `**:chart_with_upwards_trend: ${config.coin.name} (${config.coin.symbol}) Price Info :chart_with_upwards_trend:**`,
                 `*Error fetching the price.*`,
             );
-            return;
         }
 
         const nomicsData: any = await nomicsRequest.json().catch(async (error) => {
@@ -742,7 +723,9 @@ export const nomics = async (message: Discord.Message) => {
                 },
             ],
         });
-    } else if (currency === `wavn`) {
+    }
+
+    if (currency === `wavn`) {
         const nomicsData: any = await (
             await fetch(
                 `https://api.nomics.com/v1/currencies/ticker?key=${

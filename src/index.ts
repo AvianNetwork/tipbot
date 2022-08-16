@@ -106,8 +106,8 @@ bot.on(`ready`, async () => {
         }).\n`,
     );
 
-	// Set the bot's presence
-	bot.user?.setActivity(`!avn help | Watching the Avian Network server`);
+    // Set the bot's presence
+    bot.user?.setActivity(`!avn help | Watching the Avian Network server`);
 
     // Set the price in the bot presence and channel name, and change the nicknames of info bots
     setInterval(async () => {
@@ -253,9 +253,9 @@ export const log = async (
 };
 
 // General error handling
-process.on(`uncaughtException`, async (error) => await log(`uncaughtException: ${error}`));
+process.on(`uncaughtException`, async (error, origin) => await log(`uncaughtException: ${error}\nOrigin: ${origin}`));
 
-process.on(`unhandledRejection`, async (error) => await log(`unhandledRejection: ${error}`));
+process.on(`unhandledRejection`, async (reason) => await log(`unhandledRejection: ${reason}`));
 
 bot.on(`disconnected`, async () => {
     await log(`Disconnected.`, {

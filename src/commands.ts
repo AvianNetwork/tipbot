@@ -195,51 +195,50 @@ const uptime = async (message: Discord.Message) => {
             .then(helper.deleteAfterTimeout);
 
         // Log the error
-        await main.log(`Error while fetching uptime: ${walletUptimeData[0]}`);
-        return;
-    } else {
-        // Get the wallet uptime and bot uptime in days
-        const walletUptime = Number(walletUptimeData[1] / (3600 * 24)).toLocaleString(`en-US`, {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-        });
-        const botUptime = Number(process.uptime() / (3600 * 24)).toLocaleString(`en-US`, {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-        });
-
-        // Send the embed containing the information
-        message
-            .reply({
-                embeds: [
-                    {
-                        description: `**:tools::robot:  ${config.coin.name} (${config.coin.symbol}) bot and wallet uptime  :robot::tools:**`,
-                        color: 1363892,
-                        thumbnail: {
-                            url: `${config.project.explorer}images/avian_256x256x32.png`,
-                        },
-                        fields: [
-                            {
-                                name: `__Current wallet uptime__`,
-                                value: `${walletUptime} days`,
-                                inline: false,
-                            },
-                            {
-                                name: `__Current bot uptime__`,
-                                value: `${botUptime} days`,
-                                inline: false,
-                            },
-                            {
-                                name: `:clock: Time`,
-                                value: date,
-                                inline: false,
-                            },
-                        ],
-                    },
-                ],
-            })
-            .then(helper.deleteAfterTimeout);
+        return await main.log(`Error while fetching uptime: ${walletUptimeData[0]}`);
     }
+
+    // Get the wallet uptime and bot uptime in days
+    const walletUptime = Number(walletUptimeData[1] / (3600 * 24)).toLocaleString(`en-US`, {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
+    });
+    const botUptime = Number(process.uptime() / (3600 * 24)).toLocaleString(`en-US`, {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
+    });
+
+    // Send the embed containing the information
+    message
+        .reply({
+            embeds: [
+                {
+                    description: `**:tools::robot:  ${config.coin.name} (${config.coin.symbol}) bot and wallet uptime  :robot::tools:**`,
+                    color: 1363892,
+                    thumbnail: {
+                        url: `${config.project.explorer}images/avian_256x256x32.png`,
+                    },
+                    fields: [
+                        {
+                            name: `__Current wallet uptime__`,
+                            value: `${walletUptime} days`,
+                            inline: false,
+                        },
+                        {
+                            name: `__Current bot uptime__`,
+                            value: `${botUptime} days`,
+                            inline: false,
+                        },
+                        {
+                            name: `:clock: Time`,
+                            value: date,
+                            inline: false,
+                        },
+                    ],
+                },
+            ],
+        })
+        .then(helper.deleteAfterTimeout);
 };
 
 const priceDeprecated = (message: Discord.Message) => {

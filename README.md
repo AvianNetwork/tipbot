@@ -35,7 +35,7 @@ Thanks to all the [contributors](https://github.com/AvianNetwork/tipbot/graphs/c
     <p align="center" style="text-align:center;margin: 0 auto;"><strong>Telegram Announcements:&nbsp;<a target="_blank" rel="noopener" href="https://t.me/AvianNetworkAnnouncements">https://t.me/AvianNetworkAnnouncements<a></p>
     <p align="center"><a href="https://avn.network/"><a href="https://avn.network/"><img alt="Avian Network Logo" src="https://explorer-us.avn.network/images/avian_256x256x32.png" height="32"></a></p>
         <p align="center"><h4>Official Avian Foundation Donation address</h4></p>
-    <p align="center">RDs4A4sDHp4otDHQQuFSaPDYEg2xx3hbdN</p>
+    <p align="center">RXp2d4fLYsjqXRSkVDjcQXbvyFXFS4jFir</p>
         <p align="center">~ send AVN only ~</p>
     <p align="center">Donations help to fund ongoing development, design, marketing, and all other aspects of the Avian Network.</p>
     <p align="center">Thank you for being a part of the journey.</p>

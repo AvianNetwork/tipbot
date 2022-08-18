@@ -11,7 +11,6 @@ import * as commands from "./commands.js";
 
 // We can only fetch channels within the bot.on(`ready`) function
 let logChannel: Discord.TextChannel;
-let priceChannel: Discord.VoiceChannel;
 
 // Create the bots
 const bot = new Discord.Client({
@@ -78,16 +77,6 @@ bot.on(`ready`, async () => {
 	// Set the log channel
 	logChannel = tempLogChannel as Discord.TextChannel;
 
-	// Fetch the price channel
-	const tempPriceChannel = await bot.channels.fetch(config.channels.price);
-	if (!tempPriceChannel) {
-		console.error(`[${helper.getTime()}] Discord bot error: Price channel not found.`);
-		process.exit(1);
-	}
-
-	// Set the price channel
-	priceChannel = tempPriceChannel as Discord.VoiceChannel;
-
 	// Send startup messages
 	console.log(
 		`[${helper.getTime()}] Logged in as ${bot.user?.username}#${bot.user?.discriminator} (${bot.user?.id}).`,
@@ -116,9 +105,6 @@ bot.on(`ready`, async () => {
 			return undefined;
 		});
 		if (ticker === undefined) return;
-
-		// Set the price channels name
-		priceChannel.setName(`${ticker[`last`]} USDT`);
 
 		// Set nicknames and activity for info bots
 		infoBots.forEach(async (bot) => {

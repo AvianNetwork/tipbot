@@ -14,7 +14,7 @@ let logChannel: Discord.TextChannel;
 
 // Create the bots
 const bot = new Discord.Client({
-	intents: [`Guilds`, `GuildMessages`, `DirectMessages`, `GuildPresences`],
+	intents: [`Guilds`, `GuildMessages`, `DirectMessages`, `GuildPresences`, `MessageContent`],
 	partials: [Discord.Partials.Channel],
 });
 const infoBots = [

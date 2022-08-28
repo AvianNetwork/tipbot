@@ -272,10 +272,6 @@ bot.on(`messageCreate`, async (message: Discord.Message) => {
 		case `tip`:
 			commands.tip(message);
 			break;
-		case `privkey`:
-		case `privatekey`:
-			helper.spamOrDM(message, commands.privatekey);
-			break;
 		case `deposit`:
 		case `donate`:
 		case `withdraw`:

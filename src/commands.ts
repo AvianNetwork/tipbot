@@ -112,8 +112,7 @@ const help = (message: Discord.Message) => {
 								`**${config.bot.prefix} donate <amount>:** Donate to the Avian Foundation.\n` +
 								`**${config.bot.prefix} withdraw <address> <amount>:** Withdraw ${config.coin.name} to specified address.\n` +
 								`**${config.bot.prefix} tip <@user> <amount>:** Mention an user with @ and the amount to tip them.\n` +
-								`**${config.bot.prefix} walletversion:** Display the wallet version of the bot.\n` +
-								`**${config.bot.prefix} privatekey:** Send the private key for your wallet to your DM.\n\u200b`,
+								`**${config.bot.prefix} walletversion:** Display the wallet version of the bot.\n\u200b`,
 							inline: false,
 						},
 						{
@@ -262,8 +261,8 @@ export { supply, wealth, qr };
 import { mininginfo, miningcalc, blockchaininfo, miners, validate } from "./blockchainandmining.js";
 export { mininginfo, miningcalc, blockchaininfo, miners, validate };
 
-import { balance, deposit, donate, withdraw, tip, walletversion, privatekey } from "./wallet.js";
-export { balance, deposit, donate, withdraw, tip, walletversion, privatekey };
+import { balance, deposit, donate, withdraw, tip, walletversion } from "./wallet.js";
+export { balance, deposit, donate, withdraw, tip, walletversion };
 
 import { exchanges, wavn, sushi, price, convert, cap, nomics } from "./market.js";
 export { exchanges, wavn, sushi, price, convert, cap, nomics };
